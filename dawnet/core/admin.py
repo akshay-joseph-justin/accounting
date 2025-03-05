@@ -5,7 +5,7 @@ from django.contrib import admin
 from . import models
 
 admin.site.register(models.Capital)
-admin.site.register(models.Liability)
+admin.site.register(models.Loan)
 admin.site.register(models.Income)
 
 admin.site.register(models.Bank_Credit)

@@ -17,7 +17,7 @@ class Capital(models.Model):
     created_date = models.CharField(max_length=100, null=True)
     created_by = models.CharField(max_length=100, null=True)
 
-class Liability(models.Model):
+class Loan(models.Model):
     amount = models.CharField(max_length=100, null=True)
     reason = models.CharField(max_length=100, null=True)
     method = models.CharField(max_length=100, null=True)
