@@ -18,5 +18,8 @@ admin.site.register(models.Purchase)
 admin.site.register(models.Expense)
 admin.site.register(models.Asset)
 
+admin.site.register(models.Ledger)
+
+
 
 

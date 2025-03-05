@@ -103,3 +103,14 @@ class Asset(models.Model):
     created_date = models.CharField(max_length=100, null=True)
     created_by = models.CharField(max_length=100, null=True)
 
+
+class Ledger(models.Model):
+    amount = models.CharField(max_length=100, null=True)
+    
+    type = models.CharField(max_length=100, null=True)
+    
+    date = models.CharField(max_length=100, null=True)
+    time = models.CharField(max_length=100, null=True)
+    created_date = models.CharField(max_length=100, null=True)
+    created_by = models.CharField(max_length=100, null=True)
+
