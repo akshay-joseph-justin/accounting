@@ -1,0 +1,60 @@
+<!-- accounts_list.html -->
+{% extends 'include/base.html' %}
+
+{% block title %}
+    Accounts
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Account List</h2>
+    <a href="{% url 'finsys:account-create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Account
+    </a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Code</th>
+            <th>Name</th>
+            <th>Type</th>
+            <th>Balance</th>
+            <th>Parent</th>
+            <th>Active</th>
+            <th>Description</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for account in accounts %}
+        <tr>
+            <td>{{ account.code }}</td>
+            <td>{{ account.name }}</td>
+            <td>{{ account.get_account_type_display }}</td>
+            <td>{{ account.balance }}</td>
+            {% if account.parent %}
+                <td>{{ account.parent.name }}</td>
+            {% else %}
+                <td>None</td>
+            {% endif %}
+            <td>{{ account.is_active|yesno:"Yes,No" }}</td>
+            <td>{{ account.description }}</td>
+            <td>
+                <a href="{% url 'finsys:account-update' account.id %}" class="btn btn-sm btn-warning">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'finsys:account-delete' account.id %}" class="btn btn-sm btn-danger"
+                onclick="return confirm('Are you sure about that🫥🫥🫥')"
+                >
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8">No accounts available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

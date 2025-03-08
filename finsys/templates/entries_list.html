@@ -1,0 +1,56 @@
+<!-- accounts_list.html -->
+{% extends 'include/base.html' %}
+
+{% block title %}
+    Journal Entries
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h2>Journal Entries</h2>
+    <a href="{% url 'finsys:entries-create' %}" class="btn btn-primary">
+        <i class="fas fa-plus"></i> Add Entries
+    </a>
+</div>
+<table class="table table-striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Reference Number</th>
+            <th>Description</th>
+            <th>Period</th>
+            <th>Status</th>
+            <th>Created By</th>
+            <th>Posted At</th>
+            <th>Actions</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for entry in entries %}
+        <tr>
+            <td>{{ entry.date }}</td>
+            <td>{{ entry.reference_number }}</td>
+            <td>{{ entry.description }}</td>
+            <td>{{ entry.period }}</td>
+            <td>{{ entry.status }}</td>
+            <td>{{ entry.created_by }}</td>
+            <td>{{ entry.posted_at }}</td>
+            <td>
+                <a href="{% url 'finsys:entries-update' entry.id %}" class="btn btn-sm btn-warning">
+                    <i class="fas fa-edit"></i> Edit
+                </a>
+                <a href="{% url 'finsys:entries-delete' entry.id %}" class="btn btn-sm btn-danger"
+                onclick="return confirm('Are you sure about that🫥🫥🫥')"
+                >
+                    <i class="fas fa-trash"></i> Delete
+                </a>
+            </td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="8">No entries available.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}
