@@ -14,17 +14,16 @@ class TimeStampedModel(models.Model):
 
 
 class AccountModel(TimeStampedModel):
+    CREDIT = 1
+    DEBIT = 2
     ACCOUNT_TYPES = (
-        ('asset', 'Asset'),
-        ('liability', 'Liability'),
-        ('equity', 'Equity'),
-        ('revenue', 'Revenue'),
-        ('expense', 'Expense'),
+        (1, 'Credit'),
+        (2, 'Debit'),
     )
 
     code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
-    account_type = models.CharField(max_length=20, choices=ACCOUNT_TYPES)
+    account_type = models.SmallIntegerField(choices=ACCOUNT_TYPES)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     parent = models.ForeignKey('self', null=True, blank=True, on_delete=models.SET_NULL)
     is_active = models.BooleanField(default=True)

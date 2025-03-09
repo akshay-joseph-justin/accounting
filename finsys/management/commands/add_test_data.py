@@ -12,8 +12,7 @@ class Command(BaseCommand):
         account1 = AccountModel.objects.create(
             code='1001',
             name='Cash',
-            account_type='asset',
-            balance=10000.00,
+            account_type=AccountModel.DEBIT,
             is_active=True,
             description='Cash account'
         )
@@ -21,8 +20,7 @@ class Command(BaseCommand):
         account2 = AccountModel.objects.create(
             code='2001',
             name='Accounts Payable',
-            account_type='liability',
-            balance=5000.00,
+            account_type=AccountModel.CREDIT,
             is_active=True,
             description='Accounts payable to suppliers'
         )
@@ -30,8 +28,7 @@ class Command(BaseCommand):
         account3 = AccountModel.objects.create(
             code='3001',
             name='Owner’s Equity',
-            account_type='equity',
-            balance=15000.00,
+            account_type=AccountModel.CREDIT,
             is_active=True,
             description='Owner’s equity account'
         )
@@ -39,8 +36,7 @@ class Command(BaseCommand):
         account4 = AccountModel.objects.create(
             code='4001',
             name='Sales Revenue',
-            account_type='revenue',
-            balance=20000.00,
+            account_type=AccountModel.CREDIT,
             is_active=True,
             description='Revenue from sales'
         )
@@ -48,8 +44,7 @@ class Command(BaseCommand):
         account5 = AccountModel.objects.create(
             code='5001',
             name='Office Supplies',
-            account_type='expense',
-            balance=2000.00,
+            account_type=AccountModel.DEBIT,
             is_active=True,
             description='Expenses for office supplies'
         )
@@ -58,8 +53,7 @@ class Command(BaseCommand):
         account6 = AccountModel.objects.create(
             code='1002',
             name='Petty Cash',
-            account_type='asset',
-            balance=500.00,
+            account_type=AccountModel.DEBIT,
             parent=account1,
             is_active=True,
             description='Petty cash account'
