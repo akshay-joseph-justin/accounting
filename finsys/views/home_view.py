@@ -1,5 +1,5 @@
-from django.views.generic import RedirectView
+from django.views.generic import TemplateView
 
 
-class HomeView(RedirectView):
-    pattern_name = 'finsys:account-list'
+class HomeView(TemplateView):
+    template_name = "index.html"

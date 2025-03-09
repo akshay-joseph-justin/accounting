@@ -1,0 +1,10 @@
+.carousel-caption {
+    width: fit-content;
+    margin: 0 auto;
+}
+
+.special-card:hover,
+.bttn-animate:hover{
+    transition: 2s;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}

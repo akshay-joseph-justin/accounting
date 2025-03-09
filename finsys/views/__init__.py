@@ -13,3 +13,6 @@ from .journel_enry_views import (
     JournelEntryUpdateView,
     JournelEntryDeleteView,
 )
+from .wallet_views import (
+    WalletView,
+)

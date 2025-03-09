@@ -5,17 +5,18 @@ from finsys.forms import AccountForm
 from finsys.models import AccountModel
 from finsys.views.delete import DeleteView
 
+
 class AccountListView(generic.ListView):
     model = AccountModel
     context_object_name = 'accounts'
     ordering = ['name']
-    template_name = "account_list.html"
+    template_name = "ledger.html"
 
 
 class AccountCreateView(generic.CreateView):
     form_class = AccountForm
     model = AccountModel
-    template_name = "account_create.html"
+    template_name = "add-ledger.html"
     success_url = reverse_lazy("finsys:account-list")
 
 

@@ -1,0 +1,141 @@
+<form method="post">
+    {% csrf_token %}
+
+    <!-- Display non-field errors for the main form -->
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            {% for error in form.non_field_errors %}
+                <p class="mb-0">{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+
+    <!-- Main Form -->
+    <div class="form-box">
+        <h2 class="text-center mb-4 px-4"> {{ main_title }} </h2>
+        {% for field in form %}
+            <div class="input-group">
+                <label for="{{ field.id_for_label }}" class="floating-label">{{ field.label }}</label>
+                {{ field }}
+                {% if field.errors %}
+                    <div class="invalid-feedback d-block">
+                        {% for error in field.errors %}
+                            <p class="mb-0">{{ error }}</p>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+
+    <!-- Formset Section -->
+    {% if formset %}
+        <hr class="my-4">
+
+        <!-- Display non-form errors for the formset -->
+        {% if formset.non_form_errors %}
+            <div class="alert alert-danger">
+                {% for error in formset.non_form_errors %}
+                    <p class="mb-0">{{ error }}</p>
+                {% endfor %}
+            </div>
+        {% endif %}
+
+        <div class="formset-container mt-4">
+            {{ formset.management_form }}
+
+            <div id="formset-forms">
+                {% for form in formset %}
+                    <div class="formset-form mb-4 border p-3 rounded">
+                        <h5 class="formset-title">{{ formset_title }} {{ forloop.counter }}</h5>
+
+                        <!-- Display non-field errors for each individual form inside the formset -->
+                        {% if form.non_field_errors %}
+                            <div class="alert alert-warning">
+                                {% for error in form.non_field_errors %}
+                                    <p class="mb-0">{{ error }}</p>
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+
+                        {% for field in form %}
+                            <div class="mb-3">
+                                <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                {{ field }}
+                                {% if field.errors %}
+                                    <div class="invalid-feedback d-block">
+                                        {% for error in field.errors %}
+                                            <p class="mb-0">{{ error }}</p>
+                                        {% endfor %}
+                                    </div>
+                                {% endif %}
+                            </div>
+                        {% endfor %}
+                        <button type="button" class="btn btn-danger remove-form">Remove</button>
+                    </div>
+                {% endfor %}
+            </div>
+
+            <button type="button" class="btn btn-success mt-3" id="add-form">Add More</button>
+        </div>
+    {% endif %}
+
+    <button type="submit" class="btn btn-primary mt-3">
+        Submit
+    </button>
+</form>
+
+
+<!-- JavaScript for Formset Manipulation -->
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        let formsetContainer = document.getElementById("formset-forms");
+        let addFormButton = document.getElementById("add-form");
+        let totalForms = document.querySelector("#id_{{ formset.prefix }}-TOTAL_FORMS");
+
+        function updateFormNumbers() {
+            document.querySelectorAll(".formset-form").forEach((form, index) => {
+                form.querySelector(".formset-title").textContent = `{{ formset_title }} ${index + 1}`;
+            });
+        }
+
+        addFormButton.addEventListener("click", function () {
+            let formCount = formsetContainer.children.length;
+            let newForm = formsetContainer.children[0].cloneNode(true);
+
+            // Update input names and IDs
+            newForm.querySelectorAll("input, select, textarea").forEach(function (field) {
+                let name = field.getAttribute("name").replace(/-\d+-/, `-${formCount}-`);
+                let id = field.getAttribute("id").replace(/-\d+-/, `-${formCount}-`);
+                field.setAttribute("name", name);
+                field.setAttribute("id", id);
+                field.value = ""; // Clear field value
+            });
+
+            // Add remove button event
+            newForm.querySelector(".remove-form").addEventListener("click", function () {
+                newForm.remove();
+                updateTotalForms();
+            });
+
+            formsetContainer.appendChild(newForm);
+            updateTotalForms();
+        });
+
+        // Attach remove event to existing forms
+        document.querySelectorAll(".remove-form").forEach(function (button) {
+            button.addEventListener("click", function () {
+                button.closest(".formset-form").remove();
+                updateTotalForms();
+            });
+        });
+
+        function updateTotalForms() {
+            let count = formsetContainer.children.length;
+            totalForms.setAttribute("value", count);
+            updateFormNumbers();
+        }
+
+        updateFormNumbers(); // Ensure numbers are correct on page load
+    });
+</script>

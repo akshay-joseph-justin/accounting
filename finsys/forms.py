@@ -11,7 +11,7 @@ class AccountForm(forms.ModelForm):
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs['class'] = 'form-check-input'
             else:
-                field.widget.attrs['class'] = 'form-control'
+                field.widget.attrs['class'] = 'form-control floating-input'
 
     class Meta:
         model = models.AccountModel

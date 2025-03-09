@@ -1,0 +1,126 @@
+
+
+#navbar {
+    background-color: transparent; /* Background color when not scrolled */
+    transition: background-color 0.3s ease, height 0.3s ease;
+  }
+  
+  .navbar-brand {
+    transition: transform 0.3s ease;
+  }
+  
+  .navbar-nav .nav-link {
+    transition: font-size 0.3s ease;
+  }
+
+  /* Custom CSS for the button */
+  .navbar-toggler:focus {
+    outline: none; /* Remove outline on button focus */
+    border: none;
+  }
+
+  .navbar-toggler{
+    outline: none;
+    border: none;
+  }
+  /* Style the FontAwesome hamburger icon */
+  .navbar-toggler i {
+    font-size: 2rem; /* Set icon size to 3rem */
+    color: white;
+    background-color: transparent; /* Set background color */
+    padding: 0.5rem; /* Add some padding for spacing */
+    border-radius: 4px; /* Add rounded corners for a better look */
+  }
+
+     /* Navbar Brand */
+     .navbar-brand {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: white !important;
+      text-transform: uppercase;
+  }
+
+  /* Navbar Links */
+  .nav-link {
+      color: white !important;
+      margin-right: 15px;
+      font-size: 1.1rem;
+      transition: color 0.3s ease;
+  }
+
+  .nav-link:hover {
+      color: #00d4ff !important; /* Highlight color on hover */
+  }
+
+  /* Active Link */
+  .nav-link.active {
+      color: #00d4ff !important;
+      font-weight: bold;
+  }
+
+  /* Navbar Toggler */
+  .navbar-toggler {
+      border-color: white;
+  }
+
+  .navbar-toggler-icon {
+      background-image: url('data:image/svg+xml;charset=UTF8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 30 30"%3E%3Cpath stroke="rgba%28255, 255, 255, 0.8%29" stroke-width="2" d="M4 7h22M4 15h22M4 23h22"/%3E%3C/svg%3E');
+  }
+
+  /* Add custom class for scrolled navbar */
+  .navbar.scrolled {
+      background-color: black !important;
+      transition: background-color 0.3s ease;
+  }
+
+
+  
+}
+
+@media (max-width: 768px) {
+  .banner {
+      height: 50vh; /* Reduced height for screens smaller than 768px */
+  }
+}
+
+@media (max-width: 576px) {
+  .banner {
+      height: 40vh; /* Further reduced height for screens smaller than 576px */
+  }
+}
+
+
+.caption {
+  font-size: 3rem;
+  font-weight: bold;
+  color: #00d4ff;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5); /* Shadow for better readability */
+  margin-bottom: 10px; /* Space between the main caption and sub-caption */
+}
+
+.sub-caption {
+  font-size: 1.5rem;
+  font-weight: lighter;
+  color: #f8f9fa;
+  text-shadow: 1px 1px 2px rgba(0,0,0,0.4); /* Shadow for better readability */
+}
+
+@media (max-width: 768px) {
+  .caption {
+      font-size: 2.5rem;
+  }
+
+  .sub-caption {
+      font-size: 1.2rem;
+  }
+}
+
+@media (max-width: 576px) {
+  .caption {
+      font-size: 2rem;
+  }
+
+  .sub-caption {
+      font-size: 1rem;
+  }
+}
