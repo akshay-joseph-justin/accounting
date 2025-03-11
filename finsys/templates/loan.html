@@ -1,0 +1,33 @@
+{% extends "includes/base.html" %}
+
+{% block title %}
+    Loan
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="card shadow-lg p-4 rounded">
+            <h1 class="text-center text-primary">Total Loan: <span class="fw-bold">{{ total_loan }}</span></h1>
+        </div>
+
+        <div class="row mt-4">
+            {% for bank in banks %}
+                <div class="col-md-6">
+                    <div class="card mb-3 shadow-sm">
+                        <div class="card-body">
+                            <h3 class="card-title text-success">
+                                <a href="{% url 'finsys:bank-details' bank.pk %}"
+                                   class="text-decoration-none text-success">
+                                    {{ bank.name }}
+                                </a>
+                            </h3>
+                            <p class="card-text">Loan Amount:
+                                <span class="fw-bold text-danger">{{ bank.loan }}</span>
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endblock %}

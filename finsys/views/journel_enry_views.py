@@ -3,25 +3,25 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from finsys.forms import JournalEntryForm, JournalEntryLineFormSet
-from finsys.models import JournalEntry
+from finsys.models import JournalEntryModel
 from finsys.views.delete import DeleteView
 
 
 class JournelEntryListView(generic.ListView):
-    model = JournalEntry
+    model = JournalEntryModel
     context_object_name = 'entries'
     template_name = "entries_list.html"
     ordering = ['-date']
 
 
 class JournelEntryDetailView(generic.DetailView):
-    model = JournalEntry
+    model = JournalEntryModel
     context_object_name = 'entry'
     template_name = "entries_details.html"
 
 
 class JournelEntryCreateView(generic.CreateView):
-    model = JournalEntry
+    model = JournalEntryModel
     form_class = JournalEntryForm
     formset_class = JournalEntryLineFormSet
     template_name = "entries_upsert.html"
@@ -50,7 +50,7 @@ class JournelEntryCreateView(generic.CreateView):
 
 
 class JournelEntryUpdateView(generic.UpdateView):
-    model = JournalEntry
+    model = JournalEntryModel
     form_class = JournalEntryForm
     formset_class = JournalEntryLineFormSet
     template_name = "entries_upsert.html"
@@ -64,5 +64,5 @@ class JournelEntryUpdateView(generic.UpdateView):
 
 
 class JournelEntryDeleteView(DeleteView):
-    model = JournalEntry
+    model = JournalEntryModel
     success_url = reverse_lazy("finsys:entries-list")

@@ -1,8 +1,10 @@
 # models.py
 
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.core.exceptions import ValidationError
 from django.db import models
+
+User = get_user_model()
 
 
 class TimeStampedModel(models.Model):
@@ -43,7 +45,7 @@ class FiscalPeriodModel(TimeStampedModel):
         return self.name
 
 
-class JournalEntry(TimeStampedModel):
+class JournalEntryModel(TimeStampedModel):
     ENTRY_STATUS = (
         ('draft', 'Draft'),
         ('posted', 'Posted'),
@@ -67,7 +69,7 @@ class JournalEntry(TimeStampedModel):
 
 
 class JournalEntryLineModel(TimeStampedModel):
-    entry = models.ForeignKey(JournalEntry, related_name='lines', on_delete=models.CASCADE)
+    entry = models.ForeignKey(JournalEntryModel, related_name='lines', on_delete=models.CASCADE)
     account = models.ForeignKey(AccountModel, on_delete=models.PROTECT)
     description = models.TextField(blank=True)
     debit_amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
@@ -75,3 +77,28 @@ class JournalEntryLineModel(TimeStampedModel):
 
     def __str__(self):
         return f"{self.account.name}"
+
+
+class BanKModel(TimeStampedModel):
+    name = models.CharField(max_length=50, unique=True)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    capital = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    loan = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    def __str__(self):
+        return self.name
+
+
+class BankTransactionModel(TimeStampedModel):
+    CAPITAL = 1
+    LOAN = 2
+    TYPE_CHOICES = (
+        (CAPITAL, 'Capital'),
+        (LOAN, 'Loan'),
+    )
+
+    bank = models.ForeignKey(BanKModel, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    date = models.DateField()
+    transaction_type = models.SmallIntegerField(choices=TYPE_CHOICES)
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)

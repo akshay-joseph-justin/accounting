@@ -1,0 +1,53 @@
+{% extends "includes/base.html" %}
+
+{% block title %}
+    {{ bank.name }}
+{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg p-4 rounded">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="text-primary">{{ bank.name }}</h1>
+            <a href="{% url 'finsys:bank-transaction-create' %}" class="btn btn-success">Add Amount</a>
+        </div>
+        <h3 class="mt-3">Balance: <span class="fw-bold text-danger">{{ bank.balance }}</span></h3>
+    </div>
+
+    <div class="card mt-4 shadow-sm">
+        <div class="card-header bg-primary text-white">
+            <h4 class="mb-0">Transaction History</h4>
+        </div>
+        <div class="card-body">
+            <table class="table table-striped">
+                <thead class="table-dark">
+                    <tr>
+                        <th>Date</th>
+                        <th>Bank</th>
+                        <th>User</th>
+                        <th>Type</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ transaction.date }}</td>
+                            <td>{{ transaction.bank.name }}</td>
+                            <td>{{ transaction.user.username }}</td>
+                            <td>{{ transaction.get_transaction_type_display }}</td>
+                            <td class="fw-bold {% if transaction.amount < 0 %}text-danger{% else %}text-success{% endif %}">
+                                {{ transaction.amount }}
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="5" class="text-center text-muted">No transactions available</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

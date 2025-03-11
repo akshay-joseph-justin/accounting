@@ -15,4 +15,9 @@ from .journel_enry_views import (
 )
 from .wallet_views import (
     WalletView,
+    BankCreateView,
+    BankDetailView,
+    BankTransactionCreateView,
 )
+from .capital_views import CapitalView
+from .loan_views import LoanView
