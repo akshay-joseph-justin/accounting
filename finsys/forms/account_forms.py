@@ -15,4 +15,4 @@ class AccountForm(forms.ModelForm):
 
     class Meta:
         model = AccountModel
-        exclude = ['is_active', 'balance']
+        exclude = ['is_bank', 'balance', 'is_inbuilt']

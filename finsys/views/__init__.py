@@ -7,17 +7,20 @@ from .account_views import (
     AccountDeleteView
 )
 from .journel_enry_views import (
-    JournelEntryListView,
-    JournelEntryDetailView,
     JournelEntryCreateView,
     JournelEntryUpdateView,
     JournelEntryDeleteView,
 )
 from .wallet_views import (
-    WalletView,
+    BankView,
     BankCreateView,
-    BankDetailView,
-    BankTransactionCreateView,
 )
-from .capital_views import CapitalView
-from .loan_views import LoanView
+from .capital_views import (
+    CapitalView,
+    CapitalAddAmountView,
+)
+from .loan_views import (
+    LoanView,
+    LoanAddAmountView,
+)
+from .withdraw_views import WithdrawView
