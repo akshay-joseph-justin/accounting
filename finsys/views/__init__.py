@@ -1,23 +1,27 @@
-from django.views.generic import DeleteView as delete_view
-from .home_view import HomeView
 from .account_views import (
     AccountListView,
     AccountCreateView,
     AccountUpdateView,
     AccountDeleteView
 )
+from .capital_views import (
+    CapitalView,
+    CapitalAddAmountView,
+)
+from .home_view import HomeView
 from .journel_enry_views import (
-    JournelEntryListView,
-    JournelEntryDetailView,
     JournelEntryCreateView,
     JournelEntryUpdateView,
     JournelEntryDeleteView,
 )
-from .wallet_views import (
-    WalletView,
-    BankCreateView,
-    BankDetailView,
-    BankTransactionCreateView,
+from .loan_views import (
+    LoanView,
+    LoanAddAmountView,
 )
-from .capital_views import CapitalView
-from .loan_views import LoanView
+from .wallet_views import (
+    BankView,
+    BankCreateView,
+    BankAddAmountView,
+    BankDetailView
+)
+from .withdraw_views import WithdrawView

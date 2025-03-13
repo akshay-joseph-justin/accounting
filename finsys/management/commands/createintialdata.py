@@ -1,3 +1,5 @@
+from datetime import datetime
+
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
@@ -8,47 +10,46 @@ class Command(BaseCommand):
     help = 'Add example datas'
 
     def add_accounts(self):
+
         models.AccountModel.objects.create(
-            code='1102',
-            name='petrol',
+            code='2001',
+            name='Capital',
+            account_type=models.AccountModel.CREDIT,
+            is_inbuilt=True,
+        )
+
+        models.AccountModel.objects.create(
+            code='3001',
+            name='Loan',
+            account_type=models.AccountModel.CREDIT,
+            is_inbuilt=True,
+        )
+
+        models.AccountModel.objects.create(
+            code='4001',
+            name='Fixed Assets',
             account_type=models.AccountModel.DEBIT,
+            is_inbuilt=True,
         )
 
         models.AccountModel.objects.create(
-            code='2012',
-            name='Accounts Payable',
+            code='5001',
+            name='Income',
             account_type=models.AccountModel.CREDIT,
+            is_inbuilt=True,
         )
 
         models.AccountModel.objects.create(
-            code='3012',
-            name='Owner’s Equity',
-            account_type=models.AccountModel.CREDIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='4012',
-            name='Sales Revenue',
-            account_type=models.AccountModel.CREDIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='5012',
-            name='Office Supplies',
+            code='1002',
+            name='Expense',
             account_type=models.AccountModel.DEBIT,
+            is_inbuilt=True,
         )
-
         models.AccountModel.objects.create(
-            code='6012',
-            name='Petty Cash',
-            account_type=models.AccountModel.DEBIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='6013',
-            name='SBI',
+            code='2112',
+            name='Cash',
             account_type=models.AccountModel.CREDIT,
-            is_bank=True,
+            is_bank=True
         )
 
     def handle(self, *args, **kwargs):

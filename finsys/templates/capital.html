@@ -1,33 +1,70 @@
 {% extends "includes/base.html" %}
 
 {% block title %}
-    Loan
+    Capital
 {% endblock %}
 
 {% block content %}
     <div class="container mt-5">
-        <div class="card shadow-lg p-4 rounded">
-            <h1 class="text-center text-primary">Total Capital: <span class="fw-bold">{{ total_capital }}</span>
+        <div class="d-flex justify-content-between align-items-center mb-3">
+            <h1 class="text-primary">Total Capital: <span class="fw-bold">{{ capital.balance | default:0.0 }}</span>
             </h1>
+            <a href="{% url 'finsys:capital-add-amount' %}" class="btn btn-success">Add Amount</a>
         </div>
 
-        <div class="row mt-4">
-            {% for bank in banks %}
-                <div class="col-md-6">
-                    <div class="card mb-3 shadow-sm">
-                        <div class="card-body">
-                            <h3 class="card-title text-success">
-                                <a href="{% url 'finsys:bank-details' bank.pk %}"
-                                   class="text-decoration-none text-success">
-                                    {{ bank.name }}
-                                </a>
-                            </h3>
-                            <p class="card-text">Capital Amount: <span
-                                    class="fw-bold text-danger">{{ bank.capital }}</span></p>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
+        <div class="container mt-4">
+            <h2 class="mb-3">History</h2>
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Date</th>
+                    <th>Reference Number</th>
+                    <th>Created By</th>
+                    <th>Entry Lines</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for entry in entries %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ entry.date }}</td>
+                        <td>{{ entry.reference_number }}</td>
+                        <td>{{ entry.created_by.username }}</td>
+                        <td>
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                <tr>
+                                    <th>Account</th>
+                                    <th>Type</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {% for line in entry.lines.all %}
+                                    <tr>
+                                        <td>{{ line.account.name }}</td>
+                                        <td>
+                                            {% if line.entry_type == 1 %} Debit {% else %} Credit {% endif %}
+                                        </td>
+                                        <td>{{ line.amount }}</td>
+                                    </tr>
+                                {% empty %}
+                                    <tr>
+                                        <td colspan="3" class="text-center">No Entries</td>
+                                    </tr>
+                                {% endfor %}
+                                </tbody>
+                            </table>
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5" class="text-center">No Journal Entries Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
     </div>
 {% endblock %}
