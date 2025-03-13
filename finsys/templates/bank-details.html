@@ -20,8 +20,10 @@
                     <th>#</th>
                     <th>Date</th>
                     <th>Reference Number</th>
-                    <th>Created By</th>
-                    <th>Entry Lines</th>
+                    <th>Head</th>
+                    <th>From</th>
+                    <th>Type ( Credit / Debit )</th>
+                    <th>Amount</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -30,6 +32,8 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ entry.date }}</td>
                         <td>{{ entry.reference_number }}</td>
+                        <td>Capital / Asset / Ledger / ...</td>
+                        <td> Furniture in Asset , Sponser from Capital</td>
                         <td>{{ entry.created_by.username }}</td>
                         <td>
                             <table class="table table-sm table-striped">

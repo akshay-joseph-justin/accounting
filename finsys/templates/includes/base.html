@@ -89,7 +89,9 @@
                 <span>Fixed Assets</span>
             </a>
         </li>
-        <li class="nav-item">
+
+        
+        {% comment %} <li class="nav-item">
             <a class="nav-link collapsed" href="#">
                 <i class="bi bi-grid"></i>
                 <span>Income</span>
@@ -100,14 +102,7 @@
                 <i class="bi bi-person"></i>
                 <span>Expense</span>
             </a>
-        </li>
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:wallet' %}">
-                <i class="bi bi-person"></i>
-                <span>Wallet</span>
-            </a>
-        </li>
+        </li> {% endcomment %}
 
         <li class="nav-item">
             <a class="nav-link collapsed" href="#">
@@ -116,19 +111,22 @@
             </a>
         </li>
 
+
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:withdraw' %}">
+            <a class="nav-link collapsed" href="{% url 'finsys:wallet' %}">
                 <i class="bi bi-person"></i>
-                <span>Withdraw</span>
+                <span>Banks</span>
             </a>
         </li>
 
+
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
+            <a class="nav-link collapsed" href="{% url 'finsys:withdraw' %}">
                 <i class="bi bi-person"></i>
-                <span>Deposit</span>
+                <span>Bank Transfer</span>
             </a>
         </li>
+
 
         <!-- End Profile Page Nav -->
 

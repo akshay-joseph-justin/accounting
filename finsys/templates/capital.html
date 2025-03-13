@@ -20,8 +20,12 @@
                     <th>#</th>
                     <th>Date</th>
                     <th>Reference Number</th>
-                    <th>Created By</th>
-                    <th>Entry Lines</th>
+                    <th>From</th>
+                    <th>Bank</th>
+                    <th>Amount</th>
+                    <th>View</th>
+                    <th>Edit</th>
+                    <th> History</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -57,6 +61,8 @@
                                 </tbody>
                             </table>
                         </td>
+                        <td>{{ line.amount }}</td>
+
                     </tr>
                 {% empty %}
                     <tr>
