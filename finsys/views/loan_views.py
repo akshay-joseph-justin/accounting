@@ -18,7 +18,7 @@ class LoanView(TemplateView):
 class LoanAddAmountView(TemplateView, FormView):
     template_name = "add-capital.html"
     form_class = LoanForm
-    success_url = reverse_lazy("finsys:capital")
+    success_url = reverse_lazy("finsys:loan")
 
     def form_valid(self, form):
         loan = AccountModel.objects.filter(name="Loan").first()
