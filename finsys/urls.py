@@ -15,7 +15,9 @@ urlpatterns = [
     path("entries/delete/<int:pk>/", views.JournelEntryDeleteView.as_view(), name="entries-delete"),
 
     path("wallet/", views.BankView.as_view(), name="wallet"),
-    path("wallet/create/bank/", views.BankCreateView.as_view(), name="bank-create"),
+    path("wallet/bank/create/", views.BankCreateView.as_view(), name="bank-create"),
+    path("wallet/bank/details/<int:pk>/", views.BankDetailView.as_view(), name="bank-details"),
+    path("wallet/bank/add/amount/<int:pk>/", views.BankAddAmountView.as_view(), name="bank-add-amount"),
 
     path("capital/", views.CapitalView.as_view(), name="capital"),
     path("capital/amount/add/", views.CapitalAddAmountView.as_view(), name="capital-add-amount"),

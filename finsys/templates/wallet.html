@@ -12,7 +12,7 @@
             <div class="row g-4 align-items-stretch">
                 {% for bank in banks %}
                 	<div class="col-lg-6">
-                    <a href="{% url 'finsys:home' %}" class="text-white text-decoration-none">
+                    <a href="{% url 'finsys:bank-details' bank.pk %}" class="text-white text-decoration-none">
                         <div class="p-5 credit-box">
                             <h2 class="fw-bold">{{ bank.name }}</h2>
                             <br>
