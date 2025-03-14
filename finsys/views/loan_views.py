@@ -1,7 +1,6 @@
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView
 
-from finsys import generate_random_number
 from finsys.forms import LoanForm
 from finsys.models import LoanModel, LoanHistoryModel
 
@@ -38,7 +37,12 @@ class LoanUpdateView(UpdateView):
 
 
 class LoanHistoryView(ListView):
-    model = LoanHistoryModel
     template_name = "history.html"
     context_object_name = 'entries'
     ordering = ['-date']
+
+    def get_queryset(self):
+        instance = LoanHistoryModel.objects.all().first()
+        if instance:
+            return instance.history.all()
+        return LoanHistoryModel.objects.none()

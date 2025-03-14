@@ -1,4 +1,4 @@
-# models.py
+from simple_history.models import HistoricalRecords
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -93,6 +93,7 @@ class LedgerModel(TimeStampedModel):
     bank = models.ForeignKey(BankModel, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     description = models.TextField(null=True, blank=True)
+    history = HistoricalRecords(inherit=True)
 
     class Meta:
         abstract = True

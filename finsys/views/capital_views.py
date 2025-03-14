@@ -33,7 +33,12 @@ class CapitalUpdateView(UpdateView):
 
 
 class CapitalHistoryView(ListView):
-    model = CapitalHistoryModel
     template_name = "history.html"
     context_object_name = 'entries'
     ordering = ['-date']
+
+    def get_queryset(self):
+        instance = CapitalHistoryModel.objects.all().first()
+        if instance:
+            return instance.history.all()
+        return CapitalHistoryModel.objects.none()
