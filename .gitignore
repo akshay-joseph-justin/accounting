@@ -1,4 +1,10 @@
 .idea/
 .venv/
-finsys/migrations/
 db.sqlite3
+
+finsys/migrations/
+finsys/__pycache__/
+finsys/forms/__pycache__/
+finsys/management/commands/__pycache__/
+finsys/signals/__pycache__/
+finsys/views/__pycache__/
