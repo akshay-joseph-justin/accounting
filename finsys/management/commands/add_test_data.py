@@ -1,57 +1,15 @@
-from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 
 from finsys import models
 
-
 class Command(BaseCommand):
     help = 'Add example datas'
 
-    def add_accounts(self):
-        models.AccountModel.objects.create(
-            code='1102',
-            name='petrol',
-            account_type=models.AccountModel.DEBIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='2012',
-            name='Accounts Payable',
-            account_type=models.AccountModel.CREDIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='3012',
-            name='Owner’s Equity',
-            account_type=models.AccountModel.CREDIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='4012',
-            name='Sales Revenue',
-            account_type=models.AccountModel.CREDIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='5012',
-            name='Office Supplies',
-            account_type=models.AccountModel.DEBIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='6012',
-            name='Petty Cash',
-            account_type=models.AccountModel.DEBIT,
-        )
-
-        models.AccountModel.objects.create(
-            code='6013',
-            name='SBI',
-            account_type=models.AccountModel.CREDIT,
-            is_bank=True,
-        )
-
     def handle(self, *args, **kwargs):
-        self.add_accounts()
+        models.BankModel.objects.create(
+            name="SBI",
+            account_number="123456",
+            branch="kalala"
+        )
 
         self.stdout.write(self.style.SUCCESS('Successfully added example data to models.AccountModel'))

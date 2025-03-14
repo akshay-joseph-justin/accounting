@@ -6,7 +6,9 @@ from .account_views import (
 )
 from .capital_views import (
     CapitalView,
-    CapitalAddAmountView,
+    CapitalCreateView,
+    CapitalUpdateView,
+    CapitalHistoryView,
 )
 from .home_view import HomeView
 from .journel_enry_views import (
@@ -16,12 +18,15 @@ from .journel_enry_views import (
 )
 from .loan_views import (
     LoanView,
-    LoanAddAmountView,
+    LoanCreateView,
+    LoanUpdateView,
+    LoanHistoryView,
 )
-from .wallet_views import (
+from .bank_views import (
     BankView,
     BankCreateView,
+    BankDetailView,
+    BankUpdateView,
     BankAddAmountView,
-    BankDetailView
 )
 from .withdraw_views import WithdrawView
