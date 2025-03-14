@@ -1,4 +1,4 @@
-# models.py
+from simple_history.models import HistoricalRecords
 
 from django.contrib.auth import get_user_model
 from django.db import models
@@ -57,3 +57,64 @@ class JournalEntryLineModel(TimeStampedModel):
 
     def __str__(self):
         return f"{self.account.name}"
+
+
+class BankModel(TimeStampedModel):
+    name = models.CharField(max_length=100)
+    account_number = models.CharField(max_length=50, null=True, blank=True)
+    branch = models.CharField(max_length=50, null=True, blank=True)
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    def __str__(self):
+        return f"{self.branch} - {self.name}"
+
+
+class BankTransactionModel(TimeStampedModel):
+    CREDIT = 1
+    DEBIT = 2
+    TYPES = (
+        (CREDIT, 'Credit'),
+        (DEBIT, 'Debit'),
+    )
+
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    bank = models.ForeignKey(BankModel, on_delete=models.PROTECT)
+    date = models.DateField()
+    head = models.CharField(max_length=50, null=True, blank=True)
+    from_where = models.CharField(max_length=50, null=True, blank=True)
+    transaction_type = models.SmallIntegerField(choices=TYPES)
+    amount = models.DecimalField(max_digits=15, decimal_places=2)
+
+
+class LedgerModel(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    date = models.DateField()
+    from_where = models.CharField(max_length=50)
+    bank = models.ForeignKey(BankModel, on_delete=models.PROTECT)
+    amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    description = models.TextField(null=True, blank=True)
+    history = HistoricalRecords(inherit=True)
+
+    class Meta:
+        abstract = True
+
+
+class CapitalModel(TimeStampedModel):
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+
+class LoanModel(TimeStampedModel):
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+
+class CapitalHistoryModel(LedgerModel):
+
+    def __str__(self):
+        return f"{self.date} - {self.bank}"
+
+
+class LoanHistoryModel(LedgerModel):
+
+
+    def __str__(self):
+        return f"{self.date} - {self.bank}"

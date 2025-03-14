@@ -1,17 +1,11 @@
 {% extends "includes/base.html" %}
 
 {% block title %}
-    Loan
+    History
 {% endblock %}
 
 {% block content %}
     <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-primary">Total Loan: <span class="fw-bold">{{ loan.balance | default:0.0 }}</span>
-            </h1>
-            <a href="{% url 'finsys:loan-add-amount' %}" class="btn btn-success">Add Amount</a>
-        </div>
-
         <div class="container mt-4">
             <h2 class="mb-3">History</h2>
             <table class="table table-bordered table-hover">
@@ -22,9 +16,10 @@
                     <th>From</th>
                     <th>Bank</th>
                     <th>Amount</th>
-                    <th>View</th>
-                    <th>Edit</th>
-                    <th>History</th>
+                    <th>user</th>
+                    <th>Create At</th>
+                    <th>Updated At</th>
+                    <th>~</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -32,12 +27,19 @@
                     <tr>
                         <td>{{ forloop.counter }}</td>
                         <td>{{ entry.date }}</td>
-                        <td>{{ entry.from_where}}</td>
+                        <td>{{ entry.from_where }}</td>
                         <td>{{ entry.bank }}</td>
                         <td>{{ entry.amount }}</td>
-                        <td><a href="{% url 'finsys:home' %}" class="btn btn-success">View</a></td>
-                        <td><a href="{% url 'finsys:loan-update' entry.pk %}" class="btn btn-success">Edit</a></td>
-                        <td><a href="{% url 'finsys:loan-history' %}" class="btn btn-success">History</a></td>
+                        <td>{{ entry.user }}</td>
+                        <td>{{ entry.created_at }}</td>
+                        <td>{{ entry.updated_at }}</td>
+                        {% if entry.history_type == "+" %}
+                            <td>Created</td>
+                        {% elif entry.history_type == "~" %}
+                            <td>Edited</td>
+                        {% elif entry.history_type == "-" %}
+                            <td>Deleted</td>
+                        {% endif %}
                     </tr>
                 {% empty %}
                     <tr>
