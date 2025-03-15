@@ -11,5 +11,6 @@ class Command(BaseCommand):
     def handle(self, *args, **kwargs):
         models.CapitalModel.objects.create()
         models.LoanModel.objects.create()
+        models.FixedAssetsModel.objects.create()
 
         self.stdout.write(self.style.SUCCESS('Successfully added example data to models.AccountModel'))

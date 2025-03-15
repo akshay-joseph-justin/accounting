@@ -5,8 +5,8 @@ from .account_balance_signals import AccountBalanceSignals
 from .bank_signals import BankSignal
 from .capital_signals import CapitalSignal
 from .loan_signals import LoanSignal
+from .fixed_assets_signals import FixedAssetsSignal
 
-post_save.connect(AccountBalanceSignals.calculate_balance, sender=models.JournalEntryLineModel)
 post_save.connect(AccountBalanceSignals.post_change_balance, sender=models.AccountHistoryModel)
 pre_save.connect(AccountBalanceSignals.pre_change_balance, sender=models.AccountHistoryModel)
 
@@ -17,3 +17,5 @@ pre_save.connect(CapitalSignal.pre_change_balance, sender=models.CapitalHistoryM
 
 post_save.connect(LoanSignal.post_change_balance, sender=models.LoanHistoryModel)
 pre_save.connect(LoanSignal.pre_change_balance, sender=models.LoanHistoryModel)
+
+post_save.connect(FixedAssetsSignal.post_change_balance, sender=models.FixedAssetsHistoryModel)

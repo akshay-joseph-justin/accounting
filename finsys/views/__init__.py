@@ -16,11 +16,6 @@ from .capital_views import (
     CapitalHistoryView,
 )
 from .home_view import HomeView
-from .journel_enry_views import (
-    JournelEntryCreateView,
-    JournalEntryUpdateView,
-    JournalEntryHistoryView,
-)
 from .loan_views import (
     LoanView,
     LoanCreateView,
@@ -38,4 +33,10 @@ from .bank_views import (
     BankTransferListView,
 
 )
-from .withdraw_views import WithdrawView
+from .fixed_assets_views import (
+    FixedAssetsView,
+    FixedAssetsCreateView,
+    FixedAssetsUpdateView,
+    FixedAssetsHistoryView
+)
+from .balance_sheet import BalanceSheetView

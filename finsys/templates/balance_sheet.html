@@ -1,0 +1,51 @@
+{% extends "includes/base.html" %}
+
+{% block title %}
+    Balance Sheet
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="text-center">Balance Sheet</h2>
+        <div class="container mt-4">
+            <table class="table table-bordered table-hover">
+                <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Liabilities</th>
+                        <th>Amount</th>
+                        <th>Assets</th>
+                        <th>Amount</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>1</td>
+                        <td>Capital</td>
+                        <td>{{ capital.balance|default:"0" }}</td>
+                        <td>Fixed Assets</td>
+                        <td>{{ fixed_asset.balance|default:"0" }}</td>
+                    </tr>
+                    <tr>
+                        <td>2</td>
+                        <td>Loan</td>
+                        <td>{{ loan.balance|default:"0" }}</td>
+                        <td>Bank Balance</td>
+                        <td>
+                            {% for bank in banks %}
+                                {{ bank.name }}: {{ bank.balance }} <br>
+                            {% endfor %}
+                        </td>
+                    </tr>
+                    <tr class="table-secondary">
+                        <td></td>
+                        <td><strong>Total Liabilities</strong></td>
+                        <td><strong>{{ liability_total }}</strong></td>
+                        <td><strong>Total Assets</strong></td>
+                        <td><strong>{{ assets_total }}</strong></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endblock %}

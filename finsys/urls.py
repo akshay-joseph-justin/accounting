@@ -34,5 +34,11 @@ urlpatterns = [
     path("loan/edit/<int:pk>/", views.LoanUpdateView.as_view(), name="loan-update"),
     path("loan/history/", views.LoanHistoryView.as_view(), name="loan-history"),
 
-    path("withdraw/", views.WithdrawView.as_view(), name="withdraw"),
+    path("fixed-assets/", views.FixedAssetsView.as_view(), name="fixed-assets"),
+    path("fixed-assets/create/", views.FixedAssetsCreateView.as_view(), name="fixed-assets-create"),
+    path("fixed-assets/update/<int:pk>/", views.FixedAssetsUpdateView.as_view(), name="fixed-assets-update"),
+    path("fixed-assets/history/<int:pk>/", views.FixedAssetsHistoryView.as_view(), name="fixed-assets-history"),
+
+    path("balance-sheet/", views.BalanceSheetView.as_view(), name="balance-sheet"),
+
 ]

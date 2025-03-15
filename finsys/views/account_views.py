@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from finsys.forms import AccountForm, AccountHistoryForm
-from finsys.models import AccountModel, JournalEntryModel, AccountHistoryModel
+from finsys.models import AccountModel, AccountHistoryModel
 from finsys.views.delete import DeleteView
 
 
