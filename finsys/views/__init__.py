@@ -33,5 +33,9 @@ from .bank_views import (
     BankDetailView,
     BankUpdateView,
     BankAddAmountView,
+
+    BankTransferView,
+    BankTransferListView,
+
 )
 from .withdraw_views import WithdrawView

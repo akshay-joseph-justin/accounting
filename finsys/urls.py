@@ -21,6 +21,9 @@ urlpatterns = [
     path("banks/add/amount/<int:pk>/", views.BankAddAmountView.as_view(), name="bank-add-amount"),
     path("banks/edit/<int:pk>/", views.BankUpdateView.as_view(), name="bank-update"),
 
+    path("banks/transfer/", views.BankTransferListView.as_view(), name="bank-transfer"),
+    path("banks/transfer/create/", views.BankTransferView.as_view(), name="bank-transfer-create"),
+
     path("capital/", views.CapitalView.as_view(), name="capital"),
     path("capital/amount/add/", views.CapitalCreateView.as_view(), name="capital-add-amount"),
     path("capital/edit/<int:pk>/", views.CapitalUpdateView.as_view(), name="capital-update"),
