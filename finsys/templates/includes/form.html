@@ -59,9 +59,12 @@
                         {% endif %}
 
                         {% for field in form %}
+                            {{ form.id }}
                             <div class="mb-3 input-group">
-                                <label for="{{ field.id_for_label }}" class="floating-label">{{ field.label }}</label>
-                                {{ field }}
+                                {% if not field.is_hidden %}
+                                	<label for="{{ field.id_for_label }}" class="floating-label">{{ field.label }}</label>
+                                    {{ field }}
+                                {% endif %}
                                 {% if field.errors %}
                                     <div class="invalid-feedback d-block">
                                         {% for error in field.errors %}
