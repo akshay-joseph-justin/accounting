@@ -17,4 +17,4 @@ class CapitalForm(forms.ModelForm):
 
     class Meta:
         model = CapitalHistoryModel
-        exclude = ("balance", "user")
+        exclude = ("balance", "user", "is_deleted")

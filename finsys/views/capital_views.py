@@ -10,7 +10,7 @@ class CapitalView(TemplateView):
 
     def get_context_data(self, **kwargs):
         capital = CapitalModel.objects.all().first()
-        entries = CapitalHistoryModel.objects.all()
+        entries = CapitalHistoryModel.objects.filter(is_deleted=False)
         return {"capital": capital, 'entries': entries}
 
 

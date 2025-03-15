@@ -15,7 +15,7 @@
                         <br>
                         {% for account in accounts %}
                             {% if account.get_account_type_display == 'Credit' %}
-                                <a href="" style="text-decoration: none" class="text-white">{{ account.name }}</a><br>
+                                <a href="{% url 'finsys:ledger-details' account.pk %}" style="text-decoration: none" class="text-white">{{ account.name }}</a><br>
                             {% endif %}
                         {% endfor %}
                     </div>
@@ -26,7 +26,7 @@
                         <br>
                         {% for account in accounts %}
                             {% if account.get_account_type_display == 'Debit' %}
-                                <a href="" style="text-decoration: none" class="text-white">{{ account.name }}</a><br>
+                                <a href="{% url 'finsys:ledger-details' account.pk %}" style="text-decoration: none" class="text-white">{{ account.name }}</a><br>
                             {% endif %}
                         {% endfor %}
                     </div>

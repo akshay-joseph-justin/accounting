@@ -17,4 +17,4 @@ class LoanForm(forms.ModelForm):
 
     class Meta:
         model = LoanHistoryModel
-        exclude = ("balance", "user")
+        exclude = ("balance", "user", "is_deleted")

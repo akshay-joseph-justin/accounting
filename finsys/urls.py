@@ -9,10 +9,11 @@ urlpatterns = [
     path("ledger/create/", views.AccountCreateView.as_view(), name="ledger-create"),
     path("ledger/update/<int:pk>/", views.AccountUpdateView.as_view(), name="ledger-update"),
     path("ledger/delete/<int:pk>/", views.AccountDeleteView.as_view(), name="ledger-delete"),
+    path("ledger/<int:pk>/", views.AccountDetailView.as_view(), name="ledger-details"),
 
-    path("entries/create/", views.JournelEntryCreateView.as_view(), name="entries-create"),
-    path("entries/update/<int:pk>/", views.JournelEntryUpdateView.as_view(), name="entries-update"),
-    path("entries/delete/<int:pk>/", views.JournelEntryDeleteView.as_view(), name="entries-delete"),
+    path("entries/create/<int:pk>/", views.AccountHistoryCreateView.as_view(), name="entries-create"),
+    path("entries/update/<int:pk>/", views.AccountHistoryUpdateView.as_view(), name="entries-update"),
+    path("entries/history/<int:pk>/", views.AccountHistoryView.as_view(), name="entries-history"),
 
     path("banks/", views.BankView.as_view(), name="wallet"),
     path("banks/<int:pk>/", views.BankDetailView.as_view(), name="bank-details"),

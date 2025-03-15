@@ -19,7 +19,7 @@ class BankDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["transactions"] = models.BankTransactionModel.objects.filter(bank=self.object)
+        context["transactions"] = models.BankTransactionModel.objects.filter(bank=self.object, is_deleted=False)
         return context
 
 
@@ -46,6 +46,7 @@ class BankAddAmountView(generic.TemplateView, generic.FormView):
     def form_valid(self, form):
         bank = models.BankModel.objects.get(pk=self.kwargs['pk'])
         transaction = self.model.objects.create(
+            user=self.request.user,
             bank=bank,
             date=form.cleaned_data['date'],
             from_where=form.cleaned_data['from_where'],

@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from finsys.forms import JournalEntryForm, JournalEntryLineFormSet
-from finsys.models import JournalEntryModel
+from finsys.models import JournalEntryModel, AccountModel
 from finsys.views.delete import DeleteView
 
 
@@ -11,7 +11,6 @@ class JournelEntryCreateView(generic.CreateView):
     form_class = JournalEntryForm
     formset_class = JournalEntryLineFormSet
     template_name = "entries-upsert.html"
-    success_url = reverse_lazy("finsys:home")
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -31,30 +30,53 @@ class JournelEntryCreateView(generic.CreateView):
             self.object.save()
             formset.instance = self.object
             formset.save()
+            self.account = formset.forms[0].instance.account
             return super().form_valid(form)
         return self.form_invalid(form)
 
     def get_success_url(self):
-        if self.request.session.get('path', None):
-            return reverse_lazy(f"finsys:{account_name}")
-
-        return super().get_success_url()
+        return reverse_lazy(f"finsys:ledger-details", kwargs={"pk": self.account.pk})
 
 
-class JournelEntryUpdateView(generic.UpdateView):
+class JournalEntryUpdateView(generic.UpdateView):
     model = JournalEntryModel
     form_class = JournalEntryForm
-    formset_class = JournalEntryLineFormSet
-    template_name = "entries-upsert.html"
-    success_url = reverse_lazy("finsys:entries-list")
+    template_name = 'entries-upsert.html'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        formset = JournalEntryLineFormSet(instance=self.get_object())
-        context['formset'] = formset
+        if self.request.POST:
+            context['formset'] = JournalEntryLineFormSet(self.request.POST, instance=self.object)
+        else:
+            context['formset'] = JournalEntryLineFormSet(instance=self.object)
+        return context
+
+    def form_valid(self, form):
+        context = self.get_context_data()
+        formset = context['formset']
+        if formset.is_valid():
+            self.object = form.save()
+            formset.instance = self.object
+            formset.save()
+            self.account = formset.forms[0].instance.account
+            return super().form_valid(form)
+
+        return self.form_invalid(form)
+
+    def get_success_url(self):
+        return reverse_lazy("finsys:ledger-details", kwargs={"pk": self.account.pk})
+
+
+class JournalEntryHistoryView(generic.DetailView):
+    model = JournalEntryModel
+    template_name = "entris-history.html"
+    context_object_name = "entry"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["entries"] = context["entry"].lines.all()
         return context
 
 
-class JournelEntryDeleteView(DeleteView):
-    model = JournalEntryModel
-    success_url = reverse_lazy("finsys:entries-list")
+
+

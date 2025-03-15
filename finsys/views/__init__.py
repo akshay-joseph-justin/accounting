@@ -2,7 +2,12 @@ from .account_views import (
     AccountListView,
     AccountCreateView,
     AccountUpdateView,
-    AccountDeleteView
+    AccountDeleteView,
+    AccountDetailView,
+
+    AccountHistoryView,
+    AccountHistoryCreateView,
+    AccountHistoryUpdateView
 )
 from .capital_views import (
     CapitalView,
@@ -13,8 +18,8 @@ from .capital_views import (
 from .home_view import HomeView
 from .journel_enry_views import (
     JournelEntryCreateView,
-    JournelEntryUpdateView,
-    JournelEntryDeleteView,
+    JournalEntryUpdateView,
+    JournalEntryHistoryView,
 )
 from .loan_views import (
     LoanView,

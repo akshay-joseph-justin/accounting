@@ -22,15 +22,12 @@ class AccountModel(TimeStampedModel):
         (2, 'Debit'),
     )
 
-    code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     account_type = models.SmallIntegerField(choices=ACCOUNT_TYPES)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    is_inbuilt = models.BooleanField(default=False)
-    is_bank = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.code} - {self.name}"
+        return f"{self.name}"
 
 
 class JournalEntryModel(TimeStampedModel):
@@ -54,6 +51,7 @@ class JournalEntryLineModel(TimeStampedModel):
     account = models.ForeignKey(AccountModel, on_delete=models.PROTECT)
     entry_type = models.SmallIntegerField(choices=ENTRY_TYPES)
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
+    history = HistoricalRecords()
 
     def __str__(self):
         return f"{self.account.name}"
@@ -84,6 +82,8 @@ class BankTransactionModel(TimeStampedModel):
     from_where = models.CharField(max_length=50, null=True, blank=True)
     transaction_type = models.SmallIntegerField(choices=TYPES)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
+    is_deleted = models.BooleanField(default=False)
+    foreign_id = models.IntegerField(null=True, blank=True)
 
 
 class LedgerModel(TimeStampedModel):
@@ -94,6 +94,7 @@ class LedgerModel(TimeStampedModel):
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     description = models.TextField(null=True, blank=True)
     history = HistoricalRecords(inherit=True)
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -115,6 +116,13 @@ class CapitalHistoryModel(LedgerModel):
 
 class LoanHistoryModel(LedgerModel):
 
+
+    def __str__(self):
+        return f"{self.date} - {self.bank}"
+
+
+class AccountHistoryModel(LedgerModel):
+    account = models.ForeignKey(AccountModel, on_delete=models.PROTECT)
 
     def __str__(self):
         return f"{self.date} - {self.bank}"

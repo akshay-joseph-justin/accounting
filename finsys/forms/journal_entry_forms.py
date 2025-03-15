@@ -38,5 +38,5 @@ JournalEntryLineFormSet = forms.inlineformset_factory(
     JournalEntryLineModel,
     form=JournalEntryLineForm,
     extra=2,
-    can_delete=True
+    can_delete=False
 )
