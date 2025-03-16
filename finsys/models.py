@@ -1,7 +1,6 @@
-from simple_history.models import HistoricalRecords
-
 from django.contrib.auth import get_user_model
 from django.db import models
+from simple_history.models import HistoricalRecords
 
 User = get_user_model()
 
@@ -22,41 +21,12 @@ class AccountModel(TimeStampedModel):
         (2, 'Debit'),
     )
 
-    code = models.CharField(max_length=20, unique=True)
     name = models.CharField(max_length=100)
     account_type = models.SmallIntegerField(choices=ACCOUNT_TYPES)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
-    is_inbuilt = models.BooleanField(default=False)
-    is_bank = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.code} - {self.name}"
-
-
-class JournalEntryModel(TimeStampedModel):
-    date = models.DateField()
-    reference_number = models.CharField(max_length=50)
-    created_by = models.ForeignKey(User, on_delete=models.PROTECT)
-
-    def __str__(self):
-        return f"{self.date} - {self.reference_number}"
-
-
-class JournalEntryLineModel(TimeStampedModel):
-    DEBIT = 1
-    CREDIT = 2
-    ENTRY_TYPES = (
-        (DEBIT, 'Debit'),
-        (CREDIT, 'Credit'),
-    )
-
-    entry = models.ForeignKey(JournalEntryModel, related_name='lines', on_delete=models.CASCADE)
-    account = models.ForeignKey(AccountModel, on_delete=models.PROTECT)
-    entry_type = models.SmallIntegerField(choices=ENTRY_TYPES)
-    amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
-
-    def __str__(self):
-        return f"{self.account.name}"
+        return f"{self.name}"
 
 
 class BankModel(TimeStampedModel):
@@ -84,6 +54,8 @@ class BankTransactionModel(TimeStampedModel):
     from_where = models.CharField(max_length=50, null=True, blank=True)
     transaction_type = models.SmallIntegerField(choices=TYPES)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
+    is_deleted = models.BooleanField(default=False)
+    foreign_id = models.IntegerField(null=True, blank=True)
 
 
 class LedgerModel(TimeStampedModel):
@@ -94,6 +66,7 @@ class LedgerModel(TimeStampedModel):
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     description = models.TextField(null=True, blank=True)
     history = HistoricalRecords(inherit=True)
+    is_deleted = models.BooleanField(default=False)
 
     class Meta:
         abstract = True
@@ -114,6 +87,34 @@ class CapitalHistoryModel(LedgerModel):
 
 
 class LoanHistoryModel(LedgerModel):
+
+    def __str__(self):
+        return f"{self.date} - {self.bank}"
+
+
+class AccountHistoryModel(LedgerModel):
+    account = models.ForeignKey(AccountModel, on_delete=models.PROTECT)
+
+    def __str__(self):
+        return f"{self.date} - {self.bank}"
+
+
+class FixedAssetsModel(TimeStampedModel):
+    balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+
+class FixedAssetsHistoryModel(LedgerModel):
+    depreciation = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    current_balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    def save(self, *args, **kwargs):
+        if self.current_balance == 0:
+            self.current_balance = self.amount
+
+        if self.depreciation > 0 and self.current_balance > 0:
+            self.current_balance -= self.depreciation
+
+        return super().save(*args, **kwargs)
 
 
     def __str__(self):

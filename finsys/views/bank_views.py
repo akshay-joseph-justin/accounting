@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from finsys import generate_random_number
-from finsys.forms import BankUpsertForm, BankDepositForm
+from finsys.forms import BankUpsertForm, BankDepositForm, BankTransferForm
 from finsys import models
 
 
@@ -19,7 +19,7 @@ class BankDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["transactions"] = models.BankTransactionModel.objects.filter(bank=self.object)
+        context["transactions"] = models.BankTransactionModel.objects.filter(bank=self.object, is_deleted=False)
         return context
 
 
@@ -46,6 +46,7 @@ class BankAddAmountView(generic.TemplateView, generic.FormView):
     def form_valid(self, form):
         bank = models.BankModel.objects.get(pk=self.kwargs['pk'])
         transaction = self.model.objects.create(
+            user=self.request.user,
             bank=bank,
             date=form.cleaned_data['date'],
             from_where=form.cleaned_data['from_where'],
@@ -54,4 +55,53 @@ class BankAddAmountView(generic.TemplateView, generic.FormView):
         )
 
         return super().form_valid(form)
+
+
+class BankTransferView(generic.TemplateView, generic.FormView):
+    form_class = BankTransferForm
+    template_name = "add-ledger.html"
+    success_url = reverse_lazy('finsys:bank-transfer')
+
+    def form_valid(self, form):
+        models.BankTransactionModel.objects.create(
+            user=self.request.user,
+            bank=form.cleaned_data['to'],
+            date=form.cleaned_data['date'],
+            head=form.cleaned_data['to'],
+            from_where=form.cleaned_data['from_where'],
+            transaction_type=models.BankTransactionModel.CREDIT,
+            amount=form.cleaned_data['amount'],
+        )
+
+        models.BankTransactionModel.objects.create(
+            user=self.request.user,
+            bank=form.cleaned_data['from_where'],
+            date=form.cleaned_data['date'],
+            head=form.cleaned_data['from_where'],
+            from_where=form.cleaned_data['to'],
+            transaction_type=models.BankTransactionModel.DEBIT,
+            amount=form.cleaned_data['amount'],
+        )
+
+        return super().form_valid(form)
+
+
+from django.db.models import Q
+
+class BankTransferListView(generic.ListView):
+    model = models.BankTransactionModel
+    context_object_name = 'transactions'
+    template_name = "bank-transfer.html"
+
+    def get_queryset(self):
+        bank_names = models.BankModel.objects.values_list('name', flat=True)  # List of bank names
+
+        # Build Q object dynamically for filtering 'from_where'
+        q_object = Q()
+        for bank_name in bank_names:
+            q_object |= Q(from_where__icontains=bank_name)  # Case-insensitive match
+
+        return models.BankTransactionModel.objects.filter(q_object)
+
+
 

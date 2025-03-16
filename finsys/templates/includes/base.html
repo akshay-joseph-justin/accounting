@@ -84,13 +84,13 @@
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
-                <i class="bi bi-person"></i>
-                <span>Fixed Assets</span>
+            <a class="nav-link collapsed" href="{% url 'finsys:fixed-assets' %}">
+                <i class=" bi bi-person"></i>
+            <span>Fixed Assets</span>
             </a>
         </li>
 
-        
+
         {% comment %} <li class="nav-item">
             <a class="nav-link collapsed" href="#">
                 <i class="bi bi-grid"></i>
@@ -105,7 +105,7 @@
         </li> {% endcomment %}
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
+            <a class="nav-link collapsed" href="{% url 'finsys:balance-sheet' %}">
                 <i class="bi bi-person"></i>
                 <span>Balance Sheet</span>
             </a>
@@ -121,7 +121,7 @@
 
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:withdraw' %}">
+            <a class="nav-link collapsed" href="{% url 'finsys:bank-transfer' %}">
                 <i class="bi bi-person"></i>
                 <span>Bank Transfer</span>
             </a>

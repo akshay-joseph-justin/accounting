@@ -10,7 +10,7 @@ class LoanView(TemplateView):
 
     def get_context_data(self, **kwargs):
         loan = LoanModel.objects.all().first()
-        entries = LoanHistoryModel.objects.all()
+        entries = LoanHistoryModel.objects.filter(is_deleted=False)
         return {"loan": loan, "entries": entries}
 
     def form_valid(self, form):
