@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.views.generic import TemplateView
 
 from finsys import models
@@ -21,11 +22,18 @@ class BalanceSheetView(TemplateView):
         liability_total = capital_balance + loan_balance
         assets_total = fixed_assets_total + bank_total
 
+        capital_entries = models.CapitalHistoryModel.objects.filter(is_deleted=False).values("from_where").annotate(total_amount=Sum("amount")).order_by("from_where")
+        loan_entries = models.LoanHistoryModel.objects.filter(is_deleted=False).values("bank__name").annotate(total_amount=Sum("amount")).order_by("bank")
+        print(loan_entries)
+
         return {
             "capital": capital,
+            "capital_entries": capital_entries,
             "loan": loan,
+            "loan_entries": loan_entries,
             "banks": banks,
             "fixed_asset": fixed,
             "liability_total": liability_total,
             "assets_total": assets_total,
+            "current_assets_total": bank_total,
         }

@@ -1,4 +1,4 @@
-from finsys.models import FixedAssetsModel, FixedAssetsHistoryModel, BankModel, BankTransactionModel
+from finsys.models import FixedAssetsModel, BankModel, BankTransactionModel
 
 
 class FixedAssetsSignal:
@@ -7,9 +7,6 @@ class FixedAssetsSignal:
     def post_change_balance(cls, sender, instance, created, **kwargs):
         fixed_asset = FixedAssetsModel.objects.all().first()
         bank = BankModel.objects.filter(pk=instance.bank.pk).first()
-        if fixed_asset and bank:
-            fixed_asset.balance += instance.amount
-            fixed_asset.save()
 
         if created:
             BankTransactionModel.objects.create(
@@ -22,3 +19,6 @@ class FixedAssetsSignal:
                 amount=instance.amount,
                 foreign_id=instance.id,
             )
+            if fixed_asset and bank:
+                fixed_asset.balance += instance.amount
+                fixed_asset.save()
