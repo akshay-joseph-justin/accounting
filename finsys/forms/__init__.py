@@ -5,4 +5,4 @@ from .bank_forms import (
     BankTransferForm
 )
 from .loan_forms import LoanForm
-from .fixed_assets_forms import FixedAssetsCreateForm, FixedAssetsUpdateForm
+from .fixed_assets_forms import FixedAssetsCreateForm, FixedAssetsUpdateForm, DepreciationForm

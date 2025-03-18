@@ -34,4 +34,16 @@ class FixedAssetsUpdateForm(forms.ModelForm):
 
     class Meta:
         model = FixedAssetsHistoryModel
-        exclude = ("balance", "user", "is_deleted", "current_balance")
+        exclude = ("balance", "user", "is_deleted", "current_balance", "depreciation")
+
+
+class DepreciationForm(forms.ModelForm):
+
+    def __init__(self, *args, **kwargs):
+        super(DepreciationForm, self).__init__(*args, **kwargs)
+        self.fields["depreciation"].widget = forms.DateInput(
+            attrs={'type': 'number', "class": "form-control floating-input"})
+
+    class Meta:
+        model = FixedAssetsHistoryModel
+        fields = ("depreciation",)

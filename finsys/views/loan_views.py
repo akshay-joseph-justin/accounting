@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
 
 from finsys.forms import LoanForm
 from finsys.models import LoanModel, LoanHistoryModel
@@ -16,6 +16,14 @@ class LoanView(TemplateView):
     def form_valid(self, form):
         form.instance.user = self.request.user
         return super().form_valid(form)
+
+
+class LoanDetailView(DetailView):
+    template_name = "capital-details.html"
+    context_object_name = "ledger"
+
+    def get_queryset(self):
+        return LoanHistoryModel.objects.filter(is_deleted=False)
 
 
 class LoanCreateView(CreateView):

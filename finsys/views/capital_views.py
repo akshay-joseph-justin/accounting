@@ -1,5 +1,5 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
 
 from finsys.forms.capital_forms import CapitalForm
 from finsys.models import CapitalModel, CapitalHistoryModel
@@ -12,6 +12,14 @@ class CapitalView(TemplateView):
         capital = CapitalModel.objects.all().first()
         entries = CapitalHistoryModel.objects.filter(is_deleted=False)
         return {"capital": capital, 'entries': entries}
+
+
+class CapitalDetailView(DetailView):
+    template_name = "capital-details.html"
+    context_object_name = "ledger"
+
+    def get_queryset(self):
+        return CapitalHistoryModel.objects.filter(is_deleted=False)
 
 
 class CapitalCreateView(CreateView):

@@ -1,0 +1,40 @@
+{% extends 'includes/base.html' %}
+{% block title %}Ledger Details{% endblock %}
+
+{% block content %}
+    {% load static %}
+
+    <div class="container py-5">
+        <div class="card shadow-sm p-4">
+            <h2 class="text-center mb-4">Ledger Details</h2>
+
+            <table class="table table-bordered">
+                <tr>
+                    <th>User</th>
+                    <td>{{ ledger.user }}</td>
+                </tr>
+                <tr>
+                    <th>Date</th>
+                    <td>{{ ledger.date }}</td>
+                </tr>
+                <tr>
+                    <th>From</th>
+                    <td>{{ ledger.from_where }}</td>
+                </tr>
+                <tr>
+                    <th>Bank</th>
+                    <td>{{ ledger.bank }}</td>
+                </tr>
+                <tr>
+                    <th>Amount</th>
+                    <td>₹{{ ledger.amount }}</td>
+                </tr>
+                <tr>
+                    <th>Description</th>
+                    <td>{{ ledger.description|default:"N/A" }}</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+{% endblock %}
