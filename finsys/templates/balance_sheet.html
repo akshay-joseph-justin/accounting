@@ -62,6 +62,12 @@
                             <tr class="table-success">
                                 <td>Fixed Assets</td>
                                 <td>{{ fixed_asset.balance }}</td>
+                                {% for entry in fixed_entries %}
+                                    <tr>
+                                        <td>{{ entry.from_where }}</td>
+                                        <td>{{ entry.total_amount }}</td>
+                                    </tr>
+                                {% endfor %}
                             </tr>
                             <tr class="fw-bold">
                                 <td>Current Assets</td>
