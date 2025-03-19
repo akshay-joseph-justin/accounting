@@ -10,7 +10,7 @@ class LoanView(TemplateView):
 
     def get_context_data(self, **kwargs):
         loan = LoanModel.objects.all().first()
-        entries = LoanHistoryModel.objects.filter(is_deleted=False)
+        entries = LoanHistoryModel.objects.filter(is_deleted=False, amount__gt=0)
         return {"loan": loan, "entries": entries}
 
     def form_valid(self, form):
@@ -57,7 +57,7 @@ class LoanHistoryView(ListView):
 
 
 class LoanPayView(TemplateView, FormView):
-    template_name = "add-loan.html"
+    template_name = "loan-pay.html"
     form_class = LoanPayForm
     success_url = reverse_lazy("finsys:loan")
 
@@ -84,3 +84,6 @@ class LoanPayView(TemplateView, FormView):
         )
 
         return super().form_valid(form)
+
+    def get_context_data(self, **kwargs):
+        return {"entries": LoanHistoryModel.objects.filter(is_deleted=False, amount__lt=0)}
