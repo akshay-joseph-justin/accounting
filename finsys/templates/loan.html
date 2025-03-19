@@ -23,6 +23,7 @@
                     <th>Bank</th>
                     <th>Amount</th>
                     <th>View</th>
+                    <th>Pay</th>
                     <th>Edit</th>
                     <th>History</th>
                 </tr>
@@ -36,6 +37,7 @@
                         <td>{{ entry.bank }}</td>
                         <td>{{ entry.amount }}</td>
                         <td><a href="{% url 'finsys:loan-details' entry.pk %}" class="btn btn-success">View</a></td>
+                        <td><a href="{% url 'finsys:loan-pay' entry.bank.pk %}" class="btn btn-success">Pay</a></td>
                         <td><a href="{% url 'finsys:loan-update' entry.pk %}" class="btn btn-success">Edit</a></td>
                         <td><a href="{% url 'finsys:loan-history' %}" class="btn btn-success">History</a></td>
                     </tr>

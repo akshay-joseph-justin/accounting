@@ -35,6 +35,7 @@ urlpatterns = [
     path("loan/amount/add/", views.LoanCreateView.as_view(), name="loan-add-amount"),
     path("loan/edit/<int:pk>/", views.LoanUpdateView.as_view(), name="loan-update"),
     path("loan/history/", views.LoanHistoryView.as_view(), name="loan-history"),
+    path("loan/pay/<int:pk>", views.LoanPayView.as_view(), name="loan-pay"),
 
     path("fixed-assets/", views.FixedAssetsView.as_view(), name="fixed-assets"),
     path("fixed-assets/<int:pk>/", views.FixedAssetsDetailView.as_view(), name="fixed-assets-details"),

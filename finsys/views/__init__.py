@@ -23,6 +23,7 @@ from .loan_views import (
     LoanCreateView,
     LoanUpdateView,
     LoanHistoryView,
+    LoanPayView,
 )
 from .bank_views import (
     BankView,

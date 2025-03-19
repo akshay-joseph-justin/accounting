@@ -1,8 +1,8 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView, FormView
 
-from finsys.forms import LoanForm
-from finsys.models import LoanModel, LoanHistoryModel
+from finsys.forms import LoanForm, LoanPayForm
+from finsys.models import LoanModel, LoanHistoryModel, BankTransactionModel, BankModel
 
 
 class LoanView(TemplateView):
@@ -54,3 +54,33 @@ class LoanHistoryView(ListView):
         if instance:
             return instance.history.all()
         return LoanHistoryModel.objects.none()
+
+
+class LoanPayView(TemplateView, FormView):
+    template_name = "add-loan.html"
+    form_class = LoanPayForm
+    success_url = reverse_lazy("finsys:loan")
+
+    def debit_amount_from_bank(self, amount, date, from_where):
+        BankTransactionModel.objects.create(
+            user=self.request.user,
+            bank=BankModel.objects.get(pk=self.kwargs['pk']),
+            date=date,
+            head="Loan",
+            from_where=from_where,
+            transaction_type=BankTransactionModel.DEBIT,
+            amount=amount,
+        )
+
+    def form_valid(self, form):
+        self.debit_amount_from_bank(form.cleaned_data["principle_amount"], form.cleaned_data["date"], "Principle Loan")
+        self.debit_amount_from_bank(form.cleaned_data["interest"], form.cleaned_data["date"], "Loan Interest")
+        LoanHistoryModel.objects.create(
+            user=self.request.user,
+            bank=BankModel.objects.get(pk=self.kwargs['pk']),
+            date=form.cleaned_data["date"],
+            from_where=form.cleaned_data["from_where"],
+            amount=-form.cleaned_data["principle_amount"],
+        )
+
+        return super().form_valid(form)
