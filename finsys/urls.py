@@ -6,8 +6,8 @@ from finsys import views
 urlpatterns = [
     path("", views.HomeView.as_view(), name="home"),
 
-    path("/login", LoginView.as_view(template_name="login.html"), name="login"),
-    path("/logout", LogoutView.as_view(), name="home"),
+    path("login/", LoginView.as_view(template_name="login.html"), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
 
     path("ledger/", views.AccountListView.as_view(), name="ledger"),
     path("ledger/create/", views.AccountCreateView.as_view(), name="ledger-create"),

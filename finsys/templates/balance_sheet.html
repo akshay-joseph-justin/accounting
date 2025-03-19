@@ -8,101 +8,100 @@
     <section class="py-5">
         <div class="container px-4 px-lg-5">
             <div class="row">
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-12 mb-4">
                     <div class="p-4 bg-white shadow rounded">
                         <h2 class="fw-bold text-center mb-4">Liabilities</h2>
-                        <table class="table table-bordered text-center">
-                            <thead class="table-dark">
-                            <tr>
-                                <th>Category</th>
-                                <th>Amount</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="table-primary">
-                                <td class="fw-bold">Capital</td>
-                                <td></td>
-                            </tr>
-                            {% for entry in capital_entries %}
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead class="table-dark">
                                 <tr>
-                                    <td>{{ entry.from_where }}</td>
-                                    <td>{{ entry.total_amount }}</td>
+                                    <th>Category</th>
+                                    <th>Amount</th>
                                 </tr>
-                            {% endfor %}
-                            <tr class="fw-bold">
-                                <td>Loan</td>
-                                <td></td>
-                            </tr>
-                            {% for entry in loan_entries %}
-                                <tr>
-                                    <td>{{ entry.bank__name }}</td>
-                                    <td>{{ entry.total_amount }}</td>
+                                </thead>
+                                <tbody>
+                                <tr class="table-primary">
+                                    <td class="fw-bold">Capital</td>
+                                    <td></td>
                                 </tr>
-                            {% endfor %}
-                            <tr class="fw-bold bg-light">
-                                <td>Total Liabilities</td>
-                                <td>{{ liability_total }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                {% for entry in capital_entries %}
+                                    <tr>
+                                        <td>{{ entry.from_where }}</td>
+                                        <td>{{ entry.total_amount }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr class="fw-bold">
+                                    <td>Loan</td>
+                                    <td></td>
+                                </tr>
+                                {% for entry in loan_entries %}
+                                    <tr>
+                                        <td>{{ entry.bank__name }}</td>
+                                        <td>{{ entry.total_amount }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr class="fw-bold bg-light">
+                                    <td>Total Liabilities</td>
+                                    <td>{{ liability_total }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
-                <div class="col-lg-6">
+                <div class="col-lg-6 col-12">
                     <div class="p-4 bg-white shadow rounded">
                         <h2 class="fw-bold text-center mb-4">Assets</h2>
-                        <table class="table table-bordered text-center">
-                            <thead class="table-dark">
-                            <tr>
-                                <th>Category</th>
-                                <th>Amount</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr class="table-success">
-                                <td>Fixed Assets</td>
-                                <td>{{ fixed_asset.balance }}</td>
+                        <div class="table-responsive">
+                            <table class="table table-bordered text-center">
+                                <thead class="table-dark">
+                                <tr>
+                                    <th>Category</th>
+                                    <th>Amount</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr class="table-success">
+                                    <td>Fixed Assets</td>
+                                    <td>{{ fixed_asset.balance }}</td>
+                                </tr>
                                 {% for entry in fixed_entries %}
                                     <tr>
                                         <td>{{ entry.from_where }}</td>
                                         <td>{{ entry.total_amount }}</td>
                                     </tr>
                                 {% endfor %}
-                            </tr>
-                            <tr class="fw-bold">
-                                <td>Current Assets</td>
-                                <td></td>
-                            </tr>
-                            {% for bank in banks %}
-                                <tr>
-                                    <td>{{ bank.name }}</td>
-                                    <td>{{ bank.balance }}</td>
+                                <tr class="fw-bold">
+                                    <td>Current Assets</td>
+                                    <td></td>
                                 </tr>
-                            {% endfor %}
-                            <tr class="fw-bold bg-light">
-                                <td>Total Assets</td>
-                                <td>{{ assets_total }}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                                {% for bank in banks %}
+                                    <tr>
+                                        <td>{{ bank.name }}</td>
+                                        <td>{{ bank.balance }}</td>
+                                    </tr>
+                                {% endfor %}
+                                <tr class="fw-bold bg-light">
+                                    <td>Total Assets</td>
+                                    <td>{{ assets_total }}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </section>
 
-
-
-
-
-
-
-
     <style>
         .credit-box, .debit-box {
             border-radius: 12px;
             transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            text-align: center;
         }
 
         .credit-box {
@@ -120,16 +119,16 @@
 
         @media (max-width: 768px) {
             .credit-box, .debit-box {
-                text-align: center;
-                padding: 3rem;
+                padding: 2rem;
             }
         }
 
         .add-ledger-btn {
             display: block;
-            width: fit-content;
+            width: 100%;
+            max-width: 250px;
             margin: auto;
-            padding: 12px 24px;
+            padding: 12px;
             font-size: 18px;
             font-weight: 600;
             text-transform: uppercase;
@@ -150,11 +149,9 @@
         @media (max-width: 768px) {
             .add-ledger-btn {
                 width: 100%;
-                padding: 14px;
                 font-size: 16px;
             }
         }
     </style>
-
 
 {% endblock %}
