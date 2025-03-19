@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy
-from django.views.generic import TemplateView, CreateView, UpdateView, ListView
+from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
 
-from finsys.forms import FixedAssetsCreateForm, FixedAssetsUpdateForm
+from finsys.forms import FixedAssetsCreateForm, FixedAssetsUpdateForm, DepreciationForm
 from finsys.models import FixedAssetsModel, FixedAssetsHistoryModel
 
 
@@ -12,6 +12,14 @@ class FixedAssetsView(TemplateView):
         fixed_asset = FixedAssetsModel.objects.all().first()
         entries = FixedAssetsHistoryModel.objects.filter(is_deleted=False)
         return {"fixed_asset": fixed_asset, 'entries': entries}
+
+
+class FixedAssetsDetailView(DetailView):
+    template_name = "capital-details.html"
+    context_object_name = "ledger"
+
+    def get_queryset(self):
+        return FixedAssetsHistoryModel.objects.filter(is_deleted=False)
 
 
 class FixedAssetsCreateView(CreateView):
@@ -28,6 +36,13 @@ class FixedAssetsCreateView(CreateView):
 class FixedAssetsUpdateView(UpdateView):
     model = FixedAssetsHistoryModel
     form_class = FixedAssetsUpdateForm
+    template_name = "add-capital.html"
+    success_url = reverse_lazy("finsys:fixed-assets")
+
+
+class FixedAssetsDepreciationUpdateView(UpdateView):
+    model = FixedAssetsHistoryModel
+    form_class = DepreciationForm
     template_name = "add-capital.html"
     success_url = reverse_lazy("finsys:fixed-assets")
 

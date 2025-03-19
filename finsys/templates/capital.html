@@ -35,7 +35,7 @@
                         <td>{{ entry.from_where}}</td>
                         <td>{{ entry.bank }}</td>
                         <td>{{ entry.amount }}</td>
-                        <td><a href="{% url 'finsys:home' %}" class="btn btn-success">View</a></td>
+                        <td><a href="{% url 'finsys:capital-details' entry.pk %}" class="btn btn-success">View</a></td>
                         <td><a href="{% url 'finsys:capital-update' entry.pk %}" class="btn btn-success">Edit</a></td>
                         <td><a href="{% url 'finsys:capital-history' %}" class="btn btn-success">History</a></td>
                     </tr>

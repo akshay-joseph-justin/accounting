@@ -1,7 +1,7 @@
-<form method="post">
+<form method="post" class="needs-validation" novalidate>
     {% csrf_token %}
 
-    <!-- Display non-field errors for the main form -->
+    <!-- Display non-field errors -->
     {% if form.non_field_errors %}
         <div class="alert alert-danger">
             {% for error in form.non_field_errors %}
@@ -11,12 +11,12 @@
     {% endif %}
 
     <!-- Main Form -->
-    <div class="form-box">
-        <h2 class="text-center mb-4 px-4"> {{ main_title }} </h2>
+    <div class="card shadow-sm p-4 mb-4">
+        <h2 class="text-center mb-4">{{ main_title }}</h2>
         {% for field in form %}
-            <div class="input-group">
-                <label for="{{ field.id_for_label }}" class="floating-label">{{ field.label }}</label>
+            <div class="form-floating mb-3">
                 {{ field }}
+                <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                 {% if field.errors %}
                     <div class="invalid-feedback d-block">
                         {% for error in field.errors %}
@@ -30,26 +30,24 @@
 
     <!-- Formset Section -->
     {% if formset %}
-        <hr class="my-4">
+        <div class="card shadow-sm p-4 mb-4">
+            <h3 class="mb-3">{{ formset_title }}</h3>
 
-        <!-- Display non-form errors for the formset -->
-        {% if formset.non_form_errors %}
-            <div class="alert alert-danger">
-                {% for error in formset.non_form_errors %}
-                    <p class="mb-0">{{ error }}</p>
-                {% endfor %}
-            </div>
-        {% endif %}
+            <!-- Display non-form errors -->
+            {% if formset.non_form_errors %}
+                <div class="alert alert-danger">
+                    {% for error in formset.non_form_errors %}
+                        <p class="mb-0">{{ error }}</p>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-        <div class="formset-container mt-4">
             {{ formset.management_form }}
-
             <div id="formset-forms">
                 {% for form in formset %}
-                    <div class="formset-form form-box">
+                    <div class="formset-form border rounded p-3 mb-3">
                         <h5 class="formset-title">{{ formset_title }} {{ forloop.counter }}</h5>
 
-                        <!-- Display non-field errors for each individual form inside the formset -->
                         {% if form.non_field_errors %}
                             <div class="alert alert-warning">
                                 {% for error in form.non_field_errors %}
@@ -60,10 +58,10 @@
 
                         {% for field in form %}
                             {{ form.id }}
-                            <div class="mb-3 input-group">
+                            <div class="form-floating mb-3">
                                 {% if not field.is_hidden %}
-                                	<label for="{{ field.id_for_label }}" class="floating-label">{{ field.label }}</label>
                                     {{ field }}
+                                    <label for="{{ field.id_for_label }}">{{ field.label }}</label>
                                 {% endif %}
                                 {% if field.errors %}
                                     <div class="invalid-feedback d-block">
@@ -74,20 +72,16 @@
                                 {% endif %}
                             </div>
                         {% endfor %}
-                        <button type="button" class="btn btn-danger remove-form">Remove</button>
+                        <button type="button" class="btn btn-outline-danger remove-form">Remove</button>
                     </div>
                 {% endfor %}
             </div>
-
-            <button type="button" class="btn btn-success mt-3" id="add-form">Add More</button>
+            <button type="button" class="btn btn-outline-success mt-3" id="add-form">+ Add More</button>
         </div>
     {% endif %}
 
-    <button type="submit" class="btn btn-primary mt-3">
-        Submit
-    </button>
+    <button type="submit" class="btn btn-primary w-100">Submit</button>
 </form>
-
 
 <!-- JavaScript for Formset Manipulation -->
 <script>

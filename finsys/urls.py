@@ -25,18 +25,22 @@ urlpatterns = [
     path("banks/transfer/create/", views.BankTransferView.as_view(), name="bank-transfer-create"),
 
     path("capital/", views.CapitalView.as_view(), name="capital"),
+    path("capital/<int:pk>/", views.CapitalDetailView.as_view(), name="capital-details"),
     path("capital/amount/add/", views.CapitalCreateView.as_view(), name="capital-add-amount"),
     path("capital/edit/<int:pk>/", views.CapitalUpdateView.as_view(), name="capital-update"),
     path("capital/history/", views.CapitalHistoryView.as_view(), name="capital-history"),
 
     path("loan/", views.LoanView.as_view(), name="loan"),
+    path("loan/<int:pk>/", views.LoanDetailView.as_view(), name="loan-details"),
     path("loan/amount/add/", views.LoanCreateView.as_view(), name="loan-add-amount"),
     path("loan/edit/<int:pk>/", views.LoanUpdateView.as_view(), name="loan-update"),
     path("loan/history/", views.LoanHistoryView.as_view(), name="loan-history"),
 
     path("fixed-assets/", views.FixedAssetsView.as_view(), name="fixed-assets"),
+    path("fixed-assets/<int:pk>/", views.FixedAssetsDetailView.as_view(), name="fixed-assets-details"),
     path("fixed-assets/create/", views.FixedAssetsCreateView.as_view(), name="fixed-assets-create"),
     path("fixed-assets/update/<int:pk>/", views.FixedAssetsUpdateView.as_view(), name="fixed-assets-update"),
+    path("fixed-assets/update/depreciation/<int:pk>/", views.FixedAssetsDepreciationUpdateView.as_view(), name="fixed-assets-depreciation"),
     path("fixed-assets/history/<int:pk>/", views.FixedAssetsHistoryView.as_view(), name="fixed-assets-history"),
 
     path("balance-sheet/", views.BalanceSheetView.as_view(), name="balance-sheet"),

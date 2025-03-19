@@ -1,9 +1,9 @@
+from django.db.models import Q
 from django.urls import reverse_lazy
 from django.views import generic
 
-from finsys import generate_random_number
-from finsys.forms import BankUpsertForm, BankDepositForm, BankTransferForm
 from finsys import models
+from finsys.forms import BankUpsertForm, BankDepositForm, BankTransferForm
 
 
 class BankView(generic.ListView):
@@ -86,8 +86,6 @@ class BankTransferView(generic.TemplateView, generic.FormView):
         return super().form_valid(form)
 
 
-from django.db.models import Q
-
 class BankTransferListView(generic.ListView):
     model = models.BankTransactionModel
     context_object_name = 'transactions'
@@ -102,6 +100,3 @@ class BankTransferListView(generic.ListView):
             q_object |= Q(from_where__icontains=bank_name)  # Case-insensitive match
 
         return models.BankTransactionModel.objects.filter(q_object)
-
-
-

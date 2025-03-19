@@ -24,6 +24,7 @@
                     <th>original price</th>
                     <th>current price</th>
                     <th>View</th>
+                    <th></th>
                     <th>Edit</th>
                     <th> History</th>
                 </tr>
@@ -37,7 +38,8 @@
                         <td>{{ entry.bank }}</td>
                         <td>{{ entry.amount }}</td>
                         <td>{{ entry.current_balance }}</td>
-                        <td><a href="{% url 'finsys:home' %}" class="btn btn-success">View</a></td>
+                        <td><a href="{% url 'finsys:fixed-assets-details' entry.pk %}" class="btn btn-success">view</a></td>
+                        <td><a href="{% url 'finsys:fixed-assets-depreciation' entry.pk %}" class="btn btn-success">depreciation</a></td>
                         <td><a href="{% url 'finsys:fixed-assets-update' entry.pk %}" class="btn btn-success">Edit</a></td>
                         <td><a href="{% url 'finsys:fixed-assets-history' entry.pk %}" class="btn btn-success">History</a></td>
                     </tr>

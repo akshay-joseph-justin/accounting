@@ -112,7 +112,7 @@ class FixedAssetsHistoryModel(LedgerModel):
             self.current_balance = self.amount
 
         if self.depreciation > 0 and self.current_balance > 0:
-            self.current_balance -= self.depreciation
+            self.current_balance = self.amount - self.depreciation
 
         return super().save(*args, **kwargs)
 
