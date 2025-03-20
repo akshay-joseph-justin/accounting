@@ -6,8 +6,9 @@
 
 {% block content %}
     <div class="container mt-5">
-        <div class="container mt-4">
-            <h2 class="mb-3">History</h2>
+        <h2 class="mb-3 text-center text-lg-start">History</h2>
+
+        <div class="table-responsive">
             <table class="table table-bordered table-hover">
                 <thead class="table-dark">
                 <tr>
@@ -15,13 +16,13 @@
                     <th>Date</th>
                     <th>From</th>
                     <th>Bank</th>
-                    <th>original price</th>
-                    <th>current price</th>
-                    <th>depreciation</th>
-                    <th>user</th>
-                    <th>Create At</th>
+                    <th>Original Price</th>
+                    <th>Current Price</th>
+                    <th>Depreciation</th>
+                    <th>User</th>
+                    <th>Created At</th>
                     <th>Updated At</th>
-                    <th>~</th>
+                    <th>Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -35,23 +36,34 @@
                         <td>{{ entry.current_balance }}</td>
                         <td>{{ entry.depreciation }}</td>
                         <td>{{ entry.user }}</td>
-                        <td>{{ entry.created_at }}</td>
-                        <td>{{ entry.updated_at }}</td>
-                        {% if entry.history_type == "+" %}
-                            <td>Created</td>
-                        {% elif entry.history_type == "~" %}
-                            <td>Edited</td>
-                        {% elif entry.history_type == "-" %}
-                            <td>Deleted</td>
-                        {% endif %}
+                        <td>{{ entry.created_at|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ entry.updated_at|date:"Y-m-d H:i:s" }}</td>
+                        <td>
+                            {% if entry.history_type == "+" %}
+                                <span class="badge bg-success">Created</span>
+                            {% elif entry.history_type == "~" %}
+                                <span class="badge bg-warning">Edited</span>
+                            {% elif entry.history_type == "-" %}
+                                <span class="badge bg-danger">Deleted</span>
+                            {% endif %}
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>
-                        <td colspan="5" class="text-center">No Journal Entries Found</td>
+                        <td colspan="11" class="text-center">No Journal Entries Found</td>
                     </tr>
                 {% endfor %}
                 </tbody>
             </table>
         </div>
     </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+
 {% endblock %}

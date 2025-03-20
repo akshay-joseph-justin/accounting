@@ -6,46 +6,63 @@
 
 {% block content %}
     <div class="container mt-5">
-        <div class="d-flex justify-content-between align-items-center mb-3">
-            <h1 class="text-primary">Total Capital: <span class="fw-bold">{{ capital.balance | default:0.0 }}</span>
-            </h1>
-            <a href="{% url 'finsys:capital-add-amount' %}" class="btn btn-success">Add Amount</a>
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
+            <h1 class="text-primary text-center text-lg-start">Total Capital: <span
+                    class="fw-bold">{{ capital.balance | default:0.0 }}</span></h1>
+
+            <a href="{% url 'finsys:capital-add-amount' %}" class="btn btn-success mt-3 mt-lg-0">Add Amount</a>
         </div>
 
         <div class="container mt-4">
             <h2 class="mb-3">History</h2>
-            <table class="table table-bordered table-hover">
-                <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Date</th>
-                    <th>From</th>
-                    <th>Bank</th>
-                    <th>Amount</th>
-                    <th>View</th>
-                    <th>Edit</th>
-                    <th> History</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for entry in entries %}
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover">
+                    <thead class="table-dark">
                     <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td>{{ entry.date }}</td>
-                        <td>{{ entry.from_where}}</td>
-                        <td>{{ entry.bank }}</td>
-                        <td>{{ entry.amount }}</td>
-                        <td><a href="{% url 'finsys:capital-details' entry.pk %}" class="btn btn-success">View</a></td>
-                        <td><a href="{% url 'finsys:capital-update' entry.pk %}" class="btn btn-success">Edit</a></td>
-                        <td><a href="{% url 'finsys:capital-history' %}" class="btn btn-success">History</a></td>
+                        <th>#</th>
+                        <th>Date</th>
+                        <th>From</th>
+                        <th>Bank</th>
+                        <th>Amount</th>
+                        <th>View</th>
+                        <th>Edit</th>
+                        <th>History</th>
                     </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="5" class="text-center">No Journal Entries Found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ entry.date }}</td>
+                            <td>{{ entry.from_where }}</td>
+                            <td>{{ entry.bank }}</td>
+                            <td>{{ entry.amount }}</td>
+                            <td><a href="{% url 'finsys:capital-details' entry.pk %}"
+                                   class="btn btn-info btn-sm">View</a></td>
+                            <td><a href="{% url 'finsys:capital-update' entry.pk %}"
+                                   class="btn btn-warning btn-sm">Edit</a></td>
+                            <td><a href="{% url 'finsys:capital-history' %}"
+                                   class="btn btn-secondary btn-sm">History</a></td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">No Journal Entries Found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+
 {% endblock %}

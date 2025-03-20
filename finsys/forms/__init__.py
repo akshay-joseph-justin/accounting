@@ -4,5 +4,5 @@ from .bank_forms import (
     BankDepositForm,
     BankTransferForm
 )
-from .loan_forms import LoanForm
+from .loan_forms import LoanForm, LoanPayForm
 from .fixed_assets_forms import FixedAssetsCreateForm, FixedAssetsUpdateForm, DepreciationForm

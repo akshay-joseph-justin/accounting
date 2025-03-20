@@ -18,3 +18,12 @@ class LoanForm(forms.ModelForm):
     class Meta:
         model = LoanHistoryModel
         exclude = ("balance", "user", "is_deleted")
+
+
+class LoanPayForm(forms.Form):
+    date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control floating-input'}))
+    principle_amount = forms.DecimalField(
+        widget=forms.NumberInput(attrs={'class': 'form-control floating-input', 'type': 'number'}))
+    interest = forms.DecimalField(
+        widget=forms.NumberInput(attrs={'class': 'form-control floating-input', 'type': 'number'}))
+    from_where = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control floating-input', 'type': 'text'}))

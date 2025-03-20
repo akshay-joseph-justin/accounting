@@ -1,9 +1,13 @@
 from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView
 
 from finsys import views
 
 urlpatterns = [
     path("", views.HomeView.as_view(), name="home"),
+
+    path("login/", LoginView.as_view(template_name="login.html"), name="login"),
+    path("logout/", LogoutView.as_view(), name="logout"),
 
     path("ledger/", views.AccountListView.as_view(), name="ledger"),
     path("ledger/create/", views.AccountCreateView.as_view(), name="ledger-create"),
@@ -35,6 +39,7 @@ urlpatterns = [
     path("loan/amount/add/", views.LoanCreateView.as_view(), name="loan-add-amount"),
     path("loan/edit/<int:pk>/", views.LoanUpdateView.as_view(), name="loan-update"),
     path("loan/history/", views.LoanHistoryView.as_view(), name="loan-history"),
+    path("loan/pay/<int:pk>", views.LoanPayView.as_view(), name="loan-pay"),
 
     path("fixed-assets/", views.FixedAssetsView.as_view(), name="fixed-assets"),
     path("fixed-assets/<int:pk>/", views.FixedAssetsDetailView.as_view(), name="fixed-assets-details"),
