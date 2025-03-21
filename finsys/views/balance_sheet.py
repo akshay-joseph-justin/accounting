@@ -22,9 +22,12 @@ class BalanceSheetView(TemplateView):
         liability_total = capital_balance + loan_balance
         assets_total = fixed_assets_total + bank_total
 
-        capital_entries = models.CapitalHistoryModel.objects.filter(is_deleted=False).values("from_where").annotate(total_amount=Sum("amount")).order_by("from_where")
-        fixed_entries = models.FixedAssetsHistoryModel.objects.filter(is_deleted=False).values("from_where").annotate(total_amount=Sum("amount")).order_by("from_where")
-        loan_entries = models.LoanHistoryModel.objects.filter(is_deleted=False).values("bank__name").annotate(total_amount=Sum("amount")).order_by("bank")
+        capital_entries = models.CapitalHistoryModel.objects.filter(is_deleted=False).values("from_where").annotate(
+            total_amount=Sum("amount")).order_by("from_where")
+        fixed_entries = models.FixedAssetsHistoryModel.objects.filter(is_deleted=False).values("from_where").annotate(
+            total_amount=Sum("current_balance")).order_by("from_where")
+        loan_entries = models.LoanHistoryModel.objects.filter(is_deleted=False).values("bank__name").annotate(
+            total_amount=Sum("amount")).order_by("bank")
         print(loan_entries)
 
         return {

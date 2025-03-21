@@ -1,0 +1,51 @@
+<div class="row mb-3">
+    <div class="col-md-4">
+        <label for="singleDate" class="form-label">Filter by Date:</label>
+        <input type="date" id="singleDate" class="form-control">
+    </div>
+    <div class="col-md-4">
+        <label for="startDate" class="form-label">From:</label>
+        <input type="date" id="startDate" class="form-control">
+    </div>
+    <div class="col-md-4">
+        <label for="endDate" class="form-label">To:</label>
+        <input type="date" id="endDate" class="form-control">
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const singleDateInput = document.getElementById("singleDate");
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+        const tableRows = document.querySelectorAll("#dataTable tbody tr");
+
+        function filterTable() {
+            let singleDate = singleDateInput.value;
+            let startDate = startDateInput.value;
+            let endDate = endDateInput.value;
+
+            tableRows.forEach(row => {
+                let rowDate = row.querySelector(".entry-date").innerText.trim();
+                if (rowDate) {
+                    let entryDate = new Date(rowDate);
+                    let showRow = true;
+
+                    if (singleDate) {
+                        showRow = entryDate.toISOString().split('T')[0] === singleDate;
+                    } else if (startDate && endDate) {
+                        let start = new Date(startDate);
+                        let end = new Date(endDate);
+                        showRow = entryDate >= start && entryDate <= end;
+                    }
+
+                    row.style.display = showRow ? "" : "none";
+                }
+            });
+        }
+
+        singleDateInput.addEventListener("change", filterTable);
+        startDateInput.addEventListener("change", filterTable);
+        endDateInput.addEventListener("change", filterTable);
+    });
+</script>

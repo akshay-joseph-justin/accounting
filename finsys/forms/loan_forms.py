@@ -1,6 +1,6 @@
 from django import forms
 
-from finsys.models import LoanHistoryModel
+from finsys.models import LoanHistoryModel, BankModel
 
 
 class LoanForm(forms.ModelForm):
@@ -26,4 +26,4 @@ class LoanPayForm(forms.Form):
         widget=forms.NumberInput(attrs={'class': 'form-control floating-input', 'type': 'number'}))
     interest = forms.DecimalField(
         widget=forms.NumberInput(attrs={'class': 'form-control floating-input', 'type': 'number'}))
-    from_where = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control floating-input', 'type': 'text'}))
+    from_where = forms.ModelChoiceField(queryset=BankModel.objects.all(), widget=forms.Select(attrs={'class': 'form-control floating-input'}))

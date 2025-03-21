@@ -13,12 +13,14 @@
 
             <a href="{% url 'finsys:entries-create' account.pk %}" class="btn btn-success mt-3 mt-lg-0">Add Entry</a>
         </div>
+    
+        {% include 'includes/date_filter.html' %}
 
         <div class="container mt-4">
             <h2 class="mb-3">History</h2>
 
             <div class="table-responsive">
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover" id="dataTable">
                     <thead class="table-dark">
                     <tr>
                         <th>#</th>
@@ -35,7 +37,7 @@
                     {% for entry in entries %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ entry.date }}</td>
+                            <td class="entry-date">{{ entry.date }}</td>
                             <td>{{ entry.account.name }}</td>
                             <td>{{ entry.bank.name }}</td>
                             <td>{{ entry.amount }}</td>
