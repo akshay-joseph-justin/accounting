@@ -86,4 +86,6 @@ class LoanPayView(TemplateView, FormView):
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
-        return {"entries": LoanHistoryModel.objects.filter(is_deleted=False, amount__lt=0)}
+        context = super().get_context_data(**kwargs)
+        context["entries"] = LoanHistoryModel.objects.filter(is_deleted=False, amount__lt=0)
+        return context
