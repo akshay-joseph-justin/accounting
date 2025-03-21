@@ -29,6 +29,12 @@
                     <th>Amount</th>
                     <td>₹{{ ledger.amount }}</td>
                 </tr>
+                {% if ledger.current_balance %}
+                    <tr>
+                        <th>Current Amount</th>
+                        <td>₹{{ ledger.current_balance }}</td>
+                    </tr>
+                {% endif %}
                 <tr>
                     <th>Description</th>
                     <td>{{ ledger.description|default:"N/A" }}</td>

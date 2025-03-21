@@ -19,9 +19,11 @@
 
         <div class="container mt-4">
             <h2 class="mb-3">History</h2>
+        
+            {% include 'includes/date_filter.html' %}
 
             <div class="table-responsive">
-                <table class="table table-bordered table-hover">
+                <table class="table table-bordered table-hover" id="dataTable">
                     <thead class="table-dark">
                     <tr>
                         <th>#</th>
@@ -36,7 +38,7 @@
                     {% for transaction in transactions %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
-                            <td>{{ transaction.date }}</td>
+                            <td class="entry-date">{{ transaction.date }}</td>
                             <td>{{ transaction.head }}</td>
                             <td>{{ transaction.from_where }}</td>
                             <td>{{ transaction.get_transaction_type_display }}</td>

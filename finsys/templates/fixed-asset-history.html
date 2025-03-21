@@ -7,9 +7,11 @@
 {% block content %}
     <div class="container mt-5">
         <h2 class="mb-3 text-center text-lg-start">History</h2>
+    
+        {% include 'includes/date_filter.html' %}
 
         <div class="table-responsive">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="dataTable">
                 <thead class="table-dark">
                 <tr>
                     <th>#</th>
@@ -29,7 +31,7 @@
                 {% for entry in entries %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ entry.date }}</td>
+                        <td class="entry-date">{{ entry.date }}</td>
                         <td>{{ entry.from_where }}</td>
                         <td>{{ entry.bank }}</td>
                         <td>{{ entry.amount }}</td>

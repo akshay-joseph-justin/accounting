@@ -7,15 +7,17 @@
     {% load static %}
     <div class="container mt-5">
         <div class="form-container">
-            {% include 'includes/form.html' with form=form main_title='Add Loan' %}
+            {% include 'includes/form.html' with form=form main_title='Pay Loan' %}
         </div>
     </div>
 
     <div class="container mt-4">
         <h2 class="mb-3">History</h2>
+    
+        {% include 'includes/date_filter.html' %}
 
         <div class="table-responsive">
-            <table class="table table-bordered table-hover">
+            <table class="table table-bordered table-hover" id="dataTable">
                 <thead class="table-dark">
                 <tr>
                     <th>#</th>
@@ -29,7 +31,7 @@
                 {% for entry in entries %}
                     <tr>
                         <td>{{ forloop.counter }}</td>
-                        <td>{{ entry.date }}</td>
+                        <td class="entry-date">{{ entry.date }}</td>
                         <td>{{ entry.from_where }}</td>
                         <td>{{ entry.bank }}</td>
                         {% load abs_value %}
