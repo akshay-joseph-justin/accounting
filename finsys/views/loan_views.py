@@ -64,7 +64,7 @@ class LoanPayView(TemplateView, FormView):
     def debit_amount_from_bank(self, amount, date, from_where):
         BankTransactionModel.objects.create(
             user=self.request.user,
-            bank=BankModel.objects.get(pk=self.kwargs['pk']),
+            bank=BankModel.objects.get(pk=self.kwargs['bank_pk']),
             date=date,
             head="Loan",
             from_where=from_where,
@@ -75,12 +75,18 @@ class LoanPayView(TemplateView, FormView):
     def form_valid(self, form):
         self.debit_amount_from_bank(form.cleaned_data["principle_amount"], form.cleaned_data["date"], "Principle Loan")
         self.debit_amount_from_bank(form.cleaned_data["interest"], form.cleaned_data["date"], "Loan Interest")
+
+        loan = LoanHistoryModel.objects.get(pk=self.kwargs['history_pk'])
+        loan.amount -= form.cleaned_data["principle_amount"]
+        loan.save()
         LoanHistoryModel.objects.create(
             user=self.request.user,
-            bank=BankModel.objects.get(pk=self.kwargs['pk']),
+            bank=BankModel.objects.get(pk=self.kwargs['bank_pk']),
             date=form.cleaned_data["date"],
             from_where=form.cleaned_data["from_where"],
             amount=-form.cleaned_data["principle_amount"],
+            pending_amount=loan.amount,
+            is_pay=True
         )
 
         return super().form_valid(form)

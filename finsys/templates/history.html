@@ -22,6 +22,7 @@
                     <th>User</th>
                     <th>Created At</th>
                     <th>Updated At</th>
+                    <th>Reason</th>
                     <th>Status</th>
                 </tr>
                 </thead>
@@ -36,6 +37,7 @@
                         <td>{{ entry.user }}</td>
                         <td>{{ entry.created_at|date:"Y-m-d H:i:s" }}</td>
                         <td>{{ entry.updated_at|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ entry.history_change_reason  }}</td>
                         <td>
                             {% if entry.history_type == "+" %}
                                 <span class="badge bg-success">Created</span>
