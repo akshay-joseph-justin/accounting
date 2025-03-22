@@ -87,6 +87,8 @@ class CapitalHistoryModel(LedgerModel):
 
 
 class LoanHistoryModel(LedgerModel):
+    pending_amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    is_pay = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.date} - {self.bank}"

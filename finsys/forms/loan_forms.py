@@ -1,12 +1,22 @@
 from django import forms
+from simple_history.utils import update_change_reason
 
 from finsys.models import LoanHistoryModel, BankModel
 
 
 class LoanForm(forms.ModelForm):
+    change_reason = forms.CharField(
+        required=False,
+        help_text="Reason for change",
+        widget=forms.TextInput(attrs={'placeholder': 'Enter reason for update'})
+    )
 
     def __init__(self, *args, **kwargs):
         super(LoanForm, self).__init__(*args, **kwargs)
+
+        if not self.instance.pk:
+            self.fields.pop('change_reason')
+
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs['class'] = 'form-check-input'
@@ -17,7 +27,18 @@ class LoanForm(forms.ModelForm):
 
     class Meta:
         model = LoanHistoryModel
-        exclude = ("balance", "user", "is_deleted")
+        exclude = ("balance", "user", "is_deleted", "pending_amount", "is_pay")
+
+    def save(self, commit=True):
+        obj = super().save(commit=False)
+
+        # Capture reason only if it's an update
+        if self.instance.pk:
+            update_change_reason(obj, self.cleaned_data.get('change_reason'))
+
+        if commit:
+            obj.save()
+        return obj
 
 
 class LoanPayForm(forms.Form):
@@ -26,4 +47,5 @@ class LoanPayForm(forms.Form):
         widget=forms.NumberInput(attrs={'class': 'form-control floating-input', 'type': 'number'}))
     interest = forms.DecimalField(
         widget=forms.NumberInput(attrs={'class': 'form-control floating-input', 'type': 'number'}))
-    from_where = forms.ModelChoiceField(queryset=BankModel.objects.all(), widget=forms.Select(attrs={'class': 'form-control floating-input'}))
+    from_where = forms.ModelChoiceField(queryset=BankModel.objects.all(),
+                                        widget=forms.Select(attrs={'class': 'form-control floating-input'}))

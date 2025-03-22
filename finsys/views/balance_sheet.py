@@ -16,7 +16,7 @@ class BalanceSheetView(TemplateView):
         # Ensure objects are not None before accessing attributes
         capital_balance = capital.balance if capital else 0
         loan_balance = loan.balance if loan else 0
-        fixed_assets_total = fixed.balance if fixed else 0
+        fixed_assets_total = models.FixedAssetsHistoryModel.objects.aggregate(total=Sum('current_balance'))['total']
         bank_total = sum(bank.balance for bank in banks)
 
         liability_total = capital_balance + loan_balance
@@ -26,7 +26,7 @@ class BalanceSheetView(TemplateView):
             total_amount=Sum("amount")).order_by("from_where")
         fixed_entries = models.FixedAssetsHistoryModel.objects.filter(is_deleted=False).values("from_where").annotate(
             total_amount=Sum("current_balance")).order_by("from_where")
-        loan_entries = models.LoanHistoryModel.objects.filter(is_deleted=False).values("bank__name").annotate(
+        loan_entries = models.LoanHistoryModel.objects.filter(is_deleted=False, amount__gt=0).values("bank__name").annotate(
             total_amount=Sum("amount")).order_by("bank")
         print(loan_entries)
 

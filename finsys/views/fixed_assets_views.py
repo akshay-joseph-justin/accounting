@@ -1,3 +1,4 @@
+from django.db.models import Sum
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
 
@@ -10,7 +11,7 @@ class FixedAssetsView(TemplateView):
 
     def get_context_data(self, **kwargs):
         fixed_asset = FixedAssetsModel.objects.all().first()
-        entries = FixedAssetsHistoryModel.objects.filter(is_deleted=False)
+        entries = FixedAssetsHistoryModel.objects.filter(is_deleted=False).annotate(total=Sum('current_balance'))
         return {"fixed_asset": fixed_asset, 'entries': entries}
 
 
