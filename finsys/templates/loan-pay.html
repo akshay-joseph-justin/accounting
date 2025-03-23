@@ -13,7 +13,7 @@
 
     <div class="container mt-4">
         <h2 class="mb-3">History</h2>
-    
+
         {% include 'includes/date_filter.html' %}
 
         <div class="table-responsive">
@@ -23,8 +23,8 @@
                     <th>#</th>
                     <th>Date</th>
                     <th>From</th>
-                    <th>Bank</th>
                     <th>Amount</th>
+                    <th>Pending</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -33,9 +33,9 @@
                         <td>{{ forloop.counter }}</td>
                         <td class="entry-date">{{ entry.date }}</td>
                         <td>{{ entry.from_where }}</td>
-                        <td>{{ entry.bank }}</td>
                         {% load abs_value %}
                         <td>{{ entry.amount|abs_value }}</td>
+                        <td>{{ entry.pending_amount }}</td>
                     </tr>
                 {% empty %}
                     <tr>

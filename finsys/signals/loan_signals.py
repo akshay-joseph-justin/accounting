@@ -7,11 +7,11 @@ class LoanSignal:
     def post_change_balance(cls, sender, instance, created, **kwargs):
         loan = LoanModel.objects.all().first()
         bank = BankModel.objects.filter(pk=instance.bank.pk).first()
-        if loan and bank:
+        if loan and bank and not instance.is_pay:
             loan.balance += instance.amount
             loan.save()
 
-        if created:
+        if created and not instance.is_pay:
             BankTransactionModel.objects.create(
                 date=instance.date,
                 user=instance.user,
@@ -23,10 +23,10 @@ class LoanSignal:
                 foreign_id=instance.id,
             )
         else:
-            print(f"update - {BankTransactionModel.objects.filter(foreign_id=instance.id).exists()}")
             transaction = BankTransactionModel.objects.filter(foreign_id=instance.id).first()
-            transaction.amount = instance.amount
-            transaction.save()
+            if transaction:
+                transaction.amount = instance.amount
+                transaction.save()
 
     @classmethod
     def pre_change_balance(cls, sender, instance, **kwargs):
