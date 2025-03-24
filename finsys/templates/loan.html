@@ -49,7 +49,7 @@
                                    class="btn btn-danger btn-sm">Pay</a></td>
                             <td><a href="{% url 'finsys:loan-update' entry.pk %}"
                                    class="btn btn-warning btn-sm">Edit</a></td>
-                            <td><a href="{% url 'finsys:loan-history' %}"
+                            <td><a href="{% url 'finsys:loan-history' entry.pk %}"
                                    class="btn btn-secondary btn-sm">History</a></td>
                         </tr>
                     {% empty %}

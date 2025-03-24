@@ -74,7 +74,7 @@ class AccountHistoryView(generic.ListView):
     ordering = ['-date']
 
     def get_queryset(self):
-        instance = AccountHistoryModel.objects.all().first()
+        instance = AccountHistoryModel.objects.get(pk=self.kwargs['pk'])
         if instance:
             return instance.history.all()
         return AccountHistoryModel.objects.none()
