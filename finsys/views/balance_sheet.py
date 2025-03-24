@@ -16,7 +16,7 @@ class BalanceSheetView(TemplateView):
         # Ensure objects are not None before accessing attributes
         capital_balance = capital.balance if capital else 0
         loan_balance = loan.balance if loan else 0
-        fixed_assets_total = models.FixedAssetsHistoryModel.objects.aggregate(total=Sum('current_balance'))['total']
+        fixed_assets_total = models.FixedAssetsHistoryModel.objects.aggregate(total=Sum('current_balance'))['total'] or 0
         bank_total = sum(bank.balance for bank in banks)
 
         liability_total = capital_balance + loan_balance

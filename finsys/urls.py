@@ -32,13 +32,13 @@ urlpatterns = [
     path("capital/<int:pk>/", views.CapitalDetailView.as_view(), name="capital-details"),
     path("capital/amount/add/", views.CapitalCreateView.as_view(), name="capital-add-amount"),
     path("capital/edit/<int:pk>/", views.CapitalUpdateView.as_view(), name="capital-update"),
-    path("capital/history/", views.CapitalHistoryView.as_view(), name="capital-history"),
+    path("capital/history/<int:pk>/", views.CapitalHistoryView.as_view(), name="capital-history"),
 
     path("loan/", views.LoanView.as_view(), name="loan"),
     path("loan/<int:pk>/", views.LoanDetailView.as_view(), name="loan-details"),
     path("loan/amount/add/", views.LoanCreateView.as_view(), name="loan-add-amount"),
     path("loan/edit/<int:pk>/", views.LoanUpdateView.as_view(), name="loan-update"),
-    path("loan/history/", views.LoanHistoryView.as_view(), name="loan-history"),
+    path("loan/history/<int:pk>/", views.LoanHistoryView.as_view(), name="loan-history"),
     path("loan/pay/<int:history_pk>/<int:bank_pk>/", views.LoanPayView.as_view(), name="loan-pay"),
 
     path("fixed-assets/", views.FixedAssetsView.as_view(), name="fixed-assets"),

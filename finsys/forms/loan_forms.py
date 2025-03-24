@@ -6,7 +6,6 @@ from finsys.models import LoanHistoryModel, BankModel
 
 class LoanForm(forms.ModelForm):
     change_reason = forms.CharField(
-        required=False,
         help_text="Reason for change",
         widget=forms.TextInput(attrs={'placeholder': 'Enter reason for update'})
     )

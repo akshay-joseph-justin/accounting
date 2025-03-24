@@ -50,7 +50,7 @@ class LoanHistoryView(ListView):
     ordering = ['-date']
 
     def get_queryset(self):
-        instance = LoanHistoryModel.objects.all().first()
+        instance = LoanHistoryModel.objects.get(pk=self.kwargs['pk'])
         if instance:
             return instance.history.all()
         return LoanHistoryModel.objects.none()

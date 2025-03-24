@@ -59,53 +59,39 @@
 
     <ul class="sidebar-nav" id="sidebar-nav">
         <li class="nav-item">
-            <a class="nav-link " href="{% url 'finsys:home' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:home' %}">
                 <i class="bi bi-grid"></i>
                 <span>Dashboard</span>
             </a>
         </li>
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:capital' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'capital' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:capital' %}">
                 <i class="bi bi-person"></i>
                 <span>Capital</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:loan' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'loan' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:loan' %}">
                 <i class="bi bi-person"></i>
                 <span>Loan</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:ledger' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'ledger' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:ledger' %}">
                 <i class="bi bi-person"></i>
                 <span>Ledger</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:fixed-assets' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'fixed-assets' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:fixed-assets' %}">
                 <i class=" bi bi-person"></i>
             <span>Fixed Assets</span>
             </a>
         </li>
 
-
-        {% comment %} <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
-                <i class="bi bi-grid"></i>
-                <span>Income</span>
-            </a>
-        </li>
         <li class="nav-item">
-            <a class="nav-link collapsed" href="#">
-                <i class="bi bi-person"></i>
-                <span>Expense</span>
-            </a>
-        </li> {% endcomment %}
-
-        <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:balance-sheet' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'balance-sheet' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:balance-sheet' %}">
                 <i class="bi bi-person"></i>
                 <span>Balance Sheet</span>
             </a>
@@ -113,7 +99,7 @@
 
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:wallet' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'wallet' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:wallet' %}">
                 <i class="bi bi-person"></i>
                 <span>Banks</span>
             </a>
@@ -121,7 +107,7 @@
 
 
         <li class="nav-item">
-            <a class="nav-link collapsed" href="{% url 'finsys:bank-transfer' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:bank-transfer' %}">
                 <i class="bi bi-person"></i>
                 <span>Bank Transfer</span>
             </a>
@@ -143,7 +129,8 @@
             </a>
         </li>
     </ul>
-</aside><!-- End Sidebar-->
+</aside>
+<!-- End Sidebar-->
 <main id="main" class="main">
 
     {% block content %}

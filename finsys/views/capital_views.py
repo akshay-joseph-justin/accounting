@@ -46,7 +46,7 @@ class CapitalHistoryView(ListView):
     ordering = ['-date']
 
     def get_queryset(self):
-        instance = CapitalHistoryModel.objects.all().first()
+        instance = CapitalHistoryModel.objects.get(pk=self.kwargs['pk'])
         if instance:
             return instance.history.all()
         return CapitalHistoryModel.objects.none()
