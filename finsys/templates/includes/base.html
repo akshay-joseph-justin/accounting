@@ -97,6 +97,13 @@
             </a>
         </li>
 
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'trial-balance' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:trial-balance' %}">
+                <i class="bi bi-person"></i>
+                <span>Trial Balance</span>
+            </a>
+        </li>
+
 
         <li class="nav-item">
             <a class="nav-link {% if request.resolver_match.url_name == 'wallet' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:wallet' %}">
@@ -105,11 +112,31 @@
             </a>
         </li>
 
-
         <li class="nav-item">
-            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:bank-transfer' %}">
+            <a class="nav-link {% if request.resolver_match.url_name == 'bank-transfer' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:bank-transfer' %}">
                 <i class="bi bi-person"></i>
                 <span>Bank Transfer</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'receipt' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:receipt' %}">
+                <i class="bi bi-person"></i>
+                <span>Receipt</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'payment' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:payment' %}">
+                <i class="bi bi-person"></i>
+                <span>Payment</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'journal' %}active{% else %}collapsed{% endif %}" href="{% url 'finsys:journal' %}">
+                <i class="bi bi-person"></i>
+                <span>Journal</span>
             </a>
         </li>
 

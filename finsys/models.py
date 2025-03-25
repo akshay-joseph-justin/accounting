@@ -121,3 +121,9 @@ class FixedAssetsHistoryModel(LedgerModel):
 
     def __str__(self):
         return f"{self.date} - {self.bank}"
+
+
+class JournalModel(LedgerModel):
+
+    def __str__(self):
+        return f"{self.date} - {self.bank}"
