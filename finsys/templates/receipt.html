@@ -1,6 +1,6 @@
 {% extends 'includes/base.html' %}
 {% block title %}
-    Ledger
+    Receipt
 {% endblock %}
 
 {% block content %}
@@ -14,20 +14,8 @@
                         <h2 class="fw-bold">Receipt</h2>
                         <br>
                         {% for account in accounts %}
-                            {% if account.get_account_type_display == 'Credit' %}
-                                <a href="{% url 'finsys:ledger-details' account.pk %}" style="text-decoration: none" class="text-white">{{ account.name }}</a><br>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="p-5 text-white debit-box">
-                        <h2 class="fw-bold">Payment</h2>
-                        <br>
-                        {% for account in accounts %}
-                            {% if account.get_account_type_display == 'Debit' %}
-                                <a href="{% url 'finsys:ledger-details' account.pk %}" style="text-decoration: none" class="text-white">{{ account.name }}</a><br>
-                            {% endif %}
+                            <a href="{% url 'finsys:ledger-details' account.pk %}" style="text-decoration: none"
+                               class="text-white">{{ account.name }}</a><br>
                         {% endfor %}
                     </div>
                 </div>

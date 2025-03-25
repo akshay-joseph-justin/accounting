@@ -6,3 +6,4 @@ from .bank_forms import (
 )
 from .loan_forms import LoanForm, LoanPayForm
 from .fixed_assets_forms import FixedAssetsCreateForm, FixedAssetsUpdateForm, DepreciationForm
+from .journal_forms import JournalForm

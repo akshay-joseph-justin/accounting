@@ -20,29 +20,48 @@
         const endDateInput = document.getElementById("endDate");
         const tableRows = document.querySelectorAll("#dataTable tbody tr");
 
+        function formatDateToYYYYMMDD(date) {
+            let year = date.getFullYear();
+            let month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
+            let day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
+            return `${year}-${month}-${day}`;
+        }
+
         function filterTable() {
             let singleDate = singleDateInput.value;
             let startDate = startDateInput.value;
             let endDate = endDateInput.value;
 
             tableRows.forEach(row => {
-                let rowDate = row.querySelector(".entry-date").innerText.trim();
+                let rowDate = row.querySelector(".entry-date")?.innerText.trim();
+                let showRow = true;
+
                 if (rowDate) {
                     let entryDate = new Date(rowDate);
-                    let showRow = true;
+                    if (isNaN(entryDate)) return;
+
+                    let entryDateStr = formatDateToYYYYMMDD(entryDate); // Convert to local YYYY-MM-DD
 
                     if (singleDate) {
-                        showRow = entryDate.toISOString().split('T')[0] === singleDate;
-                    } else if (startDate && endDate) {
-                        let start = new Date(startDate);
-                        let end = new Date(endDate);
-                        showRow = entryDate >= start && entryDate <= end;
-                    }
+                        showRow = entryDateStr === singleDate;
+                    } else {
+                        let start = startDate ? new Date(startDate) : null;
+                        let end = endDate ? new Date(endDate) : null;
 
-                    row.style.display = showRow ? "" : "none";
+                        if (start && end) {
+                            showRow = entryDate >= start && entryDate <= end;
+                        } else if (start) {
+                            showRow = entryDate >= start;
+                        } else if (end) {
+                            showRow = entryDate <= end;
+                        }
+                    }
                 }
+
+                row.style.display = showRow ? "" : "none";
             });
         }
+
 
         singleDateInput.addEventListener("change", filterTable);
         startDateInput.addEventListener("change", filterTable);

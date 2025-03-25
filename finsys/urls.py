@@ -50,4 +50,13 @@ urlpatterns = [
 
     path("balance-sheet/", views.BalanceSheetView.as_view(), name="balance-sheet"),
 
+    path("trial-balance/", views.TrialBalanceView.as_view(), name="trial-balance"),
+
+    path("receipt/", views.ReceiptView.as_view(), name="receipt"),
+    path("payment/", views.PaymentView.as_view(), name="payment"),
+
+    path("journal/", views.JournalListView.as_view(), name="journal"),
+    path("journal/add/", views.JournalCreateView.as_view(), name="journal-create"),
+    path("journal/edit/<int:pk>/", views.JournalUpdateView.as_view(), name="journal-update"),
+
 ]

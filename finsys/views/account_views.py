@@ -46,7 +46,7 @@ class AccountDeleteView(DeleteView):
 class AccountHistoryCreateView(generic.CreateView):
     model = AccountHistoryModel
     form_class = AccountHistoryForm
-    template_name = "add-capital.html"
+    template_name = "account-transaction.html"
 
     def form_valid(self, form):
         account = AccountModel.objects.get(pk=self.kwargs['pk'])
@@ -62,7 +62,7 @@ class AccountHistoryCreateView(generic.CreateView):
 class AccountHistoryUpdateView(generic.UpdateView):
     model = AccountHistoryModel
     form_class = AccountHistoryForm
-    template_name = "add-capital.html"
+    template_name = "account-transaction.html"
 
     def get_success_url(self):
         return reverse_lazy("finsys:ledger-details", kwargs={"pk": self.kwargs['pk']})

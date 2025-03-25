@@ -1,49 +1,13 @@
 {% extends 'includes/base.html' %}
 {% block title %}
-    PAY LOAN
+    Transaction
 {% endblock %}
 
 {% block content %}
     {% load static %}
     <div class="container mt-5">
         <div class="form-container">
-            {% include 'includes/form.html' with form=form main_title='Pay Loan' %}
-        </div>
-    </div>
-
-    <div class="container mt-4">
-        <h2 class="mb-3">History</h2>
-
-        {% include 'includes/date_filter.html' %}
-
-        <div class="table-responsive">
-            <table class="table table-bordered table-hover" id="dataTable">
-                <thead class="table-dark">
-                <tr>
-                    <th>#</th>
-                    <th>Date</th>
-                    <th>From</th>
-                    <th>Amount</th>
-                    <th>Pending</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for entry in entries %}
-                    <tr>
-                        <td>{{ forloop.counter }}</td>
-                        <td class="entry-date">{{ entry.date }}</td>
-                        <td>{{ entry.from_where }}</td>
-                        {% load abs_value %}
-                        <td>{{ entry.amount|abs_value }}</td>
-                        <td>{{ entry.pending_amount }}</td>
-                    </tr>
-                {% empty %}
-                    <tr>
-                        <td colspan="9" class="text-center">No Journal Entries Found</td>
-                    </tr>
-                {% endfor %}
-                </tbody>
-            </table>
+            {% include 'includes/form.html' with form=form main_title='Transaction' %}
         </div>
     </div>
 

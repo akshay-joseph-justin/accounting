@@ -26,7 +26,7 @@ class FixedAssetsDetailView(DetailView):
 class FixedAssetsCreateView(CreateView):
     model = FixedAssetsHistoryModel
     form_class = FixedAssetsCreateForm
-    template_name = "add-capital.html"
+    template_name = "add-fixed.html"
     success_url = reverse_lazy("finsys:fixed-assets")
 
     def form_valid(self, form):
@@ -37,14 +37,14 @@ class FixedAssetsCreateView(CreateView):
 class FixedAssetsUpdateView(UpdateView):
     model = FixedAssetsHistoryModel
     form_class = FixedAssetsUpdateForm
-    template_name = "add-capital.html"
+    template_name = "add-fixed.html"
     success_url = reverse_lazy("finsys:fixed-assets")
 
 
 class FixedAssetsDepreciationUpdateView(UpdateView):
     model = FixedAssetsHistoryModel
     form_class = DepreciationForm
-    template_name = "add-capital.html"
+    template_name = "add-fixed.html"
     success_url = reverse_lazy("finsys:fixed-assets")
 
 

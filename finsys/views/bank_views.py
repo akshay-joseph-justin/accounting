@@ -60,7 +60,7 @@ class BankAddAmountView(generic.TemplateView, generic.FormView):
 
 class BankTransferView(generic.TemplateView, generic.FormView):
     form_class = BankTransferForm
-    template_name = "add-ledger.html"
+    template_name = "account-transaction.html"
     success_url = reverse_lazy('finsys:bank-transfer')
 
     def form_valid(self, form):
