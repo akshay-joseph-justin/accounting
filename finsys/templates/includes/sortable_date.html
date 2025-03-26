@@ -1,0 +1,31 @@
+<th class="sortable" onclick="sortTable()">
+    Date
+    <i id="sort-icon" class="bi bi-arrow-up"></i>
+</th>
+<style>
+    .sortable {
+        cursor: pointer;
+        user-select: none;
+    }
+</style>
+<script>
+    let ascending = true;
+
+    function sortTable() {
+        let table = document.getElementById("table-body");
+        let rows = Array.from(table.querySelectorAll("tr"));
+
+        rows.sort((a, b) => {
+            let dateA = new Date(a.querySelector(".entry-date").innerText);
+            let dateB = new Date(b.querySelector(".entry-date").innerText);
+            return ascending ? dateA - dateB : dateB - dateA;
+        });
+
+        rows.forEach(row => table.appendChild(row));
+
+        ascending = !ascending;
+
+        // Update arrow direction
+        document.getElementById("sort-icon").className = ascending ? "bi bi-arrow-up" : "bi bi-arrow-down";
+    }
+</script>
