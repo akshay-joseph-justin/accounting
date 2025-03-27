@@ -7,9 +7,9 @@
 {% block content %}
     <div class="container mt-5">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
-            <h1 class="text-primary text-center text-lg-start">Total Capital: <span
-                    class="fw-bold">{{ capital.balance | default:0.0 }}</span></h1>
-
+            <h1 class="text-primary text-center text-lg-start">
+                Total Capital: <span class="fw-bold">{{ capital.balance | default:0.0 }}</span>
+            </h1>
             <a href="{% url 'finsys:capital-add-amount' %}" class="btn btn-success mt-3 mt-lg-0">Add Amount</a>
         </div>
 
@@ -24,7 +24,7 @@
                     <thead class="table-dark">
                     <tr>
                         <th>#</th>
-                        <th>Date</th>
+                        {% include 'includes/sortable_date.html' %}
                         <th>From</th>
                         <th>Bank</th>
                         <th>Amount</th>
@@ -33,7 +33,7 @@
                         <th>History</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="table-body">
                     {% for entry in entries %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
@@ -45,8 +45,8 @@
                                    class="btn btn-info btn-sm">View</a></td>
                             <td><a href="{% url 'finsys:capital-update' entry.pk %}"
                                    class="btn btn-warning btn-sm">Edit</a></td>
-                            <td><a href="{% url 'finsys:capital-history' entry.pk %}"
-                                   class="btn btn-secondary btn-sm">History</a></td>
+                            <td><a href="{% url 'finsys:capital-history' entry.pk %}" class="btn btn-secondary btn-sm">History</a>
+                            </td>
                         </tr>
                     {% empty %}
                         <tr>
@@ -67,5 +67,4 @@
             }
         }
     </style>
-
 {% endblock %}

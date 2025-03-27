@@ -1,59 +1,47 @@
-{% extends 'includes/base.html' %}
+{% extends "includes/base.html" %}
+
 {% block title %}
-    Receipt
+    Capital
 {% endblock %}
 
 {% block content %}
-    {% load static %}
     <a href="{% url 'finsys:ledger-create' %}" class="btn add-ledger-btn">Add Ledger</a>
-    <section class="py-5">
-        <div class="container px-4 px-lg-5">
-            <div class="row g-4 align-items-stretch">
-                <div class="col-lg-6">
-                    <div class="p-5 text-white credit-box">
-                        <h2 class="fw-bold">Receipt</h2>
-                        <br>
-                        {% for account in accounts %}
-                            <a href="{% url 'finsys:ledger-details' account.pk %}" style="text-decoration: none"
-                               class="text-white">{{ account.name }}</a><br>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+
+    <div class="container mt-4">
+        <h2 class="mb-3">Receipt</h2>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Balance</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for account in accounts %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ account.name }}</td>
+                        <td>{{ account.balance }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No Entries Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
         </div>
-    </section>
-
-
-
-
-
-
-
+    </div>
+    </div>
 
     <style>
-        .credit-box, .debit-box {
-            border-radius: 12px;
-            transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-
-        .credit-box {
-            background: linear-gradient(135deg, rgb(77, 196, 200), rgb(50, 160, 165));
-        }
-
-        .debit-box {
-            background: linear-gradient(135deg, rgb(77, 196, 170), rgb(50, 160, 140));
-        }
-
-        .credit-box:hover, .debit-box:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
-        }
-
         @media (max-width: 768px) {
-            .credit-box, .debit-box {
-                text-align: center;
-                padding: 3rem;
+            .btn {
+                width: 100%;
+                margin-bottom: 8px;
             }
         }
 
@@ -78,15 +66,6 @@
             transform: translateY(-3px);
             box-shadow: 0 6px 15px rgba(0, 123, 255, 0.5);
         }
-
-        @media (max-width: 768px) {
-            .add-ledger-btn {
-                width: 100%;
-                padding: 14px;
-                font-size: 16px;
-            }
-        }
     </style>
-
 
 {% endblock %}

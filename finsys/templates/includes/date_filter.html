@@ -1,15 +1,18 @@
 <div class="row mb-3">
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label for="singleDate" class="form-label">Filter by Date:</label>
         <input type="date" id="singleDate" class="form-control">
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label for="startDate" class="form-label">From:</label>
         <input type="date" id="startDate" class="form-control">
     </div>
-    <div class="col-md-4">
+    <div class="col-md-3">
         <label for="endDate" class="form-label">To:</label>
         <input type="date" id="endDate" class="form-control">
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button id="resetFilters" class="btn btn-secondary w-100">Reset</button>
     </div>
 </div>
 
@@ -18,12 +21,13 @@
         const singleDateInput = document.getElementById("singleDate");
         const startDateInput = document.getElementById("startDate");
         const endDateInput = document.getElementById("endDate");
+        const resetButton = document.getElementById("resetFilters");
         const tableRows = document.querySelectorAll("#dataTable tbody tr");
 
         function formatDateToYYYYMMDD(date) {
             let year = date.getFullYear();
-            let month = String(date.getMonth() + 1).padStart(2, '0'); // Ensure two digits
-            let day = String(date.getDate()).padStart(2, '0'); // Ensure two digits
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
         }
 
@@ -40,7 +44,7 @@
                     let entryDate = new Date(rowDate);
                     if (isNaN(entryDate)) return;
 
-                    let entryDateStr = formatDateToYYYYMMDD(entryDate); // Convert to local YYYY-MM-DD
+                    let entryDateStr = formatDateToYYYYMMDD(entryDate);
 
                     if (singleDate) {
                         showRow = entryDateStr === singleDate;
@@ -62,9 +66,16 @@
             });
         }
 
+        function resetFilters() {
+            singleDateInput.value = "";
+            startDateInput.value = "";
+            endDateInput.value = "";
+            tableRows.forEach(row => row.style.display = "");
+        }
 
         singleDateInput.addEventListener("change", filterTable);
         startDateInput.addEventListener("change", filterTable);
         endDateInput.addEventListener("change", filterTable);
+        resetButton.addEventListener("click", resetFilters);
     });
 </script>
