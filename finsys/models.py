@@ -1,6 +1,7 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 from simple_history.models import HistoricalRecords
+from finsys.utils import generate_random_number
 
 User = get_user_model()
 
@@ -47,6 +48,7 @@ class BankTransactionModel(TimeStampedModel):
         (DEBIT, 'Debit'),
     )
 
+    serial_number = models.CharField(max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     bank = models.ForeignKey(BankModel, on_delete=models.PROTECT)
     date = models.DateField()
@@ -57,8 +59,14 @@ class BankTransactionModel(TimeStampedModel):
     is_deleted = models.BooleanField(default=False)
     foreign_id = models.IntegerField(null=True, blank=True)
 
+    def save(self, **kwargs):
+        if not self.serial_number:
+            self.serial_number = generate_random_number()
+        return super().save(**kwargs)
+
 
 class LedgerModel(TimeStampedModel):
+    serial_number = models.CharField(max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
     date = models.DateField()
     from_where = models.CharField(max_length=50)
@@ -70,6 +78,11 @@ class LedgerModel(TimeStampedModel):
 
     class Meta:
         abstract = True
+
+    def save(self, **kwargs):
+        if not self.serial_number:
+            self.serial_number = generate_random_number()
+        return super().save(**kwargs)
 
 
 class CapitalModel(TimeStampedModel):
@@ -109,15 +122,14 @@ class FixedAssetsHistoryModel(LedgerModel):
     depreciation = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     current_balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
-    def save(self, *args, **kwargs):
+    def save(self, **kwargs):
         if self.current_balance == 0:
             self.current_balance = self.amount
 
         if self.depreciation > 0 and self.current_balance > 0:
             self.current_balance = self.amount - self.depreciation
 
-        return super().save(*args, **kwargs)
-
+        return super().save(**kwargs)
 
     def __str__(self):
         return f"{self.date} - {self.bank}"

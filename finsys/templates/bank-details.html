@@ -27,14 +27,14 @@
                     <thead class="table-dark">
                     <tr>
                         <th>#</th>
-                        <th>Date</th>
+                        {% include 'includes/sortable_date.html' %}
                         <th>Head</th>
                         <th>From</th>
                         <th>Type (Credit/Debit)</th>
                         <th>Amount</th>
                     </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="table-body">
                     {% for transaction in transactions %}
                         <tr>
                             <td>{{ forloop.counter }}</td>
