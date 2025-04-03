@@ -1,16 +1,13 @@
 from django import forms
 
-from finsys.models import JournalModel, FixedAssetsHistoryModel
+from finsys.models import DepreciationModel
 
 
-class JournalForm(forms.ModelForm):
-    DEBIT = 2
-    CREDIT = 1
-    transaction_type = forms.IntegerField(widget=forms.Select(choices=((CREDIT, 'Credit'), (DEBIT, 'Debit'))))
+class DepreciationForm(forms.ModelForm):
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control floating-input'}))
 
     def __init__(self, *args, **kwargs):
-        super(JournalForm, self).__init__(*args, **kwargs)
+        super(DepreciationForm, self).__init__(*args, **kwargs)
 
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.CheckboxInput):
@@ -19,5 +16,5 @@ class JournalForm(forms.ModelForm):
                 field.widget.attrs['class'] = 'form-control floating-input'
 
     class Meta:
-        model = JournalModel
-        exclude = ('is_deleted', 'user', 'history')
+        model = DepreciationModel
+        fields = "__all__"

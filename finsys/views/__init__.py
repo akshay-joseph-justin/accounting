@@ -42,7 +42,6 @@ from .fixed_assets_views import (
     FixedAssetsCreateView,
     FixedAssetsUpdateView,
     FixedAssetsHistoryView,
-    FixedAssetsDepreciationUpdateView
 )
 from .balance_sheet import BalanceSheetView
 from .trial_balance_views import TrialBalanceView
@@ -50,5 +49,6 @@ from .reciept_payment_views import ReceiptView, PaymentView
 from .journal_views import (
     JournalListView,
     JournalCreateView,
-    JournalUpdateView
+    JournalUpdateView,
 )
+from .depriciation_views import AddDepreciationView

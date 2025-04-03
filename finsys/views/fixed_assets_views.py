@@ -41,13 +41,6 @@ class FixedAssetsUpdateView(UpdateView):
     success_url = reverse_lazy("finsys:fixed-assets")
 
 
-class FixedAssetsDepreciationUpdateView(UpdateView):
-    model = FixedAssetsHistoryModel
-    form_class = DepreciationForm
-    template_name = "add-fixed.html"
-    success_url = reverse_lazy("finsys:fixed-assets")
-
-
 class FixedAssetsHistoryView(ListView):
     template_name = "fixed-asset-history.html"
     context_object_name = 'entries'

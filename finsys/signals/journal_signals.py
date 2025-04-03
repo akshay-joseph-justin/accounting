@@ -14,7 +14,7 @@ class CapitalSignal:
                 bank=instance.bank,
                 head="Journal",
                 from_where=instance.from_where,
-                transaction_type=BankTransactionModel.CREDIT,
+                transaction_type=instance.transaction_type,
                 amount=instance.amount,
                 foreign_id=instance.id,
             )

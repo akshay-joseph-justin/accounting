@@ -17,6 +17,7 @@
                     <th>#</th>
                     <th>Name</th>
                     <th>Balance</th>
+                    <th>View</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -25,6 +26,9 @@
                         <td>{{ forloop.counter }}</td>
                         <td>{{ account.name }}</td>
                         <td>{{ account.balance }}</td>
+                        <td>
+                            <a href="{% url 'finsys:ledger-details' account.pk %}" style="text-decoration: none" class="text-white">{{ account.name }}</a><br>
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>

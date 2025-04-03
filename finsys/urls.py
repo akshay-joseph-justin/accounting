@@ -45,7 +45,6 @@ urlpatterns = [
     path("fixed-assets/<int:pk>/", views.FixedAssetsDetailView.as_view(), name="fixed-assets-details"),
     path("fixed-assets/create/", views.FixedAssetsCreateView.as_view(), name="fixed-assets-create"),
     path("fixed-assets/update/<int:pk>/", views.FixedAssetsUpdateView.as_view(), name="fixed-assets-update"),
-    path("fixed-assets/update/depreciation/<int:pk>/", views.FixedAssetsDepreciationUpdateView.as_view(), name="fixed-assets-depreciation"),
     path("fixed-assets/history/<int:pk>/", views.FixedAssetsHistoryView.as_view(), name="fixed-assets-history"),
 
     path("balance-sheet/", views.BalanceSheetView.as_view(), name="balance-sheet"),
@@ -58,5 +57,7 @@ urlpatterns = [
     path("journal/", views.JournalListView.as_view(), name="journal"),
     path("journal/add/", views.JournalCreateView.as_view(), name="journal-create"),
     path("journal/edit/<int:pk>/", views.JournalUpdateView.as_view(), name="journal-update"),
+
+    path("depreciation/", views.AddDepreciationView.as_view(), name="depreciation"),
 
 ]

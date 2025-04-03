@@ -67,10 +67,10 @@ class BankTransactionModel(TimeStampedModel):
 
 class LedgerModel(TimeStampedModel):
     serial_number = models.CharField(max_length=100, null=True, blank=True)
-    user = models.ForeignKey(User, on_delete=models.PROTECT)
+    user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
     date = models.DateField()
     from_where = models.CharField(max_length=50)
-    bank = models.ForeignKey(BankModel, on_delete=models.PROTECT)
+    bank = models.ForeignKey(BankModel, on_delete=models.PROTECT, null=True, blank=True)
     amount = models.DecimalField(max_digits=15, decimal_places=2, default=0)
     description = models.TextField(null=True, blank=True)
     history = HistoricalRecords(inherit=True)
@@ -132,7 +132,13 @@ class FixedAssetsHistoryModel(LedgerModel):
         return super().save(**kwargs)
 
     def __str__(self):
-        return f"{self.date} - {self.bank}"
+        return f"{self.description}"
+
+
+class DepreciationModel(TimeStampedModel):
+    date = models.DateField()
+    asset = models.ForeignKey(FixedAssetsHistoryModel, on_delete=models.PROTECT)
+    amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
 
 class JournalModel(LedgerModel):
