@@ -50,13 +50,6 @@
         </button>
     </div>
 
-    <script>
-        document.querySelector('.print-btn').addEventListener('click', function () {
-            window.print();
-        });
-    </script>
-
-
     <!-- End Logo -->
 
     <!-- End Search Bar -->
@@ -199,6 +192,52 @@
 
 <!-- Template Main JS File -->
 <script src="{% static 'assets/js/main.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector('.print-btn').addEventListener('click', () => {
+            const main = document.querySelector(".main");
+            const dateFilter = document.querySelector("#date-filter");
+
+            if (main) {
+                printSelectedElement(main, dateFilter);
+            } else {
+                console.log('Element not found');
+            }
+        });
+    });
+
+    function printSelectedElement(mainElement, dateFilterElement) {
+        // Hide the date filter element temporarily
+        if (dateFilterElement) {
+            dateFilterElement.style.display = 'none';
+        }
+
+        // Create a new window for printing
+        const printWindow = window.open('', '', 'height=800,width=600');
+
+        // Write the HTML content into the print window
+        printWindow.document.write('<html><head><title>Print</title><style>body { font-family: Arial, sans-serif; }</style></head><body>');
+        printWindow.document.write(mainElement.outerHTML); // Copy the outer HTML of the .main element
+        printWindow.document.write('</body></html>');
+
+        // Close the document to trigger loading
+        printWindow.document.close();
+
+        // Wait for the content to load and trigger the print
+        printWindow.onload = function () {
+            printWindow.print(); // Open the print dialog
+            printWindow.close();  // Close the window after printing
+
+            // Restore the visibility of the date filter element after printing
+            if (dateFilterElement) {
+                dateFilterElement.style.display = '';
+            }
+        };
+    }
+
+
+</script>
 
 </body>
 

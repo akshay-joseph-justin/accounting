@@ -52,19 +52,3 @@ class FixedAssetsUpdateForm(forms.ModelForm):
         if commit:
             obj.save()
         return obj
-
-
-class DepreciationForm(forms.ModelForm):
-
-    def __init__(self, *args, **kwargs):
-        super(DepreciationForm, self).__init__(*args, **kwargs)
-
-        if not self.instance.pk:
-            self.fields.pop('change_reason')
-
-        self.fields["depreciation"].widget = forms.DateInput(
-            attrs={'type': 'number', "class": "form-control floating-input"})
-
-    class Meta:
-        model = FixedAssetsHistoryModel
-        fields = ("depreciation",)
