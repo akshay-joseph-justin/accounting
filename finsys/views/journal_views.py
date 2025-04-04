@@ -21,6 +21,10 @@ class JournalCreateView(generic.CreateView):
     template_name = 'account-transaction.html'
     success_url = reverse_lazy('finsys:journal')
 
+    def form_valid(self, form):
+        form.instance.user = self.request.user
+        return super().form_valid(form)
+
 
 class JournalUpdateView(generic.UpdateView):
     model = JournalModel

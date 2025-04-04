@@ -132,7 +132,7 @@ class FixedAssetsHistoryModel(LedgerModel):
         return super().save(**kwargs)
 
     def __str__(self):
-        return f"{self.description}"
+        return f"{self.from_where}"
 
 
 class DepreciationModel(TimeStampedModel):
@@ -142,6 +142,14 @@ class DepreciationModel(TimeStampedModel):
 
 
 class JournalModel(LedgerModel):
+    CREDIT = 1
+    DEBIT = 2
+    TYPES = (
+        (CREDIT, 'Credit'),
+        (DEBIT, 'Debit'),
+    )
+
+    transaction_type = models.SmallIntegerField(choices=TYPES)
 
     def __str__(self):
         return f"{self.date} - {self.bank}"

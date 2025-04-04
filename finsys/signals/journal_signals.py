@@ -1,10 +1,12 @@
 from finsys.models import JournalModel, BankModel, BankTransactionModel
 
 
-class CapitalSignal:
+class JournalSignal:
 
     @classmethod
     def post_change_balance(cls, sender, instance, created, **kwargs):
+        if not instance.bank:
+            return
         bank = BankModel.objects.filter(pk=instance.bank.pk).first()
 
         if created:

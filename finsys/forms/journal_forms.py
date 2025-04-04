@@ -4,9 +4,6 @@ from finsys.models import JournalModel, FixedAssetsHistoryModel
 
 
 class JournalForm(forms.ModelForm):
-    DEBIT = 2
-    CREDIT = 1
-    transaction_type = forms.IntegerField(widget=forms.Select(choices=((CREDIT, 'Credit'), (DEBIT, 'Debit'))))
     date = forms.DateField(widget=forms.DateInput(attrs={'type': 'date', 'class': 'form-control floating-input'}))
 
     def __init__(self, *args, **kwargs):
