@@ -44,7 +44,7 @@ from .fixed_assets_views import (
     FixedAssetsHistoryView,
 )
 from .balance_sheet import BalanceSheetView
-from .trial_balance_views import TrialBalanceView
+from .trial_balance_views import TrialBalanceView, ProfitLossApi
 from .reciept_payment_views import ReceiptView, PaymentView
 from .journal_views import (
     JournalListView,

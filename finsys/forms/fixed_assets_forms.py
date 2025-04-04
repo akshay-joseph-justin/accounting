@@ -9,6 +9,8 @@ class FixedAssetsCreateForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FixedAssetsCreateForm, self).__init__(*args, **kwargs)
 
+        self.fields["from_where"].label = "Asset Name"
+
         for field_name, field in self.fields.items():
             if isinstance(field.widget, forms.CheckboxInput):
                 field.widget.attrs['class'] = 'form-check-input'

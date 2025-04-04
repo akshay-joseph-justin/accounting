@@ -50,6 +50,7 @@ urlpatterns = [
     path("balance-sheet/", views.BalanceSheetView.as_view(), name="balance-sheet"),
 
     path("trial-balance/", views.TrialBalanceView.as_view(), name="trial-balance"),
+    path("api/trial-balance/profit-loss/", views.ProfitLossApi.as_view(), name="api-profit-loss"),
 
     path("receipt/", views.ReceiptView.as_view(), name="receipt"),
     path("payment/", views.PaymentView.as_view(), name="payment"),

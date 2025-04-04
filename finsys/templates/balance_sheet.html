@@ -26,7 +26,11 @@
                                 </tr>
                                 {% for entry in capital_entries %}
                                     <tr>
-                                        <td>{{ entry.from_where }}</td>
+                                        <td>
+                                            <a href="{% url 'finsys:capital-details' entry.pk %}">
+                                                {{ entry.from_where }}
+                                            </a>
+                                        </td>
                                         <td>{{ entry.total_amount }}</td>
                                     </tr>
                                 {% endfor %}
@@ -36,7 +40,11 @@
                                 </tr>
                                 {% for entry in loan_entries %}
                                     <tr>
-                                        <td>{{ entry.bank__name }}</td>
+                                        <td>
+                                            <a href="{% url 'finsys:loan-details' entry.pk %}">
+                                                {{ entry.from_where }}
+                                            </a>
+                                        </td>
                                         <td>{{ entry.total_amount }}</td>
                                     </tr>
                                 {% endfor %}
@@ -67,7 +75,11 @@
                                 </tr>
                                 {% for entry in fixed_entries %}
                                     <tr>
-                                        <td>{{ entry.from_where }}</td>
+                                        <td>
+                                            <a href="{% url 'finsys:fixed-assets-details' entry.pk %}">
+                                                {{ entry.from_where }}
+                                            </a>
+                                        </td>
                                         <td>{{ entry.total_amount }}</td>
                                     </tr>
                                 {% endfor %}
@@ -77,7 +89,11 @@
                                 </tr>
                                 {% for bank in banks %}
                                     <tr>
-                                        <td>{{ bank.name }}</td>
+                                        <td>
+                                            <a href="{% url 'finsys:bank-details' bank.pk %}">
+                                                {{ bank.name }}
+                                            </a>
+                                        </td>
                                         <td>{{ bank.balance }}</td>
                                     </tr>
                                 {% endfor %}
