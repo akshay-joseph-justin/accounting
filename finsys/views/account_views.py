@@ -2,7 +2,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from finsys.forms import AccountForm, AccountHistoryForm
-from finsys.models import AccountModel, AccountHistoryModel
+from finsys.models import AccountModel, AccountHistoryModel, BankTransactionModel
 from finsys.views.delete import DeleteView
 
 
@@ -20,7 +20,7 @@ class AccountDetailView(generic.DetailView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["entries"] = AccountHistoryModel.objects.filter(account=self.object)
+        context["entries"] = AccountHistoryModel.objects.filter(account=self.object, is_deleted=False)
         return context
 
 
@@ -38,9 +38,12 @@ class AccountUpdateView(generic.UpdateView):
     success_url = reverse_lazy("finsys:account-list")
 
 
-class AccountDeleteView(DeleteView):
+class AccountDeleteView(generic.DeleteView):
     model = AccountModel
-    success_url = reverse_lazy("finsys:account-list")
+    success_url = reverse_lazy("finsys:ledger")
+
+    def get(self, request, *args, **kwargs):
+        return self.delete(request, *args, **kwargs)
 
 
 class AccountHistoryCreateView(generic.CreateView):
@@ -66,6 +69,22 @@ class AccountHistoryUpdateView(generic.UpdateView):
 
     def get_success_url(self):
         return reverse_lazy("finsys:ledger-details", kwargs={"pk": self.kwargs['pk']})
+
+
+class AccountHistoryDeleteView(DeleteView):
+    model = AccountHistoryModel
+
+    def get_success_url(self):
+        return reverse_lazy("finsys:ledger-details", kwargs={"pk": self.kwargs['pk']})
+
+    def get(self, request, *args, **kwargs):
+        account = AccountModel.objects.filter(pk=kwargs['acc_pk']).first()
+        entry = AccountHistoryModel.objects.filter(pk=kwargs['pk']).first()
+        account.balance -= entry.amount
+        account.save()
+        BankTransactionModel.objects.filter(foreign_id=entry.id, head=account.name).update(is_deleted=True)
+
+        return super().get(request, *args, **kwargs)
 
 
 class AccountHistoryView(generic.ListView):

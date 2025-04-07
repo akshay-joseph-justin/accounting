@@ -198,20 +198,28 @@
         document.querySelector('.print-btn').addEventListener('click', () => {
             const main = document.querySelector(".main");
             const dateFilter = document.querySelector("#date-filter");
+            const btns = document.querySelectorAll(".btn")
 
             if (main) {
-                printSelectedElement(main, dateFilter);
+                printSelectedElement(main, dateFilter, btns);
             } else {
                 console.log('Element not found');
             }
         });
     });
 
-    function printSelectedElement(mainElement, dateFilterElement) {
+    function printSelectedElement(mainElement, dateFilterElement, btns) {
         // Hide the date filter element temporarily
         if (dateFilterElement) {
             dateFilterElement.style.display = 'none';
         }
+
+        if (btns) {
+            btns.forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+
 
         // Create a new window for printing
         const printWindow = window.open('', '', 'height=800,width=600');

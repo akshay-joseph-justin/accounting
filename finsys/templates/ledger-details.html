@@ -12,6 +12,7 @@
             </h1>
 
             <a href="{% url 'finsys:entries-create' account.pk %}" class="btn btn-success mt-3 mt-lg-0">Add Entry</a>
+            <a href="{% url 'finsys:ledger-delete' account.pk %}" class="btn btn-success mt-3 mt-lg-0" onclick="return confirm('Are you sure?')">Delete Ledger</a>
         </div>
     
         {% include 'includes/date_filter.html' %}
@@ -30,6 +31,7 @@
                         <th>Amount</th>
                         <th>View</th>
                         <th>Edit</th>
+                        <th>Delete</th>
                         <th>History</th>
                     </tr>
                     </thead>
@@ -45,6 +47,9 @@
                             <td><a href="{% url 'finsys:entries-update' entry.pk %}"
                                    class="btn btn-warning btn-sm">Edit</a></td>
                             <td><a href="{% url 'finsys:entries-history' entry.pk %}" class="btn btn-secondary btn-sm">History</a>
+                            </td>
+                            <td>
+                                <a href="{% url 'finsys:entries-delete' pk=entry.pk acc_pk=account.pk %}" class="btn btn-warning" onclick="return confirm('Are you sure')">Delete</a>
                             </td>
                         </tr>
                     {% empty %}

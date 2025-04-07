@@ -7,20 +7,20 @@ class BankSignal:
 
     @classmethod
     def change_balance(cls, sender, instance, created, **kwargs):
+        if instance.is_deleted:
+            return
         bank = BankModel.objects.get(pk=instance.bank.pk)
         if instance.transaction_type == BankTransactionModel.CREDIT:
             bank.balance += instance.amount
 
         if instance.transaction_type == BankTransactionModel.DEBIT:
-            if bank.balance < instance.amount:
-                return ValidationError("Bank Balance is lower than required amount")
-
             bank.balance -= instance.amount
 
         bank.save()
 
     @classmethod
-    def delete(cls, sender, instance, created, **kwargs):
-        if not created:
-            transaction = BankTransactionModel.objects.get(pk=instance.pk)
-            transaction.objects.update(is_deleted=True)
+    def pre_save(cls, sender, instance, **kwargs):
+        bank = BankModel.objects.get(pk=instance.bank.pk)
+        if bank.balance < instance.amount:
+            return ValidationError("Bank Balance is lower than required amount")
+

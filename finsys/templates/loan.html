@@ -32,6 +32,7 @@
                         <th>View</th>
                         <th>Pay</th>
                         <th>Edit</th>
+                        <th>Delete</th>
                         <th>History</th>
                     </tr>
                     </thead>
@@ -51,6 +52,9 @@
                                    class="btn btn-warning btn-sm">Edit</a></td>
                             <td><a href="{% url 'finsys:loan-history' entry.pk %}"
                                    class="btn btn-secondary btn-sm">History</a></td>
+                            <td>
+                                <a href="{% url 'finsys:loan-delete' entry.pk %}" class="btn btn-warning" onclick="return confirm('Are you sure')">Delete</a>
+                            </td>
                         </tr>
                     {% empty %}
                         <tr>

@@ -7,7 +7,8 @@ from .account_views import (
 
     AccountHistoryView,
     AccountHistoryCreateView,
-    AccountHistoryUpdateView
+    AccountHistoryUpdateView,
+    AccountHistoryDeleteView,
 )
 from .capital_views import (
     CapitalView,
@@ -15,6 +16,7 @@ from .capital_views import (
     CapitalCreateView,
     CapitalUpdateView,
     CapitalHistoryView,
+    CapitalDeleteView,
 )
 from .home_view import HomeView
 from .loan_views import (
@@ -24,16 +26,21 @@ from .loan_views import (
     LoanUpdateView,
     LoanHistoryView,
     LoanPayView,
+    LoanDeleteView
 )
 from .bank_views import (
     BankView,
     BankCreateView,
     BankDetailView,
     BankUpdateView,
+    BankDeleteView,
+
     BankAddAmountView,
+    BankTransactionDeleteView,
 
     BankTransferView,
     BankTransferListView,
+    BankTransferDeleteView,
 
 )
 from .fixed_assets_views import (
@@ -41,6 +48,7 @@ from .fixed_assets_views import (
     FixedAssetsDetailView,
     FixedAssetsCreateView,
     FixedAssetsUpdateView,
+    FixedAssetsDeleteView,
     FixedAssetsHistoryView,
 )
 from .balance_sheet import BalanceSheetView
@@ -50,5 +58,6 @@ from .journal_views import (
     JournalListView,
     JournalCreateView,
     JournalUpdateView,
+    JournalDeleteView,
 )
 from .depriciation_views import AddDepreciationView

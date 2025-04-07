@@ -30,6 +30,7 @@
                         <th>Current Price</th>
                         <th>View</th>
                         <th>Edit</th>
+                        <th>Delete</th>
                         <th>History</th>
                     </tr>
                     </thead>
@@ -48,6 +49,9 @@
                                    class="btn btn-primary btn-sm">Edit</a></td>
                             <td><a href="{% url 'finsys:fixed-assets-history' entry.pk %}"
                                    class="btn btn-secondary btn-sm">History</a></td>
+                            <td>
+                                <a href="{% url 'finsys:fixed-assets-delete' entry.pk %}" class="btn btn-warning" onclick="return confirm('Are you sure')">Delete</a>
+                            </td>
                         </tr>
                     {% empty %}
                         <tr>

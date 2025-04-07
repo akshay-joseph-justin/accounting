@@ -24,9 +24,10 @@ class AccountBalanceSignals:
                 foreign_id=instance.id,
             )
         else:
-            transaction = BankTransactionModel.objects.filter(foreign_id=instance.id).first()
-            transaction.amount = instance.amount
-            transaction.save()
+            if not instance.is_deleted:
+                transaction = BankTransactionModel.objects.filter(foreign_id=instance.id, head=instance.account.name).first()
+                transaction.amount = instance.amount
+                transaction.save()
 
     @classmethod
     def pre_change_balance(cls, sender, instance, **kwargs):
@@ -49,5 +50,6 @@ class AccountBalanceSignals:
             from_where=instance.from_where,
             transaction_type=transaction_type,
             amount=history.amount,
-            is_deleted=True
+            is_deleted=True,
+            is_visible=False
         )

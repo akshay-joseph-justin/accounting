@@ -24,6 +24,7 @@
                     <th>To</th>
                     <th>Type ( Credit / Debit )</th>
                     <th>Amount</th>
+                    <th>Delete</th>
                 </tr>
                 </thead>
                 <tbody id="table-body">
@@ -35,6 +36,9 @@
                         <td>{{ transaction.from_where }}</td>
                         <td>{{ transaction.get_transaction_type_display }}</td>
                         <td>{{ transaction.amount }}</td>
+                        <td>
+                            <a href="{% url 'finsys:bank-transfer-delete' pk=transaction.pk %}" class="btn btn-warning" onclick="retutn confirm('Are you sure?')">Delete</a>
+                        </td>
                     </tr>
                 {% empty %}
                     <tr>

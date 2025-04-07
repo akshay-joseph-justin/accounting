@@ -41,7 +41,7 @@ class AccountHistoryForm(forms.ModelForm):
 
     class Meta:
         model = AccountHistoryModel
-        exclude = ("balance", "user", "is_deleted", "from_where", "account")
+        exclude = ("balance", "user", "is_deleted", "from_where", "account", "is_visible")
 
     def save(self, commit=True):
         obj = super().save(commit=False)

@@ -28,7 +28,7 @@ class TrialBalanceView(ListView):
         return amount, "Balanced"
 
     def get_queryset(self):
-        bank = BankTransactionModel.objects.all().order_by("date")
+        bank = BankTransactionModel.objects.filter(is_deleted=False).order_by("date")
         depreciation = DepreciationModel.objects.all().order_by("date")
         combined_queryset = chain(bank, depreciation)
         return sorted(combined_queryset, key=lambda x: x.date)

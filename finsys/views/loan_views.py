@@ -3,6 +3,7 @@ from django.views.generic import TemplateView, CreateView, UpdateView, ListView,
 
 from finsys.forms import LoanForm, LoanPayForm
 from finsys.models import LoanModel, LoanHistoryModel, BankTransactionModel, BankModel
+from finsys.views.delete import DeleteView
 
 
 class LoanView(TemplateView):
@@ -42,6 +43,20 @@ class LoanUpdateView(UpdateView):
     template_name = "add-loan.html"
     form_class = LoanForm
     success_url = reverse_lazy("finsys:loan")
+
+
+class LoanDeleteView(DeleteView):
+    model = LoanHistoryModel
+    success_url = reverse_lazy("finsys:loan")
+
+    def get(self, request, *args, **kwargs):
+        loan = LoanModel.objects.all().first()
+        entry = LoanHistoryModel.objects.filter(pk=kwargs['pk']).first()
+        loan.balance -= entry.amount
+        loan.save()
+        BankTransactionModel.objects.filter(foreign_id=entry.id, head__iexact="Loan").update(is_deleted=True)
+
+        return super().get(request, *args, **kwargs)
 
 
 class LoanHistoryView(ListView):

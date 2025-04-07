@@ -7,7 +7,6 @@ class JournalSignal:
     def post_change_balance(cls, sender, instance, created, **kwargs):
         if not instance.bank:
             return
-        bank = BankModel.objects.filter(pk=instance.bank.pk).first()
 
         if created:
             BankTransactionModel.objects.create(
@@ -21,24 +20,20 @@ class JournalSignal:
                 foreign_id=instance.id,
             )
         else:
-            transaction = BankTransactionModel.objects.filter(foreign_id=instance.id).first()
-            transaction.amount = instance.amount
-            transaction.save()
+            if not instance.is_deleted:
+                transaction = BankTransactionModel.objects.filter(foreign_id=instance.id, head="Journal").first()
+                transaction.amount = instance.amount
+                transaction.save()
 
     @classmethod
     def pre_change_balance(cls, sender, instance, **kwargs):
         history = JournalModel.objects.filter(pk=instance.pk).first()
+        bank = BankModel.objects.filter(pk=instance.bank.pk).first()
 
         if not history:
             return
 
-        BankTransactionModel.objects.create(
-            date=instance.date,
-            user=instance.user,
-            bank=instance.bank,
-            head="Journal",
-            from_where=instance.from_where,
-            transaction_type=BankTransactionModel.DEBIT,
-            amount=history.amount,
-            is_deleted=True
-        )
+        bank.balance -= history.amount
+        bank.save()
+
+
