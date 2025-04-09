@@ -23,8 +23,8 @@ class LoanSignal:
                 foreign_id=instance.id,
             )
         else:
-            transaction = BankTransactionModel.objects.filter(foreign_id=instance.id).first()
-            if transaction:
+            transaction = BankTransactionModel.objects.filter(foreign_id=instance.id, head="Loan").first()
+            if transaction and not instance.is_deleted:
                 transaction.amount = instance.amount
                 transaction.save()
 
@@ -40,13 +40,5 @@ class LoanSignal:
         loan.balance -= history.amount
         loan.save()
 
-        BankTransactionModel.objects.create(
-            date=instance.date,
-            user=instance.user,
-            bank=instance.bank,
-            head="Loan",
-            from_where=instance.from_where,
-            transaction_type=BankTransactionModel.DEBIT,
-            amount=history.amount,
-            is_deleted=True
-        )
+        bank.balance -= history.amount
+        bank.save()

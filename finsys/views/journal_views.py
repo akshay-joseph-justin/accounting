@@ -1,14 +1,18 @@
+from django.db.models import F
 from django.urls import reverse_lazy
 from django.views import generic
 
 from finsys.forms import JournalForm
-from finsys.models import JournalModel
+from finsys.models import JournalModel, BankTransactionModel, BankModel
+from finsys.views.delete import DeleteView
 
 
 class JournalListView(generic.ListView):
-    model = JournalModel
     context_object_name = 'entries'
     template_name = 'journal.html'
+
+    def get_queryset(self):
+        return JournalModel.objects.filter(is_deleted=False)
 
 
 class JournalDetailView(generic.DetailView):
@@ -31,3 +35,18 @@ class JournalUpdateView(generic.UpdateView):
     form_class = JournalForm
     template_name = 'account-transaction.html'
     success_url = reverse_lazy('finsys:journal')
+
+
+class JournalDeleteView(DeleteView):
+    model = JournalModel
+    success_url = reverse_lazy("finsys:journal")
+
+    def get(self, request, *args, **kwargs):
+        entry = JournalModel.objects.filter(pk=kwargs['pk']).first()
+        if entry.transaction_type == JournalModel.CREDIT:
+            BankModel.objects.filter(pk=entry.bank.pk).update(balance=F("balance") - entry.amount)
+        if entry.transaction_type == JournalModel.DEBIT:
+            BankModel.objects.filter(pk=entry.bank.pk).update(balance=F("balance") + entry.amount)
+        BankTransactionModel.objects.filter(foreign_id=entry.id, head__iexact="Journal").update(is_deleted=True)
+
+        return super().get(request, *args, **kwargs)

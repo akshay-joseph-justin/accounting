@@ -21,7 +21,7 @@ class FixedAssetsCreateForm(forms.ModelForm):
 
     class Meta:
         model = FixedAssetsHistoryModel
-        exclude = ("balance", "user", "is_deleted", "depreciation", "current_balance")
+        exclude = ("balance", "user", "is_deleted", "depreciation", "current_balance", "is_visible")
 
 
 class FixedAssetsUpdateForm(forms.ModelForm):
@@ -42,7 +42,7 @@ class FixedAssetsUpdateForm(forms.ModelForm):
 
     class Meta:
         model = FixedAssetsHistoryModel
-        exclude = ("balance", "user", "is_deleted", "current_balance", "depreciation")
+        exclude = ("balance", "user", "is_deleted", "current_balance", "depreciation", "is_visible")
 
     def save(self, commit=True):
         obj = super().save(commit=False)

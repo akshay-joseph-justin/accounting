@@ -27,6 +27,7 @@
                         <th>Bank</th>
                         <th>Amount</th>
                         <th>Edit</th>
+                        <th>Delete</th>
                     </tr>
                     </thead>
                     <tbody id="table-body">
@@ -39,6 +40,9 @@
                             <td>{{ entry.amount }}</td>
                             <td><a href="{% url 'finsys:journal-update' entry.pk %}"
                                    class="btn btn-warning btn-sm">Edit</a></td>
+                            <td>
+                                <a href="{% url 'finsys:journal-delete' entry.pk %}" class="btn btn-warning" onclick="return confirm('Are you sure')">Delete</a>
+                            </td>
                         </tr>
                     {% empty %}
                         <tr>

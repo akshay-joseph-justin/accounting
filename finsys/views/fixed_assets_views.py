@@ -3,7 +3,8 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
 
 from finsys.forms import FixedAssetsCreateForm, FixedAssetsUpdateForm, DepreciationForm
-from finsys.models import FixedAssetsModel, FixedAssetsHistoryModel
+from finsys.models import FixedAssetsModel, FixedAssetsHistoryModel, BankTransactionModel
+from finsys.views.delete import DeleteView
 
 
 class FixedAssetsView(TemplateView):
@@ -39,6 +40,20 @@ class FixedAssetsUpdateView(UpdateView):
     form_class = FixedAssetsUpdateForm
     template_name = "add-fixed.html"
     success_url = reverse_lazy("finsys:fixed-assets")
+
+
+class FixedAssetsDeleteView(DeleteView):
+    model = FixedAssetsHistoryModel
+    success_url = reverse_lazy("finsys:fixed-assets")
+
+    def get(self, request, *args, **kwargs):
+        asset = FixedAssetsModel.objects.all().first()
+        entry = FixedAssetsHistoryModel.objects.filter(pk=kwargs['pk']).first()
+        asset.balance -= entry.amount
+        asset.save()
+        BankTransactionModel.objects.filter(foreign_id=entry.id, head__iexact="Fixed Asset").update(is_deleted=True)
+
+        return super().get(request, *args, **kwargs)
 
 
 class FixedAssetsHistoryView(ListView):

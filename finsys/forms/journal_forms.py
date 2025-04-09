@@ -17,4 +17,4 @@ class JournalForm(forms.ModelForm):
 
     class Meta:
         model = JournalModel
-        exclude = ('is_deleted', 'user', 'history')
+        exclude = ('is_deleted', 'user', 'history', "is_visible")

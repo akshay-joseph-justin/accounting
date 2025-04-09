@@ -50,13 +50,14 @@ class BankTransactionModel(TimeStampedModel):
 
     serial_number = models.CharField(max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    bank = models.ForeignKey(BankModel, on_delete=models.PROTECT)
+    bank = models.ForeignKey(BankModel, on_delete=models.CASCADE)
     date = models.DateField()
     head = models.CharField(max_length=50, null=True, blank=True)
     from_where = models.CharField(max_length=50, null=True, blank=True)
     transaction_type = models.SmallIntegerField(choices=TYPES)
     amount = models.DecimalField(max_digits=15, decimal_places=2)
     is_deleted = models.BooleanField(default=False)
+    is_visible = models.BooleanField(default=True)
     foreign_id = models.IntegerField(null=True, blank=True)
 
     def save(self, **kwargs):
@@ -75,6 +76,7 @@ class LedgerModel(TimeStampedModel):
     description = models.TextField(null=True, blank=True)
     history = HistoricalRecords(inherit=True)
     is_deleted = models.BooleanField(default=False)
+    is_visible = models.BooleanField(default=True)
 
     class Meta:
         abstract = True
@@ -96,7 +98,7 @@ class LoanModel(TimeStampedModel):
 class CapitalHistoryModel(LedgerModel):
 
     def __str__(self):
-        return f"{self.date} - {self.bank}"
+        return f"Capital - {self.id} - {self.date}"
 
 
 class LoanHistoryModel(LedgerModel):
@@ -104,14 +106,14 @@ class LoanHistoryModel(LedgerModel):
     is_pay = models.BooleanField(default=False)
 
     def __str__(self):
-        return f"{self.date} - {self.bank}"
+        return f"Loan {self.id} - {self.date}"
 
 
 class AccountHistoryModel(LedgerModel):
     account = models.ForeignKey(AccountModel, on_delete=models.PROTECT)
 
     def __str__(self):
-        return f"{self.date} - {self.bank}"
+        return f"Ac {self.id} - {self.date}"
 
 
 class FixedAssetsModel(TimeStampedModel):
@@ -152,4 +154,4 @@ class JournalModel(LedgerModel):
     transaction_type = models.SmallIntegerField(choices=TYPES)
 
     def __str__(self):
-        return f"{self.date} - {self.bank}"
+        return f"journal {self.id} - {self.date}"

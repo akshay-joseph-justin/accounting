@@ -11,6 +11,14 @@ class AccountAdmin(admin.ModelAdmin):
     ordering = ['name', 'created_at']
 
 
+@admin.register(models.AccountHistoryModel)
+class AccountHistoryModelAdmin(admin.ModelAdmin):
+    list_display = ['date', 'from_where', 'bank', 'amount']
+    list_filter = ['date', 'from_where', 'bank', 'amount']
+    search_fields = ['date', 'from_where', 'bank', 'amount']
+    ordering = ['date', 'from_where', 'bank', 'amount']
+
+
 @admin.register(models.BankModel)
 class BankModelAdmin(admin.ModelAdmin):
     list_display = ['name', 'account_number', 'branch', 'balance']
@@ -22,7 +30,7 @@ class BankModelAdmin(admin.ModelAdmin):
 @admin.register(models.BankTransactionModel)
 class BankTransactionModelAdmin(admin.ModelAdmin):
     list_display = ['bank', 'date', 'head', 'from_where', 'transaction_type', 'amount']
-    list_filter = ['bank', 'date', 'from_where', 'transaction_type', 'amount']
+    list_filter = ['id', 'bank', 'date', 'from_where', 'transaction_type', 'amount']
     search_fields = ['bank', 'head', 'from_where']
 
 

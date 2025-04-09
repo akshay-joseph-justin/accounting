@@ -23,10 +23,10 @@ class CapitalSignal:
                 foreign_id=instance.id,
             )
         else:
-            print(f"update - {BankTransactionModel.objects.filter(foreign_id=instance.id).exists()}")
-            transaction = BankTransactionModel.objects.filter(foreign_id=instance.id).first()
-            transaction.amount = instance.amount
-            transaction.save()
+            if not instance.is_deleted:
+                transaction = BankTransactionModel.objects.filter(foreign_id=instance.id, head="Capital").first()
+                transaction.amount = instance.amount
+                transaction.save()
 
     @classmethod
     def pre_change_balance(cls, sender, instance, **kwargs):
@@ -40,13 +40,5 @@ class CapitalSignal:
         capital.balance -= history.amount
         capital.save()
 
-        BankTransactionModel.objects.create(
-            date=instance.date,
-            user=instance.user,
-            bank=instance.bank,
-            head="Capital",
-            from_where=instance.from_where,
-            transaction_type=BankTransactionModel.DEBIT,
-            amount=history.amount,
-            is_deleted=True
-        )
+        bank.balance -= history.amount
+        bank.save()

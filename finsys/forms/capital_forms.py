@@ -26,7 +26,7 @@ class CapitalForm(forms.ModelForm):
 
     class Meta:
         model = CapitalHistoryModel
-        exclude = ("balance", "user", "is_deleted")
+        exclude = ("balance", "user", "is_deleted", "is_visible")
 
     def save(self, commit=True):
         obj = super().save()

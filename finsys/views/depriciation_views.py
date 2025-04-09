@@ -3,6 +3,7 @@ from django.views import generic
 
 from finsys.models import DepreciationModel, FixedAssetsHistoryModel
 from finsys.forms import DepreciationForm
+from finsys.views.delete import DeleteView
 
 
 class AddDepreciationView(generic.CreateView):

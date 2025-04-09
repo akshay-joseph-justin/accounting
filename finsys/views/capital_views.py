@@ -2,7 +2,8 @@ from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView, UpdateView, ListView, DetailView
 
 from finsys.forms.capital_forms import CapitalForm
-from finsys.models import CapitalModel, CapitalHistoryModel
+from finsys.models import CapitalModel, CapitalHistoryModel, BankTransactionModel, BankModel
+from finsys.views.delete import DeleteView
 
 
 class CapitalView(TemplateView):
@@ -38,6 +39,20 @@ class CapitalUpdateView(UpdateView):
     form_class = CapitalForm
     template_name = "add-capital.html"
     success_url = reverse_lazy("finsys:capital")
+
+
+class CapitalDeleteView(DeleteView):
+    model = CapitalHistoryModel
+    success_url = reverse_lazy("finsys:capital")
+
+    def get(self, request, *args, **kwargs):
+        capital = CapitalModel.objects.all().first()
+        entry = CapitalHistoryModel.objects.filter(pk=kwargs['pk']).first()
+        capital.balance -= entry.amount
+        capital.save()
+        BankTransactionModel.objects.filter(foreign_id=entry.id, head__iexact="Capital").update(is_deleted=True)
+
+        return super().get(request, *args, **kwargs)
 
 
 class CapitalHistoryView(ListView):
