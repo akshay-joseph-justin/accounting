@@ -38,7 +38,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'finsys.apps.FinsysConfig',
-    'django_filters'
 ]
 
 MIDDLEWARE = [

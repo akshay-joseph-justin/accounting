@@ -60,7 +60,9 @@ urlpatterns = [
     path("api/trial-balance/profit-loss/", views.ProfitLossApi.as_view(), name="api-profit-loss"),
 
     path("receipt/", views.ReceiptView.as_view(), name="receipt"),
+    path("receipt/create/", views.ReceiptCreateView.as_view(), name="receipt-create"),
     path("payment/", views.PaymentView.as_view(), name="payment"),
+    path("payment/create/", views.PaymentCreateView.as_view(), name="payment-create"),
 
     path("journal/", views.JournalListView.as_view(), name="journal"),
     path("journal/add/", views.JournalCreateView.as_view(), name="journal-create"),
