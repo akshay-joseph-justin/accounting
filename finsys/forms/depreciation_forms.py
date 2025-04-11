@@ -17,4 +17,4 @@ class DepreciationForm(forms.ModelForm):
 
     class Meta:
         model = DepreciationModel
-        fields = "__all__"
+        exclude = ("user",)
