@@ -1,4 +1,4 @@
-from .account_forms import AccountForm, AccountHistoryForm
+from .account_forms import AccountForm, AccountHistoryForm, ReceiptForm
 from .bank_forms import (
     BankUpsertForm,
     BankDepositForm,

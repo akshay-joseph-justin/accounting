@@ -49,9 +49,21 @@
                         {% else %}
                             <td>Depreciation</td>
                         {% endif %}
-                        <td>{{ transaction.from_where }}</td>
-                        <td>{{ transaction.bank }}</td>
-                        <td>{{ transaction.get_transaction_type_display }}</td>
+                        {% if transaction.from_where %}
+                            <td>{{ transaction.from_where }}</td>
+                        {% else %}
+                            <td>{{ transaction.asset.from_where }}</td>
+                        {% endif %}
+                        {% if transaction.bank %}
+                            <td>{{ transaction.bank }}</td>
+                        {% else %}
+                            <td>-</td>
+                        {% endif %}
+                        {% if transaction.transaction_type %}
+                            <td>{{ transaction.get_transaction_type_display }}</td>
+                        {% else %}
+                            <td>Debit</td>
+                        {% endif %}
                         <td>{{ transaction.amount }}</td>
                     </tr>
                 {% empty %}

@@ -138,6 +138,7 @@ class FixedAssetsHistoryModel(LedgerModel):
 
 
 class DepreciationModel(TimeStampedModel):
+    user = models.ForeignKey(User, on_delete=models.PROTECT)
     date = models.DateField()
     asset = models.ForeignKey(FixedAssetsHistoryModel, on_delete=models.PROTECT)
     amount = models.DecimalField(max_digits=20, decimal_places=2, default=0)

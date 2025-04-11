@@ -26,6 +26,7 @@
                         <th>From</th>
                         <th>Bank</th>
                         <th>Amount</th>
+                        <th>Credit/Debit</th>
                         <th>Edit</th>
                         <th>Delete</th>
                     </tr>
@@ -38,6 +39,7 @@
                             <td>{{ entry.from_where }}</td>
                             <td>{{ entry.bank }}</td>
                             <td>{{ entry.amount }}</td>
+                            <td>{{ entry.get_transaction_type_display }}</td>
                             <td><a href="{% url 'finsys:journal-update' entry.pk %}"
                                    class="btn btn-warning btn-sm">Edit</a></td>
                             <td>

@@ -5,7 +5,7 @@ class JournalSignal:
 
     @classmethod
     def post_change_balance(cls, sender, instance, created, **kwargs):
-        if not instance.bank:
+        if not instance.bank or instance.bank is None:
             return
 
         if created:
@@ -27,6 +27,9 @@ class JournalSignal:
 
     @classmethod
     def pre_change_balance(cls, sender, instance, **kwargs):
+        if not instance.bank or instance.bank is None:
+            return
+
         history = JournalModel.objects.filter(pk=instance.pk).first()
         bank = BankModel.objects.filter(pk=instance.bank.pk).first()
 

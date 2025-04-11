@@ -1,4 +1,4 @@
-from finsys.models import FixedAssetsHistoryModel, JournalModel, CapitalModel
+from finsys.models import FixedAssetsHistoryModel, CapitalModel, CapitalHistoryModel, JournalModel
 
 
 class DepreciationSignals:
@@ -10,6 +10,17 @@ class DepreciationSignals:
             asset.depreciation += instance.amount
             asset.save()
 
-            capital = CapitalModel.objects.first()
-            capital.balance -= instance.amount
-            capital.save()
+            entries = CapitalHistoryModel.objects.all()
+            count = entries.count()
+            for entry in entries:
+                entry.amount -= instance.amount/count
+
+            entry = FixedAssetsHistoryModel.objects.get(pk=instance.asset.pk)
+
+            JournalModel.objects.create(
+                user=instance.user,
+                date=instance.date,
+                from_where=entry.from_where,
+                amount=instance.amount,
+                transaction_type=JournalModel.DEBIT
+            )
