@@ -3,7 +3,7 @@ from django.urls import reverse_lazy
 from django.views import generic
 
 from finsys.forms import JournalForm
-from finsys.models import JournalModel, BankTransactionModel, BankModel
+from finsys.models import JournalModel, BankTransactionModel, BankModel, DepreciationModel
 from finsys.views.delete import DeleteView
 
 
@@ -13,6 +13,11 @@ class JournalListView(generic.ListView):
 
     def get_queryset(self):
         return JournalModel.objects.filter(is_deleted=False)
+
+    def get_context_data(self, **kwargs):
+        data = super().get_context_data(**kwargs)
+        data["depreciations"] = DepreciationModel.objects.all()
+        return data
 
 
 class JournalDetailView(generic.DetailView):
