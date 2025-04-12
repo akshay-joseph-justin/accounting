@@ -28,7 +28,6 @@ class BalanceSheetView(TemplateView):
             total_amount=Sum("current_balance")).order_by("from_where")
         loan_entries = models.LoanHistoryModel.objects.filter(is_deleted=False, amount__gt=0).values("pk", "bank__name").annotate(
             total_amount=Sum("amount")).order_by("bank")
-        print(fixed_entries)
 
         return {
             "capital": capital,

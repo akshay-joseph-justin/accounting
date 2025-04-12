@@ -18,3 +18,9 @@ class DepreciationForm(forms.ModelForm):
     class Meta:
         model = DepreciationModel
         exclude = ("user",)
+
+    def clean_amount(self):
+        amount = self.cleaned_data['amount']
+        if amount > self.cleaned_data["asset"].current_balance:
+            raise forms.ValidationError("amount is greater than current balance")
+        return amount

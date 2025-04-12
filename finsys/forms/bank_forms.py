@@ -27,3 +27,13 @@ class BankTransferForm(forms.Form):
     from_where = forms.ModelChoiceField(queryset=BankModel.objects.all(), widget=forms.Select(attrs={'class': 'form-control floating-input'}))
     to = forms.ModelChoiceField(queryset=BankModel.objects.all(), widget=forms.Select(attrs={'class': 'form-control floating-input'}))
     amount = forms.DecimalField(widget=forms.NumberInput(attrs={'class': 'form-control floating-input'}))
+
+    def clean_from_where(self):
+        if self.cleaned_data["from_where"].balance < self.cleaned_data["amount"]:
+            raise forms.ValidationError("Bank balance is less than the amount")
+        return self.cleaned_data["from_where"]
+
+    def clean_to(self):
+        if self.cleaned_data["to"].balance < self.cleaned_data["amount"]:
+            raise forms.ValidationError("Bank balance is less than the amount")
+        return self.cleaned_data["from_where"]

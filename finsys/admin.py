@@ -73,3 +73,7 @@ class FixedAssetsHistoryModelAdmin(admin.ModelAdmin):
     ordering = ['date', 'from_where', 'bank', 'amount']
 
 
+@admin.register(models.DepreciationModel)
+class DepreciationModelAdmin(admin.ModelAdmin):
+    list_display = ['date', "asset", "amount"]
+

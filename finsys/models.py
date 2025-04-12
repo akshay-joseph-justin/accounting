@@ -89,10 +89,22 @@ class LedgerModel(TimeStampedModel):
 
 class CapitalModel(TimeStampedModel):
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    first = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    def save(self, *args, **kwargs):
+        if self.first == 0:
+            self.first = self.balance
+        return super().save(*args, **kwargs)
 
 
 class LoanModel(TimeStampedModel):
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    first = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    def save(self, *args, **kwargs):
+        if self.first == 0:
+            self.first = self.balance
+        return super().save(*args, **kwargs)
 
 
 class CapitalHistoryModel(LedgerModel):
@@ -118,6 +130,12 @@ class AccountHistoryModel(LedgerModel):
 
 class FixedAssetsModel(TimeStampedModel):
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+    first = models.DecimalField(max_digits=20, decimal_places=2, default=0)
+
+    def save(self, *args, **kwargs):
+        if self.first == 0:
+            self.first = self.balance
+        return super().save(*args, **kwargs)
 
 
 class FixedAssetsHistoryModel(LedgerModel):
