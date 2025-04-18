@@ -23,7 +23,7 @@ class BalanceSheetView(TemplateView):
         assets_total = fixed_assets_total + bank_total
         profit_loss = assets_total - liability_total
         if profit_loss > 0:
-            liability_total -= profit_loss
+            liability_total += profit_loss
         elif profit_loss < 0:
             liability_total += profit_loss
 
