@@ -15,10 +15,10 @@ class TrialBalanceView(ListView):
 
     def profit_loss(self):
         total_debit = \
-            BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.DEBIT).aggregate(
+            BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.DEBIT, is_deleted=False).aggregate(
                 total=Sum('amount'))[
                 "total"] or 0
-        total_credit = BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.CREDIT).aggregate(
+        total_credit = BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.CREDIT, is_deleted=False).aggregate(
             total=Sum('amount'))["total"] or 0
         amount = total_credit - total_debit
         if amount < 0:

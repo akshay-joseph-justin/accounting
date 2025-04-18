@@ -48,6 +48,16 @@
                                         <td>{{ entry.total_amount }}</td>
                                     </tr>
                                 {% endfor %}
+                                {% if profit_loss != 0 %}
+                                <tr>
+                                    {% if profit_loss > 0 %}
+                                        <td>Profit</td>
+                                    {% else %}
+                                        <td>Loss</td>
+                                    {% endif %}
+                                    <td>{{ profit_loss }}</td>
+                                </tr>
+                                {% endif %}
                                 <tr class="fw-bold bg-light">
                                     <td>Total Liabilities</td>
                                     <td>{{ liability_total }}</td>

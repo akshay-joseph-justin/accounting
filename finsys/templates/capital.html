@@ -27,7 +27,8 @@
                         {% include 'includes/sortable_date.html' %}
                         <th>From</th>
                         <th>Bank</th>
-                        <th>Amount</th>
+                        <th>Initial Amount</th>
+                        <th>Current Amount</th>
                         <th>View</th>
                         <th>Edit</th>
                         <th>History</th>
@@ -41,6 +42,7 @@
                             <td class="entry-date">{{ entry.date }}</td>
                             <td>{{ entry.from_where }}</td>
                             <td>{{ entry.bank }}</td>
+                            <td>{{ entry.first }}</td>
                             <td>{{ entry.amount }}</td>
                             <td><a href="{% url 'finsys:capital-details' entry.pk %}"
                                    class="btn btn-info btn-sm">View</a></td>
