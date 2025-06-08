@@ -7,7 +7,7 @@
 {% block content %}
     <div class="container mt-5">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
-            <h1 class="text-primary text-center text-lg-start">Balance: <span
+            <h1 class="text-primary text-center text-lg-start">Total Fixed Assets: <span
                     class="fw-bold">{{ entries.0.total | default:0.0 }}</span></h1>
 
             <a href="{% url 'finsys:fixed-assets-create' %}" class="btn btn-success mt-3 mt-lg-0">Add Assets</a>
