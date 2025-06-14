@@ -23,12 +23,31 @@
         const endDateInput = document.getElementById("endDate");
         const resetButton = document.getElementById("resetFilters");
         const tableRows = document.querySelectorAll("#dataTable tbody tr");
+        const total = document.getElementById("total");
 
         function formatDateToYYYYMMDD(date) {
             let year = date.getFullYear();
             let month = String(date.getMonth() + 1).padStart(2, '0');
             let day = String(date.getDate()).padStart(2, '0');
             return `${year}-${month}-${day}`;
+        }
+
+        function updateTotal() {
+            let sum = 0;
+            tableRows.forEach(row => {
+                // Only include visible rows in the total calculation
+                if (row.style.display !== "none") {
+                    const amountElement = row.querySelector(".amount-total");
+                    if (amountElement) {
+                        const value = parseFloat(amountElement.innerText) || 0;
+                        sum += value;
+                    }
+                }
+            });
+
+            if (total) {
+                total.innerText = sum.toFixed(2);
+            }
         }
 
         function filterTable() {
@@ -64,6 +83,9 @@
 
                 row.style.display = showRow ? "" : "none";
             });
+
+            // Update total after filtering
+            updateTotal();
         }
 
         function resetFilters() {
@@ -71,7 +93,13 @@
             startDateInput.value = "";
             endDateInput.value = "";
             tableRows.forEach(row => row.style.display = "");
+
+            // Update total after resetting
+            updateTotal();
         }
+
+        // Initialize total on page load
+        updateTotal();
 
         singleDateInput.addEventListener("change", filterTable);
         startDateInput.addEventListener("change", filterTable);

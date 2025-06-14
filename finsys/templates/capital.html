@@ -8,7 +8,7 @@
     <div class="container mt-5">
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
             <h1 class="text-primary text-center text-lg-start">
-                Total Capital: <span class="fw-bold">{{ capital.balance | default:0.0 }}</span>
+                Total Capital: <span class="fw-bold" id="total">{{ capital.balance | default:0.0 }}</span>
             </h1>
             <a href="{% url 'finsys:capital-add-amount' %}" class="btn btn-success mt-3 mt-lg-0">Add Amount</a>
         </div>
@@ -43,7 +43,7 @@
                             <td>{{ entry.from_where }}</td>
                             <td>{{ entry.bank }}</td>
                             <td>{{ entry.first }}</td>
-                            <td>{{ entry.amount }}</td>
+                            <td class="amount-total">{{ entry.amount }}</td>
                             <td><a href="{% url 'finsys:capital-details' entry.pk %}"
                                    class="btn btn-info btn-sm">View</a></td>
                             <td><a href="{% url 'finsys:capital-update' entry.pk %}"

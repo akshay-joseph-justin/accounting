@@ -9,7 +9,7 @@
 
         <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
             <h1 class="text-primary text-center text-lg-start">Total: <span
-                    class="fw-bold">{{ total | default:0.0 }}</span></h1>
+                    class="fw-bold" id="total">{{ total | default:0.0 }}</span></h1>
         </div>
         <div class="d-flex justify-content-between">
             <ul>
@@ -64,7 +64,7 @@
                         {% else %}
                             <td>Debit</td>
                         {% endif %}
-                        <td>{{ transaction.amount }}</td>
+                        <td class=".amount-total">{{ transaction.amount }}</td>
                     </tr>
                 {% empty %}
                     <tr>
