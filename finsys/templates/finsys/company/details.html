@@ -1,0 +1,77 @@
+{% extends "finsys/includes/base.html" %}
+
+{% block title %}
+    {{ bank.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-primary text-center text-lg-start">{{ company.name }}</h1>
+
+        {% if NOT_VIEWER %}
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
+                <div class="btn-group mt-3 mt-lg-0">
+                    <a href="{% url 'finsys:company-member-add' company.id %}" class="btn btn-warning">Add Member</a>
+                    <a href="{% url 'finsys:company-update' company.id %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'finsys:company-delete' company.pk %}" class="btn btn-warning">Delete</a>
+                </div>
+            </div>
+        {% endif %}
+
+        <div class="container mt-4">
+            <h2 class="mb-3">Users</h2>
+
+            {% include 'finsys/includes/date_filter.html' %}
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Role</th>
+                        {% if NOT_VIEWER %}
+                            <th>Change Role</th>
+                            <th>Delete</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for member in members %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td>{{ member.user.username }}</td>
+                            <td>{{ member.role }}</td>
+                            {% if NOT_VIEWER %}
+                                <td><a href="{% url 'finsys:company-role-change' member.pk %}"
+                                       class="btn btn-warning">Change</a></td>
+                                <td><a href="{% url 'finsys:company-member-remove' member.id %}"
+                                       class="btn btn-danger">Remove</a></td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No Entries Found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .btn-group {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .btn-group a {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+
+{% endblock %}

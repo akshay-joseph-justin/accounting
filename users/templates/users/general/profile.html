@@ -1,0 +1,86 @@
+{% extends "users/common/base.html" %}
+{% block title %}Profile{% endblock %}
+
+{% block content %}
+    <div class="flex flex-col lg:flex-row bg-white rounded-lg shadow-lg overflow-hidden">
+
+        <!-- Sidebar -->
+        <aside class="w-full lg:w-1/4 bg-gray-100 border-r px-6 py-8 space-y-6 text-lg font-medium text-gray-700">
+            <div class="text-xl font-bold text-blue-600 mb-4">Settings</div>
+            <a href="#personal" class="block hover:text-blue-600">Personal Info</a>
+            <a href="#security" class="block hover:text-blue-600">Security</a>
+            <a href="#account" class="block hover:text-blue-600">Account Actions</a>
+        </aside>
+
+        <!-- Main Content -->
+        <section class="flex-1 px-8 py-8 space-y-12">
+
+            <!-- Personal Info -->
+            <div id="personal" class="space-y-4">
+                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">Personal Info</h2>
+
+                <div class="flex justify-between">
+                    <span>Username:</span>
+                    <a href="{% url 'users:change-username' username=user.username %}"
+                       class="text-blue-600 underline">{{ user.username }}</a>
+                </div>
+
+                <div class="flex justify-between">
+                    <span>Full Name:</span>
+                    <a href="{% url 'users:change-fullname' username=user.username %}"
+                       class="text-blue-600 underline">{{ user.first_name }} {{ user.last_name }}</a>
+                </div>
+
+                <div class="flex justify-between">
+                    <span>Email:</span>
+                    {% if user.email %}
+                        <span>
+            {{ user.email }}
+                            {% if not user.email_verified %}
+                                <a href="{% url 'users:verification-email-redirect' %}"
+                                   class="text-red-600 ml-2 underline">Verify</a>
+                            {% endif %}
+          </span>
+                    {% else %}
+                        <a href="{% url 'users:change-email' username=user.username %}" class="text-blue-600 underline">Add
+                            Email</a>
+                    {% endif %}
+                </div>
+            </div>
+
+            <!-- Security -->
+            <div id="security" class="space-y-4">
+                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">Security</h2>
+
+                {% if not user.has_usable_password %}
+                    <p class="text-red-600 text-sm">
+                        You haven’t set a password yet.
+                        <a href="{% url 'users:set-password' %}" class="underline">Set password</a>
+                    </p>
+                {% endif %}
+
+                <a href="{% url 'users:change-password-redirect' %}">
+                    <button class="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700">Change Password</button>
+                </a>
+            </div>
+
+            <!-- Account Actions -->
+            <div id="account" class="space-y-4">
+                <h2 class="text-2xl font-semibold text-gray-800 border-b pb-2">Account Actions</h2>
+
+                <a href="{% url 'users:role-send-mail' role='STAFF' %}">
+                    <button class="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700">Request Role
+                        Change
+                    </button>
+                </a>
+                <a href="{% url 'users:delete-send-mail' %}">
+                    <button class="w-full bg-red-600 text-white py-2 rounded hover:bg-red-700">Delete Account</button>
+                </a>
+                <a href="{% url 'users:logout' %}">
+                    <button class="w-full bg-gray-300 text-gray-800 py-2 rounded hover:bg-gray-400">Logout</button>
+                </a>
+            </div>
+
+        </section>
+    </div>
+{% endblock %}

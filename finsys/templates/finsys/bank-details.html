@@ -1,0 +1,83 @@
+{% extends "finsys/includes/base.html" %}
+
+{% block title %}
+    {{ bank.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h1 class="text-primary text-center text-lg-start">{{ bank.name }}</h1>
+
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
+            <h2 class="text-primary">Balance: <span class="fw-bold">{{ bank.balance | default:0.0 }}</span></h2>
+            {% if NOT_VIEWER %}
+                <div class="btn-group mt-3 mt-lg-0">
+                    <a href="{% url 'finsys:bank-add-amount' bank.pk %}" class="btn btn-success">Add Amount</a>
+                    <a href="{% url 'finsys:bank-update' bank.pk %}" class="btn btn-warning">Edit</a>
+                    <a href="{% url 'finsys:bank-delete' bank.pk %}" class="btn btn-warning">Delete</a>
+                </div>
+            {% endif %}
+        </div>
+
+        <div class="container mt-4">
+            <h2 class="mb-3">History</h2>
+
+            {% include 'finsys/includes/date_filter.html' %}
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        {% include 'finsys/includes/sortable_date.html' %}
+                        <th>Head</th>
+                        <th>From</th>
+                        <th>Type (Credit/Debit)</th>
+                        <th>Amount</th>
+                        {% if NOT_VIEWER %}
+                            <th>Delete</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for transaction in transactions %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="entry-date">{{ transaction.date }}</td>
+                            <td>{{ transaction.head }}</td>
+                            <td>{{ transaction.from_where }}</td>
+                            <td>{{ transaction.get_transaction_type_display }}</td>
+                            <td>{{ transaction.amount }}</td>
+                            {% if NOT_VIEWER %}
+                                <td>
+                                    <a href="{% url 'finsys:bank-transaction-delete' pk=transaction.pk bank_pk=bank.pk %}"
+                                       class="btn btn-warning">Delete</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="6" class="text-center">No Entries Found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .btn-group {
+                width: 100%;
+                display: flex;
+                flex-direction: column;
+            }
+
+            .btn-group a {
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+
+{% endblock %}

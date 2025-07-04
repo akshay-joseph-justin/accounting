@@ -16,7 +16,7 @@ class AccountForm(forms.ModelForm):
 
     class Meta:
         model = AccountModel
-        fields = '__all__'
+        exclude = ("company",)
 
 
 class AccountHistoryForm(forms.ModelForm):
@@ -41,7 +41,7 @@ class AccountHistoryForm(forms.ModelForm):
 
     class Meta:
         model = AccountHistoryModel
-        exclude = ("balance", "user", "is_deleted", "from_where", "account", "is_visible")
+        exclude = ("balance", "user", "is_deleted", "from_where", "account", "is_visible", "company")
 
     def save(self, commit=True):
         obj = super().save(commit=False)
@@ -67,4 +67,4 @@ class ReceiptForm(forms.ModelForm):
 
     class Meta:
         model = AccountModel
-        exclude = ("account_type",)
+        exclude = ("account_type", "company")

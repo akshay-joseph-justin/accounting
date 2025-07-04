@@ -1,0 +1,76 @@
+{% extends "finsys/includes/base.html" %}
+
+{% block title %}
+    Receipts
+{% endblock %}
+
+{% block content %}
+    {% if NOT_VIEWER %}
+        <a href="{% url 'finsys:receipt-create' %}" class="btn add-ledger-btn">Add Receipts</a>
+    {% endif %}
+
+    <div class="container mt-4">
+        <h2 class="mb-3">Receipt</h2>
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    <th>Name</th>
+                    <th>Balance</th>
+                    <th>View</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for account in accounts %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ account.name }}</td>
+                        <td>{{ account.balance }}</td>
+                        <td><a href="{% url 'finsys:ledger-details' account.pk %}"
+                               class="btn btn-primary btn-sm">View</a></td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="8" class="text-center">No Entries Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+        }
+
+        .add-ledger-btn {
+            display: block;
+            width: fit-content;
+            margin: auto;
+            padding: 12px 24px;
+            font-size: 18px;
+            font-weight: 600;
+            text-transform: uppercase;
+            text-align: center;
+            color: #fff;
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 123, 255, 0.3);
+            transition: all 0.3s ease-in-out;
+        }
+
+        .add-ledger-btn:hover {
+            background: linear-gradient(135deg, #0056b3, #003f7f);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 15px rgba(0, 123, 255, 0.5);
+        }
+    </style>
+
+{% endblock %}

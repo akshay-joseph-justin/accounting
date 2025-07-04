@@ -3,6 +3,8 @@ from django.db import models
 from simple_history.models import HistoricalRecords
 from finsys.utils import generate_random_number
 
+from users.models import CompanyModel, YearModel
+
 User = get_user_model()
 
 
@@ -22,6 +24,7 @@ class AccountModel(TimeStampedModel):
         (2, 'Debit'),
     )
 
+    company = models.ForeignKey(CompanyModel, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     account_type = models.SmallIntegerField(choices=ACCOUNT_TYPES)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
@@ -31,13 +34,14 @@ class AccountModel(TimeStampedModel):
 
 
 class BankModel(TimeStampedModel):
+    company = models.ForeignKey(CompanyModel, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
     account_number = models.CharField(max_length=50, null=True, blank=True)
     branch = models.CharField(max_length=50, null=True, blank=True)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
     def __str__(self):
-        return f"{self.branch} - {self.name}"
+        return f"{self.branch} - {self.name} ({self.balance})"
 
 
 class BankTransactionModel(TimeStampedModel):
@@ -48,9 +52,10 @@ class BankTransactionModel(TimeStampedModel):
         (DEBIT, 'Debit'),
     )
 
+    year = models.ForeignKey(YearModel, on_delete=models.PROTECT)
     serial_number = models.CharField(max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT)
-    bank = models.ForeignKey(BankModel, on_delete=models.CASCADE)
+    bank = models.ForeignKey(BankModel, on_delete=models.PROTECT)
     date = models.DateField()
     head = models.CharField(max_length=50, null=True, blank=True)
     from_where = models.CharField(max_length=50, null=True, blank=True)
@@ -67,6 +72,8 @@ class BankTransactionModel(TimeStampedModel):
 
 
 class LedgerModel(TimeStampedModel):
+    company = models.ForeignKey(CompanyModel, on_delete=models.PROTECT)
+    year = models.ForeignKey(YearModel, on_delete=models.PROTECT)
     serial_number = models.CharField(max_length=100, null=True, blank=True)
     user = models.ForeignKey(User, on_delete=models.PROTECT, null=True, blank=True)
     date = models.DateField()
@@ -88,6 +95,8 @@ class LedgerModel(TimeStampedModel):
 
 
 class CapitalModel(TimeStampedModel):
+    company = models.ForeignKey(CompanyModel, on_delete=models.PROTECT)
+    year = models.ForeignKey(YearModel, on_delete=models.PROTECT)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     first = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
@@ -98,6 +107,8 @@ class CapitalModel(TimeStampedModel):
 
 
 class LoanModel(TimeStampedModel):
+    company = models.ForeignKey(CompanyModel, on_delete=models.PROTECT)
+    year = models.ForeignKey(YearModel, on_delete=models.PROTECT)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     first = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 
@@ -129,6 +140,8 @@ class AccountHistoryModel(LedgerModel):
 
 
 class FixedAssetsModel(TimeStampedModel):
+    company = models.ForeignKey(CompanyModel, on_delete=models.PROTECT)
+    year = models.ForeignKey(YearModel, on_delete=models.PROTECT)
     balance = models.DecimalField(max_digits=20, decimal_places=2, default=0)
     first = models.DecimalField(max_digits=20, decimal_places=2, default=0)
 

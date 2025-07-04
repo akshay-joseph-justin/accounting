@@ -6,20 +6,26 @@ from django.http import JsonResponse
 from django.views import View
 from django.views.generic import ListView
 
-from finsys.models import BankTransactionModel, BankModel, JournalModel, DepreciationModel
+from finsys.models import BankTransactionModel, BankModel, DepreciationModel
 
 
 class TrialBalanceView(ListView):
     context_object_name = 'transactions'
-    template_name = 'trial-balance.html'
+    template_name = 'finsys/trial-balance.html'
 
     def profit_loss(self):
         total_debit = \
-            BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.DEBIT, is_deleted=False).aggregate(
+            BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.DEBIT,
+                                                is_deleted=False,
+                                                bank__company_id=self.request.session["CURRENT_COMPANY_ID"],
+                                                year_id=self.request.session["CURRENT_YEAR_ID"]).aggregate(
                 total=Sum('amount'))[
                 "total"] or 0
-        total_credit = BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.CREDIT, is_deleted=False).aggregate(
-            total=Sum('amount'))["total"] or 0
+        total_credit = \
+            BankTransactionModel.objects.filter(transaction_type=BankTransactionModel.CREDIT, is_deleted=False,
+                                                bank__company_id=self.request.session["CURRENT_COMPANY_ID"],
+                                                year_id=self.request.session["CURRENT_YEAR_ID"]).aggregate(
+                total=Sum('amount'))["total"] or 0
         amount = total_credit - total_debit
         if amount < 0:
             return amount, "Loss"
@@ -28,15 +34,21 @@ class TrialBalanceView(ListView):
         return amount, "Balanced"
 
     def get_queryset(self):
-        bank = BankTransactionModel.objects.filter(is_deleted=False).order_by("date")
-        depreciation = DepreciationModel.objects.all().order_by("date")
+        bank = BankTransactionModel.objects.filter(is_deleted=False,
+                                                   bank__company_id=self.request.session["CURRENT_COMPANY_ID"],
+                                                   year_id=self.request.session["CURRENT_YEAR_ID"]).order_by("date")
+        depreciation = DepreciationModel.objects.filter(
+            asset__bank__company_id=self.request.session["CURRENT_COMPANY_ID"],
+            asset__year_id=self.request.session["CURRENT_YEAR_ID"]).order_by("date")
         combined_queryset = chain(bank, depreciation)
         return sorted(combined_queryset, key=lambda x: x.date)
 
     def get_context_data(self, **kwargs):
         context = super(TrialBalanceView, self).get_context_data(**kwargs)
-        context["total"] = BankModel.objects.aggregate(total=Sum("balance"))["total"]
-        context["banks"] = BankModel.objects.all()
+        context["total"] = \
+        BankModel.objects.filter(company_id=self.request.session["CURRENT_COMPANY_ID"]).aggregate(total=Sum("balance"))[
+            "total"]
+        context["banks"] = BankModel.objects.filter(company_id=self.request.session["CURRENT_COMPANY_ID"])
         amount, status = self.profit_loss()
         context["amount"] = abs(amount)
         context["status"] = status
@@ -44,9 +56,6 @@ class TrialBalanceView(ListView):
 
 
 class ProfitLossApi(View):
-    from datetime import datetime
-    from django.db.models import Sum
-    from django.http import JsonResponse
 
     def get(self, request):
         # Get the date parameters from the GET request
@@ -96,7 +105,7 @@ class ProfitLossApi(View):
         amount = total_credit - total_debit
 
         if amount < 0:
-            return JsonResponse({"status":f"Loss - {amount}"}, status=200)
+            return JsonResponse({"status": f"Loss - {amount}"}, status=200)
         elif amount > 0:
-            return JsonResponse({"status":f"Profit - {amount}"}, status=200)
+            return JsonResponse({"status": f"Profit - {amount}"}, status=200)
         return JsonResponse({"status": "Balanced"}, status=200)

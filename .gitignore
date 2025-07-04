@@ -2,6 +2,9 @@
 .venv/
 db.sqlite3
 
+dawnet/.env
+dawnet/client_secret.json
+
 finsys/migrations/
 finsys/__pycache__/
 finsys/forms/__pycache__/
