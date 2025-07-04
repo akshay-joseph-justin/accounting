@@ -32,8 +32,3 @@ class BankTransferForm(forms.Form):
         if self.cleaned_data["from_where"].balance < self.cleaned_data["amount"]:
             raise forms.ValidationError("Bank balance is less than the amount")
         return self.cleaned_data["from_where"]
-
-    def clean_to(self):
-        if self.cleaned_data["to"].balance < self.cleaned_data["amount"]:
-            raise forms.ValidationError("Bank balance is less than the amount")
-        return self.cleaned_data["from_where"]

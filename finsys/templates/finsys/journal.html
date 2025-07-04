@@ -1,0 +1,90 @@
+{% extends "finsys/includes/base.html" %}
+
+{% block title %}
+    Capital
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        {% if NOT_VIEWER %}
+            <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
+                <a href="{% url 'finsys:journal-create' %}" class="btn btn-success mt-3 mt-lg-0">Add Journal</a>
+                <a href="{% url 'finsys:depreciation' %}" class="btn btn-success mt-3 mt-lg-0">Add Depreciation</a>
+            </div>
+        {% endif %}
+
+        <!-- Date Filter Section -->
+        {% include 'finsys/includes/date_filter.html' %}
+
+        <div class="container mt-4">
+            <h2 class="mb-3">History</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        {% include 'finsys/includes/sortable_date.html' %}
+                        <th>From</th>
+                        <th>Bank</th>
+                        <th>Amount</th>
+                        <th>Credit/Debit</th>
+                        {% if NOT_VIEWER %}
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        {% endif %}
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="entry-date">{{ entry.date }}</td>
+                            <td>{{ entry.from_where }}</td>
+                            <td>{{ entry.bank }}</td>
+                            <td>{{ entry.amount }}</td>
+                            <td>{{ entry.get_transaction_type_display }}</td>
+                            {% if NOT_VIEWER %}
+                                <td><a href="{% url 'finsys:journal-update' entry.pk %}"
+                                       class="btn btn-warning btn-sm">Edit</a></td>
+                                <td>
+                                    <a href="{% url 'finsys:journal-delete' entry.pk %}" class="btn btn-warning"
+                                       onclick="return confirm('Are you sure')">Delete</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    {% for depreciation in depreciations %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="entry-date">{{ depreciation.date }}</td>
+                            <td>{{ depreciation.asset.from_where }}</td>
+                            <td>{{ depreciation.asset.bank }}</td>
+                            <td>{{ depreciation.amount }}</td>
+                            <td>Depreciation</td>
+                            {% if NOT_VIEWER %}
+                                <td><a href="#"
+                                       class="btn btn-warning btn-sm">Edit</a></td>
+                                <td>
+                                    <a href="#" class="btn btn-warning"
+                                       onclick="return confirm('Are you sure')">Delete</a>
+                                </td>
+                            {% endif %}
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .btn {
+                width: 100%;
+                margin-bottom: 8px;
+            }
+        }
+    </style>
+
+{% endblock %}

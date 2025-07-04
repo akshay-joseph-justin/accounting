@@ -9,14 +9,14 @@ from finsys.views.delete import DeleteView
 
 class JournalListView(generic.ListView):
     context_object_name = 'entries'
-    template_name = 'journal.html'
+    template_name = 'finsys/journal.html'
 
     def get_queryset(self):
-        return JournalModel.objects.filter(is_deleted=False)
+        return JournalModel.objects.filter(is_deleted=False, company=self.request.session["CURRENT_COMPANY_ID"], year_id=self.request.session["CURRENT_YEAR_ID"])
 
     def get_context_data(self, **kwargs):
         data = super().get_context_data(**kwargs)
-        data["depreciations"] = DepreciationModel.objects.all()
+        data["depreciations"] = DepreciationModel.objects.filter(asset__bank__company_id=self.request.session["CURRENT_COMPANY_ID"], asset__year_id=self.request.session["CURRENT_YEAR_ID"])
         return data
 
 
@@ -27,18 +27,23 @@ class JournalDetailView(generic.DetailView):
 class JournalCreateView(generic.CreateView):
     model = JournalModel
     form_class = JournalForm
-    template_name = 'account-transaction.html'
+    template_name = 'finsys/account-transaction.html'
     success_url = reverse_lazy('finsys:journal')
+
+    def get_initial(self):
+        return {"company": self.request.session["CURRENT_COMPANY_ID"]}
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.company_id = self.request.session["CURRENT_COMPANY_ID"]
+        form.instance.year_id = self.request.session["CURRENT_YEAR_ID"]
         return super().form_valid(form)
 
 
 class JournalUpdateView(generic.UpdateView):
     model = JournalModel
     form_class = JournalForm
-    template_name = 'account-transaction.html'
+    template_name = 'finsys/account-transaction.html'
     success_url = reverse_lazy('finsys:journal')
 
 

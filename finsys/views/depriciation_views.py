@@ -9,7 +9,7 @@ from finsys.views.delete import DeleteView
 class AddDepreciationView(generic.CreateView):
     model = DepreciationModel
     form_class = DepreciationForm
-    template_name = "add-depreciation.html"
+    template_name = "finsys/add-depreciation.html"
     success_url = reverse_lazy("finsys:journal")
 
     def form_valid(self, form):

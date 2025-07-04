@@ -1,0 +1,85 @@
+{% extends "finsys/includes/base.html" %}
+
+{% block title %}
+    {{ account.name }}
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
+            <h1 class="text-primary text-center text-lg-start">
+                Total: <span class="fw-bold" id="total">{{ account.balance | default:0.0 }}</span>
+            </h1>
+
+            {% if NOT_VIEWER %}
+                <a href="{% url 'finsys:entries-create' account.pk %}" class="btn btn-success mt-3 mt-lg-0">Add
+                    Entry</a>
+                <a href="{% url 'finsys:ledger-delete' account.pk %}" class="btn btn-success mt-3 mt-lg-0"
+                   onclick="return confirm('Are you sure?')">Delete Ledger</a>
+            {% endif %}
+        </div>
+
+        {% include 'finsys/includes/date_filter.html' %}
+
+        <div class="container mt-4">
+            <h2 class="mb-3">History</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        {% include 'finsys/includes/sortable_date.html' %}
+                        <th>From</th>
+                        <th>Bank</th>
+                        <th>Amount</th>
+                        <th>View</th>
+                        {% if NOT_VIEWER %}
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        {% endif %}
+                        <th>History</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="entry-date">{{ entry.date }}</td>
+                            <td>{{ entry.account.name }}</td>
+                            <td>{{ entry.bank.name }}</td>
+                            <td class=".amount-total">{{ entry.amount }}</td>
+                            <td><a href="{% url 'finsys:home' %}" class="btn btn-info btn-sm">View</a></td>
+                            {% if NOT_VIEWER %}
+                                <td><a href="{% url 'finsys:entries-update' entry.pk %}"
+                                       class="btn btn-warning btn-sm">Edit</a></td>
+                                <td>
+                                    <a href="{% url 'finsys:entries-delete' pk=entry.pk acc_pk=account.pk %}"
+                                       class="btn btn-warning" onclick="return confirm('Are you sure')">Delete</a>
+                                </td>
+                            {% endif %}
+                            <td>
+                                <a href="{% url 'finsys:entries-history' entry.pk %}"
+                                   class="btn btn-secondary btn-sm">History</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="8" class="text-center">No Journal Entries Found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+
+{% endblock %}

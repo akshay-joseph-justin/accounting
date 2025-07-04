@@ -1,0 +1,71 @@
+{% extends "finsys/includes/base.html" %}
+
+{% block title %}
+    History
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <h2 class="mb-3 text-center text-lg-start">History</h2>
+    
+        {% include 'finsys/includes/date_filter.html' %}
+
+        <div class="table-responsive">
+            <table class="table table-bordered table-hover" id="dataTable">
+                <thead class="table-dark">
+                <tr>
+                    <th>#</th>
+                    {% include 'finsys/includes/sortable_date.html' %}
+                    <th>From</th>
+                    <th>Bank</th>
+                    <th>Original Price</th>
+                    <th>Current Price</th>
+                    <th>Depreciation</th>
+                    <th>User</th>
+                    <th>Created At</th>
+                    <th>Updated At</th>
+                    <th>Status</th>
+                </tr>
+                </thead>
+                <tbody id="table-body">
+                {% for entry in entries %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td class="entry-date">{{ entry.date }}</td>
+                        <td>{{ entry.from_where }}</td>
+                        <td>{{ entry.bank }}</td>
+                        <td>{{ entry.amount }}</td>
+                        <td>{{ entry.current_balance }}</td>
+                        <td>{{ entry.depreciation }}</td>
+                        <td>{{ entry.user }}</td>
+                        <td>{{ entry.created_at|date:"Y-m-d H:i:s" }}</td>
+                        <td>{{ entry.updated_at|date:"Y-m-d H:i:s" }}</td>
+                        <td>
+                            {% if entry.history_type == "+" %}
+                                <span class="badge bg-success">Created</span>
+                            {% elif entry.history_type == "~" %}
+                                <span class="badge bg-warning">Edited</span>
+                            {% elif entry.history_type == "-" %}
+                                <span class="badge bg-danger">Deleted</span>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="11" class="text-center">No Journal Entries Found</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'finsys/includes/base.html' %}
+
+{% block title %}
+    Company Not Found
+{% endblock %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="alert alert-warning text-center shadow-sm p-4 rounded">
+                    <h2 class="mb-3">You're Not Associated with Any Company</h2>
+                    <p class="mb-4">You are not associated with any company. Please create a new company or request to
+                        be added to an existing one.</p>
+                    <div class="d-flex justify-content-center gap-3">
+                        <a href="{% url 'finsys:company-create' %}" class="btn btn-primary">Create Company</a>
+                        <a href="" class="btn btn-outline-secondary">Request Access</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

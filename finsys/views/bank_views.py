@@ -9,33 +9,41 @@ from finsys.views.delete import DeleteView
 
 
 class BankView(generic.ListView):
-    model = models.BankModel
     context_object_name = 'banks'
-    template_name = "wallet.html"
+    template_name = "finsys/wallet.html"
+
+    def get_queryset(self):
+        return BankModel.objects.filter(company_id=self.request.session["CURRENT_COMPANY_ID"])
 
 
 class BankDetailView(generic.DetailView):
     model = models.BankModel
     context_object_name = 'bank'
-    template_name = "bank-details.html"
+    template_name = "finsys/bank-details.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["transactions"] = models.BankTransactionModel.objects.filter(bank=self.object, is_deleted=False)
+        context["transactions"] = models.BankTransactionModel.objects.filter(bank=self.object, is_deleted=False,
+                                                                             year__year__exact=self.request.session[
+                                                                                 "CURRENT_YEAR"])
         return context
 
 
 class BankCreateView(generic.CreateView):
     model = models.BankModel
     form_class = BankUpsertForm
-    template_name = "bank-create.html"
+    template_name = "finsys/bank-create.html"
     success_url = reverse_lazy('finsys:wallet')
+
+    def form_valid(self, form):
+        form.instance.company_id = self.request.session["CURRENT_COMPANY_ID"]
+        return super().form_valid(form)
 
 
 class BankUpdateView(generic.UpdateView):
     model = models.BankModel
     form_class = BankUpsertForm
-    template_name = "bank-create.html"
+    template_name = "finsys/bank-create.html"
     success_url = reverse_lazy('finsys:wallet')
 
 
@@ -50,7 +58,7 @@ class BankDeleteView(generic.DeleteView):
 class BankAddAmountView(generic.TemplateView, generic.FormView):
     model = models.BankTransactionModel
     form_class = BankDepositForm
-    template_name = "bank-add-amount.html"
+    template_name = "finsys/bank-add-amount.html"
     success_url = reverse_lazy('finsys:wallet')
 
     def form_valid(self, form):
@@ -62,6 +70,7 @@ class BankAddAmountView(generic.TemplateView, generic.FormView):
             from_where=form.cleaned_data['from_where'],
             transaction_type=self.model.CREDIT,
             amount=form.cleaned_data['amount'],
+            year_id=self.request.session["CURRENT_YEAR_ID"],
         )
 
         return super().form_valid(form)
@@ -85,7 +94,7 @@ class BankTransactionDeleteView(DeleteView):
 
 class BankTransferView(generic.TemplateView, generic.FormView):
     form_class = BankTransferForm
-    template_name = "account-transaction.html"
+    template_name = "finsys/account-transaction.html"
     success_url = reverse_lazy('finsys:bank-transfer')
 
     def form_valid(self, form):
@@ -97,6 +106,7 @@ class BankTransferView(generic.TemplateView, generic.FormView):
             from_where=form.cleaned_data['to'],
             transaction_type=models.BankTransactionModel.DEBIT,
             amount=form.cleaned_data['amount'],
+            year_id=self.request.session["CURRENT_YEAR_ID"]
         )
         models.BankTransactionModel.objects.create(
             user=self.request.user,
@@ -106,7 +116,8 @@ class BankTransferView(generic.TemplateView, generic.FormView):
             from_where=form.cleaned_data['from_where'],
             transaction_type=models.BankTransactionModel.CREDIT,
             amount=form.cleaned_data['amount'],
-            foreign_id=debit.id
+            foreign_id=debit.id,
+            year_id=self.request.session["CURRENT_YEAR_ID"]
         )
 
         return super().form_valid(form)
@@ -115,17 +126,20 @@ class BankTransferView(generic.TemplateView, generic.FormView):
 class BankTransferListView(generic.ListView):
     model = models.BankTransactionModel
     context_object_name = 'transactions'
-    template_name = "bank-transfer.html"
+    template_name = "finsys/bank-transfer.html"
 
     def get_queryset(self):
-        bank_names = models.BankModel.objects.values_list('name', flat=True)  # List of bank names
+        bank_names = models.BankModel.objects.filter(company_id=self.request.session["CURRENT_COMPANY_ID"]).values_list(
+            'name', flat=True)  # List of bank names
 
         # Build Q object dynamically for filtering 'from_where'
         q_object = Q()
         for bank_name in bank_names:
             q_object |= Q(from_where__icontains=bank_name)  # Case-insensitive match
 
-        return models.BankTransactionModel.objects.filter(q_object, transaction_type=BankTransactionModel.CREDIT, is_deleted=False)
+        return models.BankTransactionModel.objects.filter(q_object, transaction_type=BankTransactionModel.CREDIT,
+                                                          is_deleted=False,
+                                                          year_id=self.request.session["CURRENT_YEAR_ID"])
 
 
 class BankTransferDeleteView(DeleteView):

@@ -1,13 +1,9 @@
-from django.urls import path
-from django.contrib.auth.views import LoginView, LogoutView
+from django.urls import path, include
 
 from finsys import views
 
 urlpatterns = [
     path("", views.HomeView.as_view(), name="home"),
-
-    path("login/", LoginView.as_view(template_name="login.html"), name="login"),
-    path("logout/", LogoutView.as_view(), name="logout"),
 
     path("ledger/", views.AccountListView.as_view(), name="ledger"),
     path("ledger/create/", views.AccountCreateView.as_view(), name="ledger-create"),
@@ -26,7 +22,8 @@ urlpatterns = [
     path("banks/add/amount/<int:pk>/", views.BankAddAmountView.as_view(), name="bank-add-amount"),
     path("banks/edit/<int:pk>/", views.BankUpdateView.as_view(), name="bank-update"),
     path("banks/delete/<int:pk>/", views.BankDeleteView.as_view(), name="bank-delete"),
-    path("banks/transaction/delete/<int:pk>/<int:bank_pk>", views.BankTransactionDeleteView.as_view(), name="bank-transaction-delete"),
+    path("banks/transaction/delete/<int:pk>/<int:bank_pk>", views.BankTransactionDeleteView.as_view(),
+         name="bank-transaction-delete"),
 
     path("banks/transfer/", views.BankTransferListView.as_view(), name="bank-transfer"),
     path("banks/transfer/create/", views.BankTransferView.as_view(), name="bank-transfer-create"),
@@ -70,5 +67,7 @@ urlpatterns = [
     path("journal/delete/<int:pk>/", views.JournalDeleteView.as_view(), name="journal-delete"),
 
     path("depreciation/", views.AddDepreciationView.as_view(), name="depreciation"),
+
+    path('company/', include("finsys.company.urls")),
 
 ]

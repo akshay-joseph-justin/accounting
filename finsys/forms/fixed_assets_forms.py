@@ -23,6 +23,13 @@ class FixedAssetsCreateForm(forms.ModelForm):
         model = FixedAssetsHistoryModel
         exclude = ("balance", "user", "is_deleted", "depreciation", "current_balance", "is_visible")
 
+    def clean_amount(self):
+        amount = self.cleaned_data["amount"]
+        if amount > self.cleaned_data["bank"].balance or self.cleaned_data["current_balance"] > self.cleaned_data[
+            "bank"].balance:
+            raise forms.ValidationError("amount is greater than bank balance")
+        return amount
+
 
 class FixedAssetsUpdateForm(forms.ModelForm):
     change_reason = forms.CharField(
@@ -46,7 +53,8 @@ class FixedAssetsUpdateForm(forms.ModelForm):
 
     def clean_amount(self):
         amount = self.cleaned_data["amount"]
-        if amount > self.cleaned_data["bank"].balance or self.cleaned_data["current_balance"] > self.cleaned_data["bank"].balance:
+        if amount > self.cleaned_data["bank"].balance or self.cleaned_data["current_balance"] > self.cleaned_data[
+            "bank"].balance:
             raise forms.ValidationError("amount is greater than bank balance")
         return amount
 

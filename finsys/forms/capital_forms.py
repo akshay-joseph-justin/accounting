@@ -1,7 +1,7 @@
 from django import forms
 from simple_history.utils import update_change_reason
 
-from finsys.models import CapitalHistoryModel
+from finsys.models import CapitalHistoryModel, BankModel
 
 
 class CapitalForm(forms.ModelForm):
@@ -12,7 +12,9 @@ class CapitalForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(CapitalForm, self).__init__(*args, **kwargs)
+        print(args, kwargs)
 
+        self.fields["bank"] = forms.ModelChoiceField(queryset=BankModel.objects.filter(company_id=kwargs.get("initial").get("company_id")))
         if not self.instance.pk:
             self.fields.pop('change_reason')
 
@@ -26,7 +28,7 @@ class CapitalForm(forms.ModelForm):
 
     class Meta:
         model = CapitalHistoryModel
-        exclude = ("balance", "user", "is_deleted", "is_visible")
+        exclude = ("balance", "user", "is_deleted", "is_visible", "company")
 
     def save(self, commit=True):
         obj = super().save()
