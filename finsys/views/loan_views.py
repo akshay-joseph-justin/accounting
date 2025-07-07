@@ -7,40 +7,42 @@ from finsys.views.delete import DeleteView
 
 
 class LoanView(TemplateView):
-    template_name = "loan.html"
+    template_name = "finsys/loan.html"
 
     def get_context_data(self, **kwargs):
-        loan = LoanModel.objects.all().first()
-        entries = LoanHistoryModel.objects.filter(is_deleted=False, amount__gt=0)
+        loan = LoanModel.objects.filter(company_id=self.request.session["CURRENT_COMPANY_ID"],
+                                        year_id=self.request.session["CURRENT_YEAR_ID"]).first()
+        entries = LoanHistoryModel.objects.filter(is_deleted=False, amount__gt=0,
+                                                  company=self.request.session["CURRENT_COMPANY_ID"],
+                                                  year_id=self.request.session["CURRENT_YEAR_ID"])
         return {"loan": loan, "entries": entries}
-
-    def form_valid(self, form):
-        form.instance.user = self.request.user
-        return super().form_valid(form)
 
 
 class LoanDetailView(DetailView):
-    template_name = "capital-details.html"
+    template_name = "finsys/capital-details.html"
     context_object_name = "ledger"
 
     def get_queryset(self):
-        return LoanHistoryModel.objects.filter(is_deleted=False)
+        return LoanHistoryModel.objects.filter(is_deleted=False, year_id=self.request.session["CURRENT_YEAR_ID"],
+                                               company_id=self.request.session["CURRENT_COMPANY_ID"])
 
 
 class LoanCreateView(CreateView):
     model = LoanHistoryModel
-    template_name = "add-loan.html"
+    template_name = "finsys/add-loan.html"
     form_class = LoanForm
     success_url = reverse_lazy("finsys:loan")
 
     def form_valid(self, form):
         form.instance.user = self.request.user
+        form.instance.company_id = self.request.session["CURRENT_COMPANY_ID"]
+        form.instance.year_id = self.request.session["CURRENT_YEAR_ID"]
         return super().form_valid(form)
 
 
 class LoanUpdateView(UpdateView):
     model = LoanHistoryModel
-    template_name = "add-loan.html"
+    template_name = "finsys/add-loan.html"
     form_class = LoanForm
     success_url = reverse_lazy("finsys:loan")
 
@@ -50,7 +52,8 @@ class LoanDeleteView(DeleteView):
     success_url = reverse_lazy("finsys:loan")
 
     def get(self, request, *args, **kwargs):
-        loan = LoanModel.objects.all().first()
+        loan = LoanModel.objects.filter(company_id=self.request.session["CURRENT_COMPANY_ID"],
+                                        year_id=self.request.session["CURRENT_YEAR_ID"]).first()
         entry = LoanHistoryModel.objects.filter(pk=kwargs['pk']).first()
         loan.balance -= entry.amount
         loan.save()
@@ -60,19 +63,21 @@ class LoanDeleteView(DeleteView):
 
 
 class LoanHistoryView(ListView):
-    template_name = "history.html"
+    template_name = "finsys/history.html"
     context_object_name = 'entries'
     ordering = ['-date']
 
     def get_queryset(self):
-        instance = LoanHistoryModel.objects.get(pk=self.kwargs['pk'])
+        instance = LoanHistoryModel.objects.get(pk=self.kwargs['pk'],
+                                                company=self.request.session["CURRENT_COMPANY_ID"],
+                                                year_id=self.request.session["CURRENT_YEAR_ID"])
         if instance:
             return instance.history.all()
         return LoanHistoryModel.objects.none()
 
 
 class LoanPayView(TemplateView, FormView):
-    template_name = "loan-pay.html"
+    template_name = "finsys/loan-pay.html"
     form_class = LoanPayForm
     success_url = reverse_lazy("finsys:loan")
 
@@ -85,28 +90,34 @@ class LoanPayView(TemplateView, FormView):
             from_where=from_where,
             transaction_type=BankTransactionModel.DEBIT,
             amount=amount,
+            year_id=self.request.session["CURRENT_YEAR_ID"]
         )
 
     def form_valid(self, form):
         self.debit_amount_from_bank(form.cleaned_data["principle_amount"], form.cleaned_data["date"], "Principle Loan")
         self.debit_amount_from_bank(form.cleaned_data["interest"], form.cleaned_data["date"], "Loan Interest")
 
-        loan = LoanHistoryModel.objects.get(pk=self.kwargs['history_pk'])
+        loan = LoanHistoryModel.objects.get(pk=self.kwargs['history_pk'],
+                                            company=self.request.session["CURRENT_COMPANY_ID"])
         loan.amount -= form.cleaned_data["principle_amount"]
         loan.save()
         LoanHistoryModel.objects.create(
+            company_id=self.request.session["CURRENT_COMPANY_ID"],
             user=self.request.user,
             bank=BankModel.objects.get(pk=self.kwargs['bank_pk']),
             date=form.cleaned_data["date"],
             from_where=form.cleaned_data["from_where"],
             amount=-form.cleaned_data["principle_amount"],
             pending_amount=loan.amount,
-            is_pay=True
+            is_pay=True,
+            year_id=self.request.session["CURRENT_YEAR_ID"]
         )
 
         return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["entries"] = LoanHistoryModel.objects.filter(is_deleted=False, amount__lt=0)
+        context["entries"] = LoanHistoryModel.objects.filter(is_deleted=False, amount__lt=0,
+                                                             company=self.request.session["CURRENT_COMPANY_ID"],
+                                                             year_id=self.request.session["CURRENT_YEAR_ID"])
         return context

@@ -9,10 +9,14 @@ https://docs.djangoproject.com/en/5.1/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/5.1/ref/settings/
 """
-
+import os
 from pathlib import Path
+from environ import Env
 
 from django.urls import reverse_lazy
+
+env = Env()
+env.read_env()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,8 +27,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = 'django-insecure-d8)b9u1ylf-=c1$v!cxb$goqlagpz7^ljz!y6xv78-a4&5+n47'
 
+SITE_NAME = "dawnet:project-accounting"
+
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+
+AUTH_USER_MODEL = "users.User"
 
 ALLOWED_HOSTS = []
 
@@ -37,7 +45,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
     'finsys.apps.FinsysConfig',
+    'users.apps.UsersConfig',
+
+    'widget_tweaks'
 ]
 
 MIDDLEWARE = [
@@ -48,7 +60,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.auth.middleware.LoginRequiredMiddleware',
+
+    'finsys.middlewares.auth.LoginRequiredMiddleware',
+    'finsys.middlewares.access.CompanyRequiredMiddleware',
+
     'whitenoise.middleware.WhiteNoiseMiddleware',
 ]
 
@@ -65,6 +80,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'users.context_processors.global_settings'
             ],
         },
     },
@@ -100,6 +116,16 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+AUTHENTICATION_BACKENDS = [
+    "users.backends.UsernameAuthBackend",
+    "users.backends.EmailAuthBackend",
+    "django.contrib.auth.backends.ModelBackend",
+]
+
+PASSWORD_HASHERS = [
+    'users.django_hashers.argon2.Hasher',
+]
+
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
 
@@ -121,6 +147,49 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-LOGIN_URL = reverse_lazy("finsys:login")
-LOGIN_REDIRECT_URL = '/'
-LOGOUT_REDIRECT_URL = reverse_lazy("finsys:login")
+LOGIN_URL = "users:login"
+LOGIN_REDIRECT_URL = "users:redirect-user"
+
+MIN_LOGIN_ATTEMPT_LIMIT = 5
+MAX_LOGIN_ATTEMPT_LIMIT = 10
+
+SECOND_FACTOR_VERIFICATION = False
+SECOND_FACTOR_VERIFICATION_URL = "users:email-factor"
+
+AUTO_LOGOUT_DELAY = 1209600
+LOGIN_ATTEMPT_LIMIT = 5
+
+DEFAULT_USER_ROLE = 'NONE'
+DEFAULT_USER_GROUP_NAME = 'none'
+
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_HOST_USER = env('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = env('EMAIL_HOST_PASSWORD')
+EMAIL_USE_TLS = True
+
+TOKEN_EXPIRY = {
+    "minutes": 10
+}
+
+OTP_LENGTH = 6
+OTP_EXPIRY = {
+    "minutes": 2,
+}
+
+if DEBUG:
+    # Use in development only (not recommended for production)
+    os.environ['OAUTHLIB_INSECURE_TRANSPORT'] = '1'
+
+GOOGLE_AUTH = {
+    'client_id': env('GOOGLE_CLIENT_ID'),
+    'client_secret_file': BASE_DIR / "dawnet/client_secret.json",
+    'redirect_uri': 'http://127.0.0.1:8000/accounts/google/login/callback/',
+    'scopes': [
+        "openid",
+        'https://www.googleapis.com/auth/userinfo.email',
+        'https://www.googleapis.com/auth/userinfo.profile'
+    ],
+    'access_type': 'online',
+}

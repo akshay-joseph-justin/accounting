@@ -1,0 +1,109 @@
+<div class="row mb-3" id="date-filter">
+    <div class="col-md-3">
+        <label for="singleDate" class="form-label">Filter by Date:</label>
+        <input type="date" id="singleDate" class="form-control">
+    </div>
+    <div class="col-md-3">
+        <label for="startDate" class="form-label">From:</label>
+        <input type="date" id="startDate" class="form-control">
+    </div>
+    <div class="col-md-3">
+        <label for="endDate" class="form-label">To:</label>
+        <input type="date" id="endDate" class="form-control">
+    </div>
+    <div class="col-md-3 d-flex align-items-end">
+        <button id="resetFilters" class="btn btn-secondary w-100">Reset</button>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const singleDateInput = document.getElementById("singleDate");
+        const startDateInput = document.getElementById("startDate");
+        const endDateInput = document.getElementById("endDate");
+        const resetButton = document.getElementById("resetFilters");
+        const tableRows = document.querySelectorAll("#dataTable tbody tr");
+        const total = document.getElementById("total");
+
+        function formatDateToYYYYMMDD(date) {
+            let year = date.getFullYear();
+            let month = String(date.getMonth() + 1).padStart(2, '0');
+            let day = String(date.getDate()).padStart(2, '0');
+            return `${year}-${month}-${day}`;
+        }
+
+        function updateTotal() {
+            let sum = 0;
+            tableRows.forEach(row => {
+                // Only include visible rows in the total calculation
+                if (row.style.display !== "none") {
+                    const amountElement = row.querySelector(".amount-total");
+                    if (amountElement) {
+                        const value = parseFloat(amountElement.innerText) || 0;
+                        sum += value;
+                    }
+                }
+            });
+
+            if (total) {
+                total.innerText = sum.toFixed(2);
+            }
+        }
+
+        function filterTable() {
+            let singleDate = singleDateInput.value;
+            let startDate = startDateInput.value;
+            let endDate = endDateInput.value;
+
+            tableRows.forEach(row => {
+                let rowDate = row.querySelector(".entry-date")?.innerText.trim();
+                let showRow = true;
+
+                if (rowDate) {
+                    let entryDate = new Date(rowDate);
+                    if (isNaN(entryDate)) return;
+
+                    let entryDateStr = formatDateToYYYYMMDD(entryDate);
+
+                    if (singleDate) {
+                        showRow = entryDateStr === singleDate;
+                    } else {
+                        let start = startDate ? new Date(startDate) : null;
+                        let end = endDate ? new Date(endDate) : null;
+
+                        if (start && end) {
+                            showRow = entryDate >= start && entryDate <= end;
+                        } else if (start) {
+                            showRow = entryDate >= start;
+                        } else if (end) {
+                            showRow = entryDate <= end;
+                        }
+                    }
+                }
+
+                row.style.display = showRow ? "" : "none";
+            });
+
+            // Update total after filtering
+            updateTotal();
+        }
+
+        function resetFilters() {
+            singleDateInput.value = "";
+            startDateInput.value = "";
+            endDateInput.value = "";
+            tableRows.forEach(row => row.style.display = "");
+
+            // Update total after resetting
+            updateTotal();
+        }
+
+        // Initialize total on page load
+        updateTotal();
+
+        singleDateInput.addEventListener("change", filterTable);
+        startDateInput.addEventListener("change", filterTable);
+        endDateInput.addEventListener("change", filterTable);
+        resetButton.addEventListener("click", resetFilters);
+    });
+</script>

@@ -1,0 +1,27 @@
+{% extends "users/common/base.html" %}
+{% block title %}Mail Sent{% endblock %}
+
+{% block content %}
+    <div class="flex items-center justify-center min-h-[85vh] px-4">
+        <div class="bg-white shadow-md rounded-lg max-w-xl w-full p-8 text-center">
+            <h1 class="text-2xl font-bold text-blue-700 mb-4">Role Change Request Sent</h1>
+
+            <p class="text-gray-700 mb-2">
+                Your request to change your account role has been submitted.
+            </p>
+            <p class="text-gray-600 mb-2">
+                An email has been sent to the administrator with your request details.
+            </p>
+            <p class="text-gray-600 mb-6">
+                You will be notified once the request is reviewed. If you need to provide more context, contact the
+                admin directly.
+            </p>
+
+            <a href="{% url 'users:redirect-user' %}">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+                    Go Back
+                </button>
+            </a>
+        </div>
+    </div>
+{% endblock %}

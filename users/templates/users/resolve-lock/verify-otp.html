@@ -1,0 +1,42 @@
+{% extends "users/common/base.html" %}
+{% block title %}Verify OTP{% endblock %}
+
+{% block content %}
+    <div class="flex items-center justify-center min-h-[85vh] px-4">
+        <div class="bg-white shadow-md rounded-lg max-w-md w-full p-8">
+            <h1 class="text-2xl font-bold text-blue-700 text-center mb-2">Unlock Your Account</h1>
+
+            <h2 class="text-lg font-semibold text-gray-800 text-center mb-4">Enter the One-Time Password (OTP)</h2>
+
+            <p class="text-gray-700 text-center mb-2">
+                Your account has been temporarily locked due to multiple failed login attempts.
+            </p>
+            <p class="text-gray-600 text-center mb-6">
+                We've sent a verification code to your registered email. Enter it below to unlock your account.
+            </p>
+
+            <form method="post" novalidate class="space-y-4">
+                {% csrf_token %}
+                {% include "users/common/form.html" with form=form %}
+
+                <button type="submit"
+                        class="w-full bg-blue-600 text-white py-2 rounded-md hover:bg-blue-700 transition">
+                    Verify
+                </button>
+            </form>
+
+            <div class="mt-4 text-center text-sm text-gray-600">
+                <p>
+                    Didn't receive the code?
+                    <a href="{% url 'users:reset-resend-otp-mail' %}" class="text-blue-600 hover:underline">
+                        Resend OTP
+                    </a>
+                </p>
+            </div>
+
+            <div class="mt-4 text-center text-xs text-gray-500">
+                <p><strong>Note:</strong> This OTP is valid for 10 minutes. Do not share it with anyone.</p>
+            </div>
+        </div>
+    </div>
+{% endblock %}

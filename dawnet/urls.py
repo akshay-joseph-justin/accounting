@@ -20,4 +20,5 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include(('finsys.urls', 'finsys'), namespace='finsys')),
+    path('authentication/', include(('users.urls', 'users'), namespace='users')),
 ]

@@ -1,0 +1,29 @@
+{% extends "users/common/base.html" %}
+{% block title %}Mail Sent{% endblock %}
+
+{% block content %}
+    <div class="flex items-center justify-center min-h-[80vh] px-4">
+        <div class="bg-white shadow-md rounded-lg max-w-xl w-full p-8 text-center">
+            <h1 class="text-2xl font-bold text-blue-700 mb-4">Email Verification Sent</h1>
+
+            <p class="text-gray-700 mb-2">
+                We've sent a verification link to your registered email address.
+            </p>
+            <p class="text-gray-600 mb-2">
+                Please check your inbox (and spam folder) for the verification email.
+            </p>
+            <p class="text-gray-600 mb-4">
+                Click the link inside to activate your account.
+            </p>
+            <p class="text-gray-500 mb-6">
+                Didn’t receive the email? You can request a new one by logging in and visiting your profile page.
+            </p>
+
+            <a href="{% url 'users:redirect-user' %}">
+                <button class="bg-blue-600 text-white px-6 py-2 rounded-md hover:bg-blue-700 transition">
+                    Go Back
+                </button>
+            </a>
+        </div>
+    </div>
+{% endblock %}

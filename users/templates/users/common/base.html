@@ -1,0 +1,80 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}{{ SITE_NAME }}{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Google Font: Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 min-h-screen flex flex-col relative">
+
+<!-- Toasts -->
+<div id="toast-container" class="fixed top-5 right-5 z-50 space-y-3">
+    {% if messages %}
+        {% for message in messages %}
+            <div class="toast px-4 py-3 rounded shadow-lg text-white flex items-center justify-between gap-2
+                {% if message.tags == 'error' %}
+                    bg-red-500
+                {% elif message.tags == 'success' %}
+                    bg-green-500
+                {% elif message.tags == 'warning' %}
+                    bg-yellow-500 text-black
+                {% else %}
+                    bg-blue-500
+                {% endif %}
+            ">
+                <span>{{ message }}</span>
+                <button onclick="this.parentElement.remove()"
+                        class="ml-4 text-xl leading-none font-bold hover:opacity-70">&times;
+                </button>
+            </div>
+        {% endfor %}
+    {% endif %}
+</div>
+
+<!-- Navbar -->
+<header class="bg-white shadow-sm sticky top-0 z-40">
+    <div class="max-w-7xl mx-auto px-4 py-4 flex justify-between items-center">
+        <h1 class="text-2xl font-bold text-blue-700"> {{ SITE_NAME }} </h1>
+    </div>
+</header>
+
+<!-- Content -->
+<main class="flex-grow max-w-3xl w-full mx-auto px-4 py-10">
+    {% block content %}{% endblock %}
+</main>
+
+<!-- Footer -->
+<footer class="bg-white border-t py-4 text-center text-sm text-gray-500">
+    &copy; {{ YEAR }} <span class="font-semibold text-blue-600">{{ SITE_NAME }}</span>. All rights
+    reserved.
+</footer>
+
+<!-- Toast Auto-dismiss -->
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const toasts = document.querySelectorAll('.toast');
+        toasts.forEach(toast => {
+            setTimeout(() => {
+                toast.remove();
+            }, 5000); // 5 seconds
+        });
+    });
+</script>
+
+{% block scripts %}{% endblock %}
+
+</body>
+</html>

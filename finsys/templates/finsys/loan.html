@@ -1,0 +1,86 @@
+{% extends "finsys/includes/base.html" %}
+
+{% block title %}
+    Loan
+{% endblock %}
+
+{% block content %}
+    <div class="container mt-5">
+        <div class="d-flex flex-column flex-lg-row justify-content-between align-items-center mb-3">
+            <h1 class="text-primary text-center text-lg-start">
+                Total Loan: <span class="fw-bold" id="total">{{ loan.balance | default:0.0 }}</span>
+            </h1>
+
+            {% if NOT_VIEWER %}
+                <a href="{% url 'finsys:loan-add-amount' %}" class="btn btn-success mt-3 mt-lg-0">Take Loan</a>
+            {% endif %}
+        </div>
+
+        <!-- Date Filter Section -->
+        {% include 'finsys/includes/date_filter.html' %}
+
+        <div class="container mt-4">
+            <h2 class="mb-3">History</h2>
+
+            <div class="table-responsive">
+                <table class="table table-bordered table-hover" id="dataTable">
+                    <thead class="table-dark">
+                    <tr>
+                        <th>#</th>
+                        {% include 'finsys/includes/sortable_date.html' %}
+                        <th>From</th>
+                        <th>Bank</th>
+                        <th>Amount</th>
+                        <th>View</th>
+                        {% if NOT_VIEWER %}
+                            <th>Pay</th>
+                            <th>Edit</th>
+                            <th>Delete</th>
+                        {% endif %}
+                        <th>History</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    {% for entry in entries %}
+                        <tr>
+                            <td>{{ forloop.counter }}</td>
+                            <td class="entry-date">{{ entry.date }}</td>
+                            <td>{{ entry.from_where }}</td>
+                            <td>{{ entry.bank }}</td>
+                            <td class=".amount-total">{{ entry.amount }}</td>
+                            <td><a href="{% url 'finsys:loan-details' entry.pk %}"
+                                   class="btn btn-primary btn-sm">View</a></td>
+                            <td><a href="{% url 'finsys:loan-pay' history_pk=entry.pk bank_pk=entry.bank.pk %}"
+                                   class="btn btn-danger btn-sm">Pay</a></td>
+                            {% if NOT_VIEWER %}
+                                <td><a href="{% url 'finsys:loan-update' entry.pk %}"
+                                       class="btn btn-warning btn-sm">Edit</a></td>
+                                <td>
+                                    <a href="{% url 'finsys:loan-delete' entry.pk %}" class="btn btn-warning"
+                                       onclick="return confirm('Are you sure')">Delete</a></td>
+                            {% endif %}
+                            <td>
+                                <a href="{% url 'finsys:loan-history' entry.pk %}"
+                                   class="btn btn-secondary btn-sm">History</a>
+                            </td>
+                        </tr>
+                    {% empty %}
+                        <tr>
+                            <td colspan="9" class="text-center">No Journal Entries Found</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <style>
+        @media (max-width: 768px) {
+            .table-responsive {
+                overflow-x: auto;
+            }
+        }
+    </style>
+
+{% endblock %}

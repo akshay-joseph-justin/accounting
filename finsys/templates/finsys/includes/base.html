@@ -1,0 +1,301 @@
+{% load static %}
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+
+    <link rel="shortcut icon" href="{% static 'finsys/img/logo.png' %}" type="image/x-icon">
+
+    <title>{% block title %} {% endblock %}</title>
+    <meta content="" name="description">
+    <meta content="" name="keywords">
+
+    <!-- Favicons -->
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.gstatic.com" rel="preconnect">
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Nunito:300,300i,400,400i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i"
+          rel="stylesheet">
+
+    <!-- Vendor CSS Files -->
+    <link href="{% static 'finsys/assets/vendor/bootstrap/css/bootstrap.min.css' %}" rel="stylesheet">
+    <link href="{% static 'finsys/assets/vendor/bootstrap-icons/bootstrap-icons.css' %}" rel="stylesheet">
+    <link href="{% static 'finsys/assets/vendor/boxicons/css/boxicons.min.css' %}" rel="stylesheet">
+    <link href="{% static 'finsys/assets/vendor/quill/quill.snow.css' %}" rel="stylesheet">
+    <link href="{% static 'finsys/assets/vendor/quill/quill.bubble.css' %}" rel="stylesheet">
+    <link href="{% static 'finsys/assets/vendor/remixicon/remixicon.css' %}" rel="stylesheet">
+    <link href="{% static 'finsys/assets/vendor/simple-datatables/style.css' %}" rel="stylesheet">
+
+    <!-- Template Main CSS File -->
+    <link href="{% static 'finsys/assets/css/style.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+<!-- ======= Header ======= -->
+<header id="header" class="header fixed-top d-flex align-items-center justify-content-between px-3">
+
+    <div class="d-flex align-items-center">
+        <a href="#" class="logo d-flex align-items-center">
+            <img src="{% static 'finsys/img/logo.png' %}" alt="Admin Logo">
+            <span class="d-none d-lg-block">Admin</span>
+        </a>
+        <button class="btn btn-light toggle-sidebar-btn ms-2" aria-label="Toggle Sidebar">
+            <i class="bi bi-list"></i>
+        </button>
+        <button class="btn btn-light print-btn ms-2" aria-label="Print Page">
+            <i class="bi bi-printer"></i>
+        </button>
+    </div>
+
+    <div class="dropdown">
+        <button class="btn btn-light dropdown-toggle d-flex align-items-center" type="button" id="userDropdown"
+                data-bs-toggle="dropdown" aria-expanded="false">
+            <i class="bi bi-person-circle me-2"></i>
+            <span class="d-none d-sm-inline">{{ user.username }}</span>
+        </button>
+        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+            <li><a class="dropdown-item" href="{% url 'users:profile' request.user.username %}">Profile</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            <li><a class="dropdown-item" href="{% url 'users:profile' request.user.username %}">Logout</a></li>
+            <li>
+                <hr class="dropdown-divider">
+            </li>
+            {% if request.session.CURRENT_COMPANY_NAME %}
+                <li>
+                    <a class="dropdown-item"
+                       href="{% url 'finsys:company-detail' request.session.CURRENT_COMPANY_NAME %}">{{ request.session.CURRENT_COMPANY_NAME }}</a>
+                </li>
+            {% endif %}
+            {% if COMPANIES %}
+                <li>
+                    <p class="dropdown-item fw-bold">Switch Companies</p>
+                </li>
+                {% for COMPANY in COMPANIES %}
+                    <li><a class="dropdown-item"
+                           href="{% url 'finsys:company-switch' %}?c_name={{ COMPANY }}">{{ COMPANY }}</a></li>
+                {% endfor %}
+                <li>
+                    <hr class="dropdown-divider">
+                </li>
+            {% endif %}
+            <li><a class="dropdown-item"
+                   href="{% url 'finsys:company-create' %}">Add Company</a></li>
+            <li>
+                <form action="{% url 'finsys:company-year-switch' %}">
+                    <label>
+                        <select name="year">
+                            {% for COMPANY_YEAR in COMPANY_YEARS %}
+                                <option value="{{ COMPANY_YEAR }}">{{ COMPANY_YEAR }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                    <button type="submit">change</button>
+                </form>
+            </li>
+        </ul>
+    </div>
+</header>
+
+<!-- End Header -->
+
+<!-- ======= Sidebar ======= -->
+<aside id="sidebar" class="sidebar">
+
+    <!-- add new navbar links here below -->
+
+    <ul class="sidebar-nav" id="sidebar-nav">
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:home' %}">
+                <i class="bi bi-grid"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'capital' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:capital' %}">
+                <i class="bi bi-person"></i>
+                <span>Capital</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'loan' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:loan' %}">
+                <i class="bi bi-person"></i>
+                <span>Loan</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'ledger' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:ledger' %}">
+                <i class="bi bi-person"></i>
+                <span>Ledger</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'fixed-assets' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:fixed-assets' %}">
+                <i class=" bi bi-person"></i>
+                <span>Fixed Assets</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'balance-sheet' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:balance-sheet' %}">
+                <i class="bi bi-person"></i>
+                <span>Balance Sheet</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'trial-balance' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:trial-balance' %}">
+                <i class="bi bi-person"></i>
+                <span>Trial Balance</span>
+            </a>
+        </li>
+
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'wallet' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:wallet' %}">
+                <i class="bi bi-person"></i>
+                <span>Banks</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'bank-transfer' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:bank-transfer' %}">
+                <i class="bi bi-person"></i>
+                <span>Contra</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'receipt' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:receipt' %}">
+                <i class="bi bi-person"></i>
+                <span>Receipt</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'payment' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:payment' %}">
+                <i class="bi bi-person"></i>
+                <span>Payment</span>
+            </a>
+        </li>
+
+        <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'journal' %}active{% else %}collapsed{% endif %}"
+               href="{% url 'finsys:journal' %}">
+                <i class="bi bi-person"></i>
+                <span>Journal</span>
+            </a>
+        </li>
+
+
+        <!-- End Profile Page Nav -->
+
+        <li class="nav-item">
+            <form method="post" action="{% url 'users:logout' %}">
+                {% csrf_token %}
+                <button type="submit" class="nav-link collapsed">
+                    <i class="bi bi-person"></i>
+                    <span>Logout</span>
+                </button>
+            </form>
+        </li>
+        <li class="nav-item">
+            <a href="#" class="nav-link collapsed">
+                <i class="bi bi-person"></i>
+                <span>Change password</span>
+            </a>
+        </li>
+    </ul>
+</aside>
+<!-- End Sidebar-->
+<main id="main" class="main">
+
+    {% block content %}
+    {% endblock %}
+</main>
+<!-- Vendor JS Files -->
+<script src="{% static 'finsys/assets/vendor/apexcharts/apexcharts.min.js' %}"></script>
+<script src="{% static 'finsys/assets/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+<script src="{% static 'finsys/assets/vendor/chart.js/chart.umd.js' %}"></script>
+<script src="{% static 'finsys/assets/vendor/echarts/echarts.min.js' %}"></script>
+<script src="{% static 'finsys/assets/vendor/quill/quill.min.js' %}"></script>
+<script src="{% static 'finsys/assets/vendor/simple-datatables/simple-datatables.js' %}"></script>
+<script src="{% static 'finsys/assets/vendor/tinymce/tinymce.min.js' %}"></script>
+<script src="{% static 'finsys/assets/vendor/php-email-form/validate.js' %}"></script>
+
+<!-- Template Main JS File -->
+<script src="{% static 'finsys/assets/js/main.js' %}"></script>
+
+<script>
+    document.addEventListener("DOMContentLoaded", () => {
+        document.querySelector('.print-btn').addEventListener('click', () => {
+            const main = document.querySelector(".main");
+            const dateFilter = document.querySelector("#date-filter");
+            const btns = document.querySelectorAll(".btn")
+
+            if (main) {
+                printSelectedElement(main, dateFilter, btns);
+            } else {
+                console.log('Element not found');
+            }
+        });
+    });
+
+    function printSelectedElement(mainElement, dateFilterElement, btns) {
+        // Hide the date filter element temporarily
+        if (dateFilterElement) {
+            dateFilterElement.style.display = 'none';
+        }
+
+        if (btns) {
+            btns.forEach(btn => {
+                btn.style.display = 'none';
+            });
+        }
+
+
+        // Create a new window for printing
+        const printWindow = window.open('', '', 'height=800,width=600');
+
+        // Write the HTML content into the print window
+        printWindow.document.write('<html><head><title>Print</title><style>body { font-family: Arial, sans-serif; }</style></head><body>');
+        printWindow.document.write(mainElement.outerHTML); // Copy the outer HTML of the .main element
+        printWindow.document.write('</body></html>');
+
+        // Close the document to trigger loading
+        printWindow.document.close();
+
+        // Wait for the content to load and trigger the print
+        printWindow.onload = function () {
+            printWindow.print(); // Open the print dialog
+            printWindow.close();  // Close the window after printing
+
+            // Restore the visibility of the date filter element after printing
+            if (dateFilterElement) {
+                dateFilterElement.style.display = '';
+            }
+        };
+    }
+
+
+</script>
+
+</body>
+
+</html>
